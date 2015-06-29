@@ -1,0 +1,23 @@
+{
+  "name":"adn_app",
+  "scripts":{},
+  "env":{
+    "AWS_ACCESS_KEY_ID":{
+      "required":true
+    },
+    "AWS_BUCKET":{
+      "required":true
+    },
+    "AWS_SECRET_ACCESS_KEY":{
+      "required":true
+    },
+    "DB_POOL":{
+      "required":true
+    }
+  },
+  "addons":[
+    "scheduler",
+    "heroku-postgresql",
+    "logentries"
+  ]
+}
