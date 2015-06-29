@@ -1,0 +1,31 @@
+<% provide(:title, t(:equipes_types_title)) %>
+<div class="margin-bottom">
+  <h1 class="text-center"><%= t(:equipes_types_title) %></h1>
+</div>
+<%= link_to t(:equipe_type_new), new_equipe_type_path, class: "btn btn-default btn-lg margin-bottom-10" %>
+<table class="table table-hover table-striped table-responsive">
+              <tr>
+                <th><%= t(:general_name)%></th>
+                <th><%= t(:general_organization)%></th>
+                <th></th>
+                <th></th>
+              </tr>
+
+<% @equipe_types.each do |equipe_type| %>
+  <tr>
+    <td><%= link_to equipe_type.name, edit_equipe_type_path(equipe_type) %></td>
+    
+    <% if equipe_type.organization %>
+    <td><%= equipe_type.organization.name %></td>
+    <% else %>
+    <td><%= t(:general_none) %></td>
+    <% end %>
+
+    <td class="td-last-1">
+      <%= link_to equipe_type, method: :delete, data: { confirm: t(:button_confirm_delete) } do %>
+        <span class="glyphicon glyphicon-trash"></span>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+</table>

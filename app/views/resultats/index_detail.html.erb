@@ -1,0 +1,61 @@
+<% provide(:title, 'Index des résultats') %>
+<div class="span7">
+<h1 class="text-center"><%= t(:resultats) %>: <%= @first_record.evaluation_name %> </h1>
+<%= t(:general_evaluation) %>: <%= @first_record.evaluation_name %>
+</br>
+<%= t(:general_date) %>: <%= @first_record.created_at.strftime("%e %b, %Y, %H:%M") %>
+</br>
+<%= t(:general_evaluator) %>: <%= link_to @first_record.user_name, @first_record.user %>
+</br>
+<%= I18n.t(:resultats_max_score) + ": " + @maximum_score.to_s %>
+</br>
+<% if @total_athletes != 0 %>
+    <%=I18n.t(:resultats_moyenne)%>: <%= "%.2f" % (@total_score.to_f/@total_athletes.to_f) %>
+  <% end %>
+</br>
+<table class="table table-condensed table-hover">
+              <tr>
+                <th><%= t(:general_athlete)%></th>
+                <th><%= t(:general_team)%></th>
+                <th><%= t(:general_score)%></th>
+                <th></th>
+              </tr>
+
+<div class="row">
+  <div class="span6 offset3">
+    <% @resultats.each do |resultat| %>
+      <tr>
+        <td><% if resultat.athlete != nil %>
+            <%= link_to (resultat.athlete_first_name.split(',')[1] + " " + resultat.athlete_last_name.split(',')[1]), athlete_resultats_path(:resultat_id => resultat.resultat_id) %>
+            <% else %>
+            <%= (resultat.athlete_first_name.split(',')[1] + " " + resultat.athlete_last_name.split(',')[1]) %>
+            <% end %>
+         </td>
+         <td><% if resultat.equipe != nil %>
+             <%= link_to resultat.equipe_name, resultat.equipe %>
+             <% else %>
+             <%=I18n.t(:resultats_individuelle)%>
+             <% end %>
+        </td>
+        <td>
+          <% if resultat.score.to_i <= @maximum_score %>
+            <%= resultat.score %>
+          <% else %>
+            <%=I18n.t(:resultats_incomplete)%>
+          <% end %>
+        </td>
+        <td class="td-last-2">
+        <% if resultat.athlete %>
+          <%= link_to restart_evaluation_resultats_path(:resultat_id => resultat.resultat_id) do %>
+          <span class="glyphicon glyphicon-pencil"></span>
+          <% end %>
+        <% end %>
+        <%= link_to confirm_delete_resultats_path(:resultat_id => resultat.resultat_id, :delete_target => "athlete") do %>
+          <span class="glyphicon glyphicon-trash"></span>
+        <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+  <%= link_to I18n.t(:general_back), resultats_path, :class=>"btn btn-default" %>
+</div>

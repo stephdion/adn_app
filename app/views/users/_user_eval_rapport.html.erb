@@ -1,0 +1,58 @@
+<div class="row">
+	<div class="col-md-12">
+		<h4 class="title-rapport">Rapport d'évaluations</h4>
+	</div>
+  <div class="col-md-12 head-rapport-filter">
+    <%= render 'user_dashboard_evaluation_filter' %>
+  </div>
+  <div class="row" id="title-rapport-blessures">
+    <span>Rapport du <span class="date-rapport-title-eval"></span>
+      <button class="button-style print-button" onclick="window.print();">Imprimer le rapport</button>
+    </h2>
+  </div>
+	<div class="col-md-12" id="result-evaluation-rapport">
+		<%= render 'user_eval_result_rapport' %>
+  </div>
+  <div class="row" id="title-rapport-blessures">
+    <button class="button-style print-button" onclick="window.print();">Imprimer le rapport</button>
+  </div>
+</div>
+<script>
+
+alert = function() {};
+table = $('.datatable').DataTable( {
+    paging: false,
+    info: false,
+    filter: false
+});
+
+var barGraphs = document.getElementsByClassName("bar-graph");
+
+for(var i = 0; i < barGraphs.length; i++) {
+  currentBarGraphs = barGraphs.item(i).getContext("2d");
+
+  var bardata = {
+  labels: $(barGraphs.item(i)).data('labels'),
+  datasets: $(barGraphs.item(i)).data('values')
+  };
+
+  var myBarChart = new Chart(currentBarGraphs).Bar(bardata, { 
+  scaleShowLabels : true,
+  scaleFontStyle : "bold",
+  scaleFontSize : 12,
+  scaleFontColor : "grey",
+  angleLineWidth : 2,
+  scaleLineWidth : 2,
+  scaleShowVerticalLines: false,
+  scaleOverride: true,
+  scaleSteps: 6,
+  scaleStepWidth: 0.5,
+  scaleStartValue: 0
+  });
+}
+
+$('.show-details').click(function(e) {
+  $(e.currentTarget.parentNode.childNodes[7].childNodes[1]).toggle();
+});
+
+</script>

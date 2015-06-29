@@ -1,0 +1,43 @@
+<% provide(:title, t(:resultats_eval_finished) ) %>
+<div style="padding-left:15px">
+<h1>Evaluation Complete!</h1>
+<h6><%= t(:general_evaluation) %> : <%= @first_record.evaluation.name %></h6>
+<h6><%= t(:general_date) %>: <%= @first_record.created_at.strftime("%e %b, %Y, %H:%M") %></h6>
+<h6><%= t(:general_trainer) %>: <%= link_to @first_record.user.name, @first_record.user %></h6>
+<h6><%= t(:general_team) %>: 
+<% if @first_record.equipe != nil %>
+  <%= link_to @first_record.equipe.name, @first_record.equipe %>
+<% else %>
+  <%= t(:resultats_individuelle) %>
+<% end %></h6>
+</br>
+<div class="span12">
+  <div class="margin-bottom">
+<table class="table table-hover table-striped table-responsive">
+              <tr>
+                <th><%= t(:general_athlete)%></th>
+                <th><%= t(:general_test)%></th>
+                <th><%= t(:general_score)%></th>
+                <th></th>
+              </tr>
+  <% @resultats_final.each do |resultat| %>
+      <tr>
+        <td><%= link_to resultat.athlete.name, resultat.athlete %></td>
+        <td><%= link_to resultat.eval_test.name, resultat.eval_test %></td>
+        <% if resultat.left_right? %>
+          <td><%= t(:resultats_right_abbr) %>- <%=resultat.right%>, <%= t(:resultats_left_abbr)%>- <%=resultat.left %></td>
+        <% else %>
+          <td><%= resultat.value%></td>
+        <% end %>
+      <% if correct_resultat_user?(@first_record.id) %>
+        <td><%= link_to t(:button_edit), modifier_resultat_path(:id => resultat.id) %></td>
+      <% end %>
+      </tr>
+  <% end %>
+  </table>
+</div>
+</div>
+<div class="span12">
+  <%= link_to t(:resultats_index), resultats_path, class:"btn btn-default" %>
+</div>
+</div>

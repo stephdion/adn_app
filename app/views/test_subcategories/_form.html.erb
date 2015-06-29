@@ -1,0 +1,41 @@
+<%= form_for(@test_subcategory) do |f| %>
+  <% if @test_subcategory.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@test_subcategory.errors.count, "error") %> prohibited this test_subcategory from being saved:</h2>
+
+      <ul>
+      <% @test_subcategory.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="styled-select">
+      <%= f.label :test_category_id %><br>
+      <%= f.collection_select :test_category_id, TestCategory.where("organization_id IN (?)", [Organization.current_organization]).order(:name).all, :id, :name, {}, :class=>"form-control" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name, :class=>"form-control" %>
+  </div>
+
+<div class="row">
+  <% if @test_subcategory.eval_tests.any? %>
+  <%= I18n.t(:subcategory_contains_tests) %><br>
+    <% @test_subcategory.eval_tests.each do |eval_test| %>
+      <div class="col-md-2" style="display:inline-block;">
+        <%= image_tag eval_test.image.url(:thumbnail) %><br>
+        <%= link_to eval_test.name, edit_eval_test_path(eval_test) %><br>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+<br>
+  <div class="actions">
+    <%= f.submit I18n.t(:button_submit), class: "btn btn-default" %>
+    <%= link_to  t(:general_back), test_categories_path, class: "btn btn-default", :style=>"display:inline;margin-left:10px;" %>
+  </div>
+
+<% end %>

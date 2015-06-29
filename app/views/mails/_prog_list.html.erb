@@ -1,0 +1,35 @@
+<ul class="programmes" style="list-style-type: none;margin-left:0px;">
+	<li>
+		<div class="col-md-1">
+			<%= radio_button_tag "prog","0", class: "customrdb", :style=>"cursor:pointer"%>
+		</div>
+		<div class="col-md-11">
+			Aucun
+		</div>
+	<li>
+  <% @programmes.each do |programme| %>
+   <% if programme.user %>
+    <li>
+		<div class="col-md-1">
+			<%= radio_button_tag "prog", "#{programme.id}", class: "customrdb", :style=>"cursor:pointer"%>
+		</div>
+		<div class="col-md-11">
+			<%= link_to programme, :target =>"_blank" do %>
+				 <span class="glyphicon glyphicon-chevron-right" style="font-size:14px;"></span> <%=programme.name%>
+			<%end%>
+		</div>
+        <%#= t(:general_owner) :%>
+        <%#= link_to programme.user.name, programme.user %>
+        <!--
+      <% if (correct_programme_user?(programme.id) || is_current_user_sysadmin?) %>
+        <%#= link_to modifier_programme_path(:id => programme.id) do %>
+        <span class="glyphicon glyphicon-pencil"></span>
+        <%# end %>
+        <%#= link_to programme, :confirm => t(:button_confirm_delete), method: :delete do %>
+          <span class="glyphicon glyphicon-trash"></span>
+        <%# end %>
+        <% end %>-->
+    </li>
+    <% end %>
+  <% end %>
+</ul>

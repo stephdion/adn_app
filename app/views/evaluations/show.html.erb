@@ -1,0 +1,71 @@
+<% provide(:title, @evaluation.name) %>
+<div class="margin-bottom">
+<h1 class="text-center"> <%= t(:evaluation) %>: <%= @evaluation.name %></h1>
+</div>
+<%= I18n.t 'activerecord.attributes.evaluation.eval_type_id' %>:
+<% if @evaluation.eval_type %>
+  <%= @evaluation.eval_type.name %>
+<% else %>
+  <%= t(:general_none) %>
+<% end %>
+</br>
+<%= I18n.t 'activerecord.attributes.evaluation.organization_id' %>: <%= @evaluation.organization.name %>
+</br><br>
+<%= I18n.t 'activerecord.attributes.evaluation.description' %>: <%= @evaluation.description.html_safe %>
+</br>
+</br>
+<%= I18n.t 'activerecord.attributes.evaluation.point_desc0' %>: <%= @evaluation.point_desc0 %>
+</br>
+<%= I18n.t 'activerecord.attributes.evaluation.point_desc1' %>: <%= @evaluation.point_desc1 %>
+</br>
+<%= I18n.t 'activerecord.attributes.evaluation.point_desc2' %>: <%= @evaluation.point_desc2 %>
+</br>
+<%= I18n.t 'activerecord.attributes.evaluation.point_desc3' %>: <%= @evaluation.point_desc3 %>
+</br>
+Nombre de semaine prescription 0 : <%= @evaluation.point_presc0 %>x semaines
+</br>
+Nombre de semaine prescription 1 : <%= @evaluation.point_presc1 %>x semaines
+</br>
+Nombre de semaine prescription 2 : <%= @evaluation.point_presc2 %>x semaines
+</br>
+Nombre de semaine prescription 3 : <%= @evaluation.point_presc3 %>x semaines
+</br>
+</br>
+
+<% if @evaluation.eval_tests.count > 1 %>
+  <%= t(:evaluation_tests) %>:
+<% elsif @evaluation.eval_tests.count == 1 %>
+  <%= t(:evaluation_test) %>:
+<% else @evaluation.eval_tests.count == 0 %>
+  <%= t(:evaluation_no_tests) %>
+<% end %>
+</br>
+<% @evaluation.test_sets.each do |test_set| %>
+  <% if test_set.eval_test %>
+    <%= image_tag test_set.eval_test.image.url(:thumbnail) %>
+    <%= link_to test_set.eval_test.name, test_set.eval_test %>
+    <% if test_set.eval_test.user %>
+      <%= t(:general_created_by) %>:
+      <%= link_to test_set.eval_test.user.name, test_set.eval_test.user %>
+    <% else %>
+      <%= t(:general_owner) %>: <%= t(:general_sysadmin) %>
+    <% end %>
+    </br>
+  <% end %>
+<% end %>
+</br>
+<%= link_to t(:eval_modify_test_order), edit_test_order_evaluation_path, class: "btn btn-default", :style=>"display:inline;" %>
+<%= link_to t(:eval_modify_exercise_order), edit_exercise_order_evaluation_path, class: "btn btn-default", :style=>"display:inline;margin-left:10px;" %>
+</br></br>
+<% if @evaluation.user %>
+  <%= t(:general_owner) %>: <%= link_to @evaluation.user.name, @evaluation.user %>
+<% else %>
+  <%= t(:general_owner) %>: <%= t(:general_sysadmin) %>
+<% end %>
+</br>
+</br>
+	<% if current_user?(@evaluation.user) || is_current_user_sysadmin? %>
+    <%= link_to t(:button_edit), modifier_evaluation_path(:id => @evaluation.id), class: "btn btn-default" %>
+    <%= link_to t(:evaluation_index), evaluations_path, class: "btn btn-default", :style=>"display:inline;margin-left:10px;" %>
+    <%#= link_to t(:button_delete), @evaluation, :confirm => t(:button_confirm_delete), class: "btn btn-default", method: :delete %>
+	<% end %>

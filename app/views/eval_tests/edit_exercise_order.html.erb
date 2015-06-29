@@ -1,0 +1,42 @@
+<% provide(:title, t(:test_modify)) %>
+<h1_left><%= t(:test_modify_exercise_order) %>:</h1_left>
+</br></br>
+
+<%= form_tag update_exercise_order_eval_test_path, method: :put do %>
+  <% @eval_test.prescriptions.each do |prescription| %>
+
+<%= fields_for "prescriptions[]", prescription do |f| %>
+
+<div class="row">
+<div class="span1">
+  <%= f.text_field :exercise_order %>
+</div>
+<div class="span4">
+  <%= image_tag prescription.exercise.image.url(:thumbnail) %>
+  <%= prescription.exercise.short_name %>
+</div>
+</div>
+      <% if prescription.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(prescription.errors.count, t(:error)) %> <%=t(:error_in_date_format)%>: </h2>
+          <ul>
+          <% prescription.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+          </ul>
+          </div>
+      <% end %>
+  	
+ <% end %>
+ </br></br>
+
+ <% end %>
+
+  	<div class="submitButton">
+        <%= submit_tag t(:button_edit), class: "btn btn-default" %>
+        </br>
+        </br>
+        <%= link_to t(:test_return), eval_tests_path %>
+    </div>
+	
+ <% end %>

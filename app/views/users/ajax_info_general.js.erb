@@ -1,0 +1,53 @@
+$("#info_general").html("<%= escape_javascript(render 'form_info_general') %>")
+
+/*$('#user_general_cancel').bind('click',function(){
+	$("#info_general").html("<%= escape_javascript(render 'info_general') %>")
+});*/
+
+$('#add_email').bind('click',function(){
+	//if($('#add_email').attr('data-uid') < 5)
+	{
+		var uid = $('#add_email').attr('data-uid');
+		
+		$("#add_email").before('<div id="email_'+uid+'" class="opc_chk"><select id="user_user_emails_attributes_' + uid + '_email_type" class="selectpicker" style="padding:0;display:none;" name="user[user_emails_attributes][' + uid + '][email_type]"><option selected="selected" value="Email 1">Email 1</option><option value="Email 2">Email 2</option><option value="Email 3">Email 3</option></select><input id="user_user_emails_attributes_' + uid + '_email" type="text" value="" size="30" name="user[user_emails_attributes][' + uid + '][email]"> <input type="hidden" value="0" name="user[user_emails_attributes][' + uid + '][_destroy]"> <input id="delete_email_' + uid + '" class="delete_email" type="checkbox" value="1" name="user[user_emails_attributes][' + uid + '][_destroy]"><label for="delete_email_' + uid + '"><span class="glyphicon glyphicon-remove"></span></label></div>')
+		uid++;
+		$('#add_email').attr('data-uid',uid)
+	}
+});
+
+$('#add_phone').bind('click',function(){
+	//if($('#add_phone').attr('data-uid') < 5)
+	{
+		var uid = $('#add_phone').attr('data-uid');
+		
+		$("#add_phone").before('<div id="phone_'+uid+'" class="opc_chk"><select id="user_user_phones_attributes_' + uid + '_phone_type" class="selectpicker" style="padding:0" name="user[user_phones_attributes][' + uid + '][phone_type]"><option value="Mobile">Mobile</option><option value="Home">Home</option><option value="Work">Work</option></select> <input id="user_user_phones_attributes_' + uid + '_number" type="text" value="" size="30" name="user[user_phones_attributes][' + uid + '][number]"> <input type="hidden" value="0" name="user[user_phones_attributes][' + uid + '][_destroy]"><input id="delete_phone_' + uid + '" class="delete_phone" type="checkbox" value="1" onclick="delete_phone" name="user[user_phones_attributes][' + uid + '][_destroy]"><label for="delete_phone_' + uid + '"><span class="glyphicon glyphicon-remove"></span></label></div>')
+		uid++;
+		$('#add_phone').attr('data-uid',uid)
+	}
+});
+
+$(document).on('click','.delete_phone',function(){
+		var uid = ($(this).attr("id")).split('_')[2];
+		
+		$("#user_user_phones_attributes_"+uid+"_number").remove();
+		$("#user_user_phones_attributes_"+uid+"_phone_type").remove();
+		$("input[type='hidden'][name='user[user_phones_attributes]["+uid+"][_destroy]']").attr("value","1");
+		
+		$('label[for=delete_phone_'+uid+']').remove();
+		$(this).remove();
+		
+		$("#phone_+uid").hide();
+});
+
+$(document).on('click','.delete_email',function(){
+		var uid = ($(this).attr("id")).split('_')[2];
+		
+		$("#user_user_emails_attributes_"+uid+"_email").remove();
+		$("#user_user_emails_attributes_"+uid+"_email_type").remove();
+		$("input[type='hidden'][name='user[user_emails_attributes]["+uid+"][_destroy]']").attr("value","1");
+		
+		$('label[for=delete_email_'+uid+']').remove();
+		$(this).remove();
+		
+		$("#email_+uid").hide();
+});

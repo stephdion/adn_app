@@ -1,0 +1,15 @@
+<div class="row">
+	<div class="col-md-12">
+		<h4 class="title-rapport">Rapport de blessures</h4>
+	</div>
+	<div class="col-md-12 head-rapport-filter">
+		<%= render 'user_dashboard_blessures_filter' %>
+	</div>
+</div>
+<div class="row" id="title-rapport-blessures">
+	<span>Rapport du <span class="date-rapport-title"></span>
+		<button class="button-style print-button" onclick="window.print();">Imprimer le rapport</button>
+	</h2>
+</div>
+
+<%= render 'user_blessure_rapport_graphics' %>

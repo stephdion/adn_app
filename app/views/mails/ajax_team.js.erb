@@ -1,0 +1,53 @@
+var chkitem = $(); //Variable used to keep checked users
+
+//Loop to see if users are checked
+$('#mail_user > div').each(function () {
+	$(this).find('input').each(function(j, element)
+    {
+    	if($(this).is(":checked")){
+    		$(this).attr('checked', 'checked');//Necessary add of checked value (for spawning the element)
+    		var uid = $(this).attr("id").replace("chk-","");
+    		chkitem = chkitem.add($("#"+uid));
+    	}
+	});
+});
+
+$("#mail_user").html("");//Clearing the div
+
+$(chkitem).each(function() {
+	//alert($(this).attr("id"));
+	//Adding the checked users
+	$("#mail_user").html($("#mail_user").html() + '<div class="row user-item" id="'+$(this).attr("id")+'" style="cursor:pointer">'+ $(this).html() + '</div');
+});
+
+//Appending the list of new users (AJAX)
+$("#mail_user").append("<%= escape_javascript(render 'user_list') %>");
+
+//Checking for duplicates : removing if found
+$(chkitem).each(function() {
+    var ids = $('[id="'+$(this).attr("id")+'"]');
+    if (ids.length > 1) $('[id="'+$(this).attr("id")+'"]:gt(0)').remove();
+});
+
+//Events
+$(".user-item").on("click",function(){
+	var uid = $(this).attr("id");
+	if($('#chk-' + uid).is(':checked')){
+		$('#chk-' + uid).prop('checked', false);
+		$('#uid_to').val($('#uid_to').val().replace(","+uid, "")); 		
+	}else{
+		$('#chk-' + uid).prop('checked', true);
+		$('#uid_to').val($('#uid_to').val() + "," + uid);
+	}
+});
+
+$(".customchk").on("click",function(event){
+	event.stopPropagation();
+	var uid = $(this).attr("id").replace("chk-","");
+		//$("#"+uid).get(0).click();
+	if($('#chk-' + uid).is(':checked')){
+		$('#uid_to').val($('#uid_to').val() + "," + uid);
+	}else{
+		$('#uid_to').val($('#uid_to').val().replace(","+uid, "")); 	
+	}
+});

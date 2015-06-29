@@ -1,0 +1,19 @@
+<% provide(:title, @exercise_category.name) %>
+<div class="margin-bottom">
+	<h1 class="text-center"><%= t("categories_exercises") %></h1>
+</div>
+
+<p>
+  <b>Name:</b>
+  <%= @exercise_category.name %>
+</p>
+
+<% if @exercise_category.exercise_subcategories.any? %>
+  <%= I18n.t(:category_contains_subcategories) %><br>
+    <% @exercise_category.exercise_subcategories.each do |subcategory| %>
+    <%= link_to subcategory.name, edit_exercise_subcategory_path(subcategory) %><br>
+    <% end %>
+    <br><br>
+  <% end %>
+
+<%= link_to  t(:general_back), exercise_categories_path, :class=>"btn btn-default" %>

@@ -1,0 +1,49 @@
+<% provide(:title, t(:equipe_modify)) %>
+<h1>Modifier l'Équipe</h1>
+
+<div class="row">
+<div class="span6">
+    <%= form_for(@equipe) do |f| %>
+      <%= render 'shared/equipe_error_messages' %>
+
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+
+      <br>
+      <%= f.label :description %>
+      <%= f.text_field :description %>
+
+      <div class="styled-select">
+      <%= f.label :user_id, t(:general_admin) %>
+      <%= f.collection_select :user_id, User.in_organization(["TRAINER", "SYSADM", "ADN_SYSADM"]).order(:last_name), :id, :name %>
+      </div>
+
+      <%= f.label :equipe_type_id %>
+      <div class="styled-select">
+        <%= f.collection_select :equipe_type_id, @current_organization.equipe_types, :id, :name %>
+      </div>
+      </br>
+      <div class="styled-select">
+        <%= f.label :organization_id %>
+        <%= f.collection_select :organization_id, @current_user.organizations, :id, :name %>
+      </div>
+      </br>
+      <%= t(:equipe_add_participants) %>:
+      </br>
+      <%= render 'athletecheckboxes' %>
+      </br>
+      </br>
+      <% if @equipe.user %>
+        <%= t(:general_owner) %>: <%= link_to @equipe.user.name, @equipe.user %>
+       <% else %>
+        <%= t(:general_owner) %>: <%= t(:general_sysadmin) %>
+      <% end %>
+      <div class="submitButton">
+        <%= f.submit t(:button_edit), class: "btn btn-default" %>
+      </br>
+      </br>
+        <%= link_to  t(:equipe_return), equipes_path %>
+      </div>
+    <% end %>
+  </div>
+</div>

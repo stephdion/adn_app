@@ -1,0 +1,66 @@
+	<div class="row">
+		<div class="col-md-12">
+			<h4 class="title-rapport">Évaluations</h4>
+		</div>
+	</div>
+	<div class="row">
+	  <div class="col-md-12 profilePullMarginSub">
+
+		<!--<ul class="nav nav-tabs" id="recurive_inner_tabs_evals">
+	  <%@i=0%>
+		<%# @evalArray.each do |eval| %>
+			<% if @i==0 %>
+				<li class="active">
+			<%else%>
+				<li>
+			<%end%>
+			<a href="#tab_<%=(@i+97).chr%>ev" data-toggle="tab"><%#=eval[:name]%></a></li>
+			<%@i += 1%>
+		<%#end%>
+	  </ul>	-->
+	  <div class="tab-content">
+		  <div class="row wrapper-rapport-search-criteria-evaluation">
+		  	<div class="col-md-8">
+		  		<div class="col-xs-12 col-sm-12 col-md-12">
+					<h3 class="title-search">Rechercher<h3>
+				</div>
+		  		<%= render 'user_resultat_criteria_picker' %>
+		  	</div>
+			<div class="col-md-4">
+				<h4 class="text-center">Pointage</h4>
+				<div class="col-xs-12 col-sm-12 col-md-12">
+					<div class="buzzer_board_title"><%= I18n.t(:resultats_max_score)%></div>
+					<div class="twenty_four_box"><%= @max_score %></div>
+				</div>
+				<div class="col-xs-12 col-sm-12 col-md-12 pointage-bottom">
+					<div class="buzzer_board_title"><%= I18n.t(:resultats_max_differential)%></div>
+					<div class="twenty_four_box"><%= @evaluation.maximum_differential %></div>
+				</div>
+			<div class="col-xs-2 col-sm-2 col-md-2"> </div>
+			</div>
+		  </div>
+		<div class="row buzzer_board_allignment_buzz_buzz">
+		</div>
+		<section id="resultats_eval" style="display:none">
+			<div class="row">
+				<div class="col-md-12">
+					<h4 class="text-center title-result-search-evaluation">Résultats de recherche</h4>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12" id="table_eval_result" style="display:block;">
+					<%#=	render 'user_eval_result' %>
+					<%= render 'user_dashboard_resultat_evaluations' %>
+				</div>
+			</div>
+		</section>
+	</div>
+</div>
+</div>
+
+<script>
+//Fix ajax debind calendar
+$(".input-group.date").datetimepicker({
+    pickTime: false
+});
+</script>

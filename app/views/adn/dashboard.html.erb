@@ -1,0 +1,34 @@
+<% provide(:title, 'Dashboard') %>
+<h1>Bienvenue : <%= cookies[:user_name] %></h1>
+
+<div class="container fluid">
+<%=
+if is_athlete(cookies[:sessionid])
+  "Athlete Section"
+end
+%>
+</div>
+
+<div class="container fluid">
+<%=
+if is_admin(cookies[:sessionid])
+  "Parent Section"
+end
+%>
+</div>
+
+<div class="container fluid">
+<%=
+if is_trainer(cookies[:sessionid])
+  "Trainer Section"
+end
+%>
+</div>
+
+<div class="container fluid">
+<%=
+if is_professional(cookies[:sessionid])
+  "Professionnal Section"
+end
+%>
+</div>

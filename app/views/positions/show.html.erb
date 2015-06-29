@@ -1,0 +1,20 @@
+<% provide(:title, t(:position) + ": " + @position.name) %>
+<h1><%= t(:position) + ": " + @position.name%></h1>
+
+<p>
+  <b><%=t(:general_name)%>:</b>
+  <%= @position.name %>
+</p>
+
+<p>
+  <b><%= I18n.t 'activerecord.attributes.position.equipe_type_id' %>:</b>
+  	 <% if @position.equipe_type %>
+  		<%= @position.equipe_type.name %>
+  	 <% else %>
+  	   	 <%=t(:position_all_teams)%>
+    <% end %>
+</p>
+<div class="span4">
+  <%= link_to t(:button_edit), edit_position_path(@position), class: "btn btn-default" %>
+  <%= link_to t(:general_back), positions_path, class: "btn btn-default", :style=>"display:inline;margin-left:10px;"  %>
+</div>

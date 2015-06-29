@@ -1,0 +1,2 @@
+module BlessuretypesHelper
+end

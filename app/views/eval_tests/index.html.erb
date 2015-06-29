@@ -1,0 +1,51 @@
+<% provide(:title, t(:test_index)) %>
+<div class="margin-bottom">
+<h1 class="text-center"><%= t(:test_index) %></h1>
+<%= link_to t(:test_new), new_eval_test_path, class: "btn btn-default btn-lg margin-bottom-10" %>
+
+<div class="row">
+
+<%= render 'test_tree' %>
+
+<div id="tests" class="span5 col-md-7 col-md-offset-1" style="border-style: solid;height: 500px; overflow: scroll; overflow-x: hidden;">
+  <% @eval_tests.each do |eval_test| %>
+      <% if eval_test.test_subcategory_id %>
+        <% subcategory = eval_test.test_subcategory_id.to_s %>
+      <% else %>
+        <% subcategory = "none"%>
+      <% end %>
+      <%= content_tag :div, class: "box-margin span1 tree_" + subcategory, style: "display: none;"  do -%>
+      <%= image_tag eval_test.image.url(:thumbnail) %><br>
+      <%= link_to eval_test.short_name, eval_test%><br><br>
+      <% end -%>
+      <% end %><br>
+</div>
+</div>
+<br>
+<%= link_to I18n.t(:categories_edit_tests), edit_multiple_eval_tests_path, class: "btn btn-default margin-bottom-10" %><br>
+
+<%= link_to t(:categories_edit), test_categories_path, class: "btn btn-default" %>
+
+</div>
+
+<script>
+        function CheckBoxHandler(check_box_tag, id) {
+          var checkbox_id = check_box_tag + "_" + id;
+          var box_class = "span1 " + check_box_tag + "_" + id;
+          checkbox = document.getElementById(checkbox_id);
+          exercises = document.getElementsByClassName(box_class);
+          if (checkbox.checked == true) {
+            for(var i=0; i<exercises.length; i++) {
+            exercises[i].style.display= "inline-block";
+            }
+          }
+          else {
+            for(var i=0; i<exercises.length; i++) {
+            exercises[i].style.display = "none";
+            }
+          }
+          //event.preventDefault();
+      }
+
+</script>
+

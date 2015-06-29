@@ -1,0 +1,39 @@
+<div class="row"><!--RAZE-->
+	  <div class="col-md-12"><!--RAZE-->
+			<div class="page-header">
+				<h1 id="timeline" style="text-align: center;">Timeline</h1>
+			</div>
+			<ul class="timeline">
+			<% number = 0 %>
+			<% @timelineArray.each do |news|
+				date = news[:date]
+
+				if news[:icon].to_s.include? "broken"
+					date = news[:date].to_s[0..10]
+				end
+			#news[0] = title, news[1] = description, news[2] = css class, news[3] = options(clickable), news[4] = date%>
+				<% if number % 2 == 0 %>
+					<li>
+				<% else %>
+					<li class="timeline-inverted">
+				<%end%>
+
+				<div class="timeline-badge <%= news[:css] %>"><span class="<%= news[:icon] %>"></div>
+				  <div class="timeline-panel">
+					<div class="timeline-heading">
+					  <h4 class="timeline-title"><%= news[:title] %></h4>
+					  	<div style="margin-top:-15px">
+					  		<%= date %>
+					  	</div>
+					</div>
+					<div class="timeline-body">
+					  <p><%= news[:description] %></p>
+					</div>
+				  </div>
+
+				</li>
+				<% number += 1 %>
+			<%end%>
+			</ul>
+	  </div><!--RAZE-->
+	</div><!--RAZE-->

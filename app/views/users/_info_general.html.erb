@@ -1,0 +1,61 @@
+<table class="table table_contact_info_info">
+<tr>
+	<td class="info_table_left_column_tag">Adresse</td>
+	<td><%= @user.address %></td>
+  </tr>
+  <tr>
+	<td class="info_table_left_column_tag">Ville</td>
+	<td><%= @user.city %></td>
+  </tr>
+  <tr>
+	<td class="info_table_left_column_tag">Province</td>
+	<td><%= @user.state %></td>
+  </tr>
+  <tr>
+	<td class="info_table_left_column_tag">Code Postale</td>
+	<td><%= @user.postalCode %></td>
+  </tr>
+  <tr>
+	<td class="info_table_left_column_tag">Pays</td>
+	<td><%= @user.country %></td>
+  </tr>
+  <tr>
+	<td class="info_table_left_column_tag">Email</td>
+	<td>     
+	<indent><%= @user.email%></indent>
+	  <br/>	
+	<% @user.user_emails.each do |items| %>
+	 <% if !items.email_type.blank?%>
+	  <indent><%= items.to_s %></indent>
+	  <br/>
+	  <%end%>
+  <% end %>
+  </td>
+  </tr>
+  <tr>
+	<td class="info_table_left_column_tag">Phone </td>
+	<td>
+	<% @user.user_phones.each do |item| %>
+	  <% if item.phone_type == "Home"%>
+		Home_icon<indent><%= item.number.to_s %></indent>
+		<br/>
+	  <% elsif item.phone_type == "Work"%>
+	   Work_icon<indent><%= item.number.to_s %></indent>
+	   <br/>
+	  <% elsif item.phone_type == "Mobile"%>
+	   Mobile_icon<indent><%= item.number.to_s %></indent>
+	   <br/>
+	  <% else %>
+	   <!--No_icon<indent><%#= item.number.to_s %></indent>-->
+	  <% end %>
+		  
+	<% end %>
+</td>
+  </tr>
+  <% if current_user?(@user) || is_current_user_sysadmin? %>
+  <tr>
+  <td><%= link_to "Modifier", [:ajax_info_general, @user], remote: true, class: "btn btn-default button_profile_box_one" %></td>
+  <!-- <a class="btn btn-default button_profile_box_one" data-remote="true" href="/users/5/ajax_info_general">Modifier<i class="glyphicon glyphicon-cog profile_user_button_icon_align"></i></a> -->
+  </tr>
+  <%end%>
+  </table>

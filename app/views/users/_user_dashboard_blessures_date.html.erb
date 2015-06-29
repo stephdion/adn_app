@@ -1,0 +1,19 @@
+<div class="span12 row">
+  <div class="span7 row">
+    <div class="margin-bottom">
+     <div style="graphicBox">
+      <blessuresLabel class="title-graph"><%= I18n.t(:chart_blessures_label_month) %>: </blessuresLabel>
+
+      <% (0..(@year_labels.size-1)).each do |i| %>
+      <%= content_tag(:div, content_tag(:p, @year_labels[i]), style: "color: " + @year_colors[i] + "; font-weight :bold; display: inline-block;font-size:24px;", class: "desc-graph") %>
+      <% end %>
+      <%= content_tag "canvas", id: "barGraph",
+                          width: "700",
+                          height:"200",
+                          data: {labels: @bar_labels, values: @bar_chart_data} do %>
+      Loading graphic...
+      <% end %>
+      </div>
+    </div>
+  </div>
+</div>

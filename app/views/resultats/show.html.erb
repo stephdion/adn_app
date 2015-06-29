@@ -1,0 +1,31 @@
+<% provide(:title, 'Resultat') %>
+<h1>Resultat:</h1>
+
+<div class="row">
+  <div class="span6 offset3">
+  	  Athlete:
+	  <%= @resultat.athlete.name%>
+	  </br> 
+      </br>
+      Date:
+      <%= @resultat.created_at.strftime("%e %b, %Y, %H:%M") %>
+	  </br> 
+      </br>
+      Evaluateur:
+	  <%= @resultat.user.name %>
+	  </br> 
+      </br>
+      Equipe:
+	  <%= @resultat.equipe.name %>
+	  </br> 
+      </br>
+      Test:
+      <%= image_tag @resultat.eval_test.image.url(:thumbnail) %>
+	  <%= link_to @resultat.eval_test.name, @resultat.eval_test %>
+	  </br> 
+      </br>
+      Resultat:
+	  <%= @resultat.value %>
+  	  </br>
+      </div>
+      </div>

@@ -1,0 +1,105 @@
+<div class="row">
+	<%= form_tag('./create', :id => 'form_mail', :method => 'post') %>
+	<div class="row" style="border-style: solid;">
+	<% if params[:arr] %>
+		<% arr = ""
+		params[:arr].each_with_index do |uid,index| 
+			arr = "#{arr},#{uid}"
+		end %>
+		<%= hidden_field_tag 'uid_to', "#{arr}" %>
+	<% elsif params[:id] %>
+		<%= hidden_field_tag 'uid_to', ",#{params[:id]}" %>
+	<% else %>
+		<%= hidden_field_tag 'uid_to', '' %>
+		<%= select_tag "mail_team", options_from_collection_for_select(@teams, "id", "name"), {:class => "form-control", :style => "padding:0;",:prompt => 'Choisir une équipe'} %>
+		<%= check_box_tag 'team_all', "1"%>
+		<%= label_tag "team_all","Toutes les équipes" %>
+		<br>
+	<% end %>
+		
+		<%= label_tag t(:mail_to), nil %>
+		<div id="mail_user" class="row" style="max-height:150px;overflow:auto;overflow-x:hidden;">
+			<% if @mail_method == 0 %>
+			<%#= select_tag :uid_to, options_from_collection_for_select(@users_to, "id", "name", params[:uid_to]), {:class => "form-control", :style => "padding:0; width:300px"} %>
+			
+			<% elsif @mail_method == 1 %>
+				<br><span>
+					<%= @users_to.name %>
+				</span><br>
+			<% elsif @mail_method == 2 %>
+				<br><span>
+				<% @users_to.each_with_index do |user,index| %>
+					<%= user.name %><br>
+				<% end %>
+				</span><br>
+			<% end %>
+		</div>
+	</div>
+	<div class="row" style="border-style: solid;">
+		<%= label_tag t(:mail_subject), nil, class: '' %><br>
+		<%= text_field_tag :subject, params[:subject], :class => "form-control search_form", :style => "padding:0; width:100%" %><br>
+		<input id="fileupload" type="file" name="files[]" data-url="server/php/" multiple>
+		<%= label_tag t(:mail_message), nil, class: '' %><br>
+		<%= text_area(:message, :message, :style =>"width:100%;height:400px;") %><br>
+
+	</div>
+			<div style="float:right">
+			<%= submit_tag t(:comment_send), :id => "mail_send", :class => "btn btn-default" %>
+			<%= link_to t(:general_cancel), mails_path, :id => "mail_cancel", :class => "btn btn-default" %>
+		</div>
+	
+</div>
+<script>
+$(function() {
+  $('#form_mail').find("input:file").each(function(i, elem) {
+    var fileInput    = $(elem);
+    var form         = $(fileInput.parents('form:first'));
+    var submitButton = form.find('input[type="submit"]');
+    var progressBar  = $("<div class='bar'></div>");
+    var barContainer = $("<div class='progress'></div>").append(progressBar);
+    fileInput.after(barContainer);
+    fileInput.fileupload({
+      fileInput:       fileInput,
+      url:             '<%= @s3_direct_post.url %>',
+      type:            'POST',
+      autoUpload:       true,
+      formData:         <%= @s3_direct_post.fields.to_json.html_safe %>,
+      paramName:        'file', // S3 does not like nested name fields i.e. name="user[avatar_url]"
+      dataType:         'XML',  // S3 returns XML if success_action_status is set to 201
+      replaceFileInput: false,
+      progressall: function (e, data) {
+        var progress = parseInt(data.loaded / data.total * 100, 10);
+        progressBar.css('width', progress + '%')
+      },
+      start: function (e) {
+        submitButton.prop('disabled', true);
+
+        progressBar.
+          css('background', 'green').
+          css('display', 'block').
+          css('width', '0%').
+          text("Loading...");
+      },
+      done: function(e, data) {
+        submitButton.prop('disabled', false);
+        progressBar.text("Uploading done");
+
+        // extract key and generate URL from response
+        var key   = $(data.jqXHR.responseXML).find("Key").text();
+        var url   = '//<%= @s3_direct_post.url.host %>/' + key;
+
+        // create hidden field
+        var input = $("<input />", { type:'hidden', name: fileInput.attr('name'), value: url })
+        form.append(input);
+      },
+      fail: function(e, data) {
+        submitButton.prop('disabled', false);
+
+        progressBar.
+          css("background", "red").
+          text("Failed");
+      }
+    });
+  });
+});
+</script>

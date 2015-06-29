@@ -1,0 +1,119 @@
+  <div class="row">
+    <div class="col-lg-4">
+      <!--QUARTER BOX-->
+      <div id="profile_box">
+        <%= render 'user_profil_box' %>
+      </div>
+	  <!--JUNK------------------------------------------------------------------------ -->
+      <%= render 'user_adress_box' %>
+      <%= render 'user_msg_box' %>
+	  <!--JUNK------------------------------------------------------------------------ -->
+    </div>
+    <!--UI-->
+    <div class="col-lg-8 margin profilePullMargin">
+        <div class="col-md-12 nav_profile_banner_img" style="background-image: url('<%= @user.banner.url(:large) %>');">
+          <nav class="navbar navbar-inverse" id="profile_sub_nav_repo_923" role="navigation">
+            <div class="container-fluid">
+              <!-- Brand and toggle get grouped for better mobile display -->
+              <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+              </div>
+              <!-- Collect the nav links, forms, and other content for toggling -->
+              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+                <ul class="nav navbar-nav">
+                  <li><a href="#tab_a" data-toggle="tab"><span class="fontello-round15 sub_nav_icons_reposition"></span>Timeline</a></li>
+                  <li><a href="#tab_b" data-toggle="tab"><span class="fontello-business133 sub_nav_icons_reposition"></span>Info</a></li>
+                  <li><a href="#tab_c" data-toggle="tab"><span class="fontello-weight sub_nav_icons_reposition"></span>Mes Programmes</a></li>
+                  <li><a href="#tab_d" data-toggle="tab"><span class="fontello-note sub_nav_icons_reposition"></span>Mes Évaluations<%= render 'user_badges_evaluations' %></a></li>
+                  <li><a href="#tab_f" data-toggle="tab"><span class="fontello-broken28 sub_nav_icons_reposition"></span></span>Blessures<%= render 'user_badges_blessures' %></a></li>
+                  <!--<li><a href="#tab_e" data-toggle="tab"><span class="fontello-mail sub_nav_icons_reposition"></span>Inbox<span class="badge" id="badge_profile_sub_nav">1</span></a></li>-->
+                </ul>
+              </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+          </nav>
+        </div>
+        <!---TAB CONTENT /NAV-->
+		<div class="row"><!--TEST12-->
+		  <div class="col-md-12"><!--TEST12-->
+			<div class="tab-content">
+			
+				<div class="tab-pane fade active in" id="tab_a">
+					<%= render 'user_timeline' %>
+				</div><!--END TAB A-->
+			  
+				<div class="tab-pane fade" id="tab_b"><!--TAB B-->
+					<%= render 'user_info' %>
+				</div><!--TAB B-->
+				   
+				<div class="tab-pane fade" id="tab_c"><!--TAB C-->
+					<%= render 'user_program' %> 
+				</div><!--TAB C-->
+				 
+				<div class="tab-pane fade" id="tab_d"><!--TAB D-->
+					<%= render 'user_eval_athlete' %> 
+				</div><!--TAB D-->
+							
+				<div class="tab-pane fade" id="tab_f"><!--TAB F-->
+					<%= render 'user_blessures_athlete' %>
+				</div><!--TAB F-->
+			   
+			</div><!-- tab content -->
+		  </div><!--TEST12-->
+		</div><!--TEST12-->
+      </div><!--END COL-8--> 
+  </div>
+
+<!--OLD PROFILE-->
+<h1 style="background-color: red;">PROFILE - V1</h1>
+<div>
+  <table>
+    <h1_left>
+      <%= @user.name %>
+    </h1_left>
+    <h1>HELLO WORLD! ITS WORKING</h1>
+    <h1>JOOD JOB THIS MORNING - K</h1>
+    <tr>
+      <td style="width:10%;vertical-align:top;padding-top:5px;padding-right:5px">
+        <%= image_tag @user.photo.url(:medium), size: "150x150" %>
+      </td>
+      <td style="width:80%">
+        <%= render 'user_personal_info' %>
+      </td>
+    </tr>
+  </table>
+<% provide(:title, @user.name) %>
+  <br/>
+  <h6>
+    <% @user.memberships.each do |items| %>
+                <%= items.to_s %><br/>
+            <% end %>
+  </h6>
+<br/>
+</div>
+
+<% if is_current_user_parent? || is_current_user_sysadmin?%>
+  <%= render 'children_dashboard' %>
+<% end %>
+
+<% if current_user?(@user) || is_current_user_sysadmin? %>
+    <%= render 'user_dashboard' %>
+    <br/>
+<% end %>
+
+<% if current_user?(@user) || is_current_user_in_any_role?(['SYSADM', 'DIR', 'TRAINER', 'PHYSIO']) || current_user.children.include?(@user) || @adn_sysadmin %>
+
+  <%= render 'user_teams' %>
+
+  <%= render 'user_admin_teams' %>
+
+  <%= render 'user_resultats' %>
+
+  <%#= render 'user_blessures' %>
+
+ <% end %>
+

@@ -1,0 +1,20 @@
+<div class="row">
+<blessuresPieTitle class="title-table-graph"><%= I18n.t(:chart_blessures_label_positions) %></blessuresPieTitle>
+    <div class="row">
+    <table class="table table-condensed">
+      <thead>
+        <tr class="top-table-graph">
+          <td class="equipe-graph">Position</td>
+          <td class="qte-graph">Quantité</td>
+        </tr>
+      </thead>
+      <tbody>
+          <% (0..(@position_totals.size-1)).each do |i| %>
+              <%= content_tag(:tr) %>
+              <%= content_tag(:td, @position_totals[i][:name]) %>
+              <%= content_tag(:td, @position_totals[i][:count], class: "qte-graph") %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+</div>

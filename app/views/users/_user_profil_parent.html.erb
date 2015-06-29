@@ -1,0 +1,56 @@
+  <div class="row">
+    <div class="col-lg-4">
+      <!--QUARTER BOX-->
+      <div id="profile_box">
+        <%= render 'user_profil_box' %>
+      </div>
+	   <!--JUNK------------------------------------------------------------------------ -->
+           <%= render 'user_adress_box' %>
+      <%= render 'user_msg_box' %>
+	  <!--JUNK------------------------------------------------------------------------ -->
+    </div>
+    <!--UI-->
+    <div class="col-lg-8 margin profilePullMargin">
+        <div class="col-md-12 nav_profile_banner_img">
+          <nav class="navbar navbar-inverse" id="profile_sub_nav_repo_923" role="navigation">
+            <div class="container-fluid">
+              <!-- Brand and toggle get grouped for better mobile display -->
+              <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+              </div>
+              <!-- Collect the nav links, forms, and other content for toggling -->
+              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+                <ul class="nav navbar-nav">
+                <li><a href="#tab_a" data-toggle="tab"><span class="fontello-business133 sub_nav_icons_reposition"></span>General</a></li>
+                  <li><a href="#tab_b" data-toggle="tab"><span class="fontello-business133 sub_nav_icons_reposition"></span>Info</a></li>
+                  <!--<li><a href="#tab_e" data-toggle="tab"><span class="fontello-mail sub_nav_icons_reposition"></span>Inbox<span class="badge" id="badge_profile_sub_nav">1</span></a></li>-->
+                </ul>
+              </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+          </nav>
+        </div>
+        <!---TAB CONTENT /NAV-->
+            <div class="row"><!--TEST12-->
+              <div class="col-md-12"><!--TEST12-->
+                <div class="tab-content">
+				
+				<div class="tab-pane fade active in" id="tab_a">
+                  <% if is_current_user_parent? || is_current_user_sysadmin?%>
+  <%= render 'children_dashboard' %>
+<% end %>
+				  </div><!--END TAB A-->
+				  
+				  <div class="tab-pane fade" id="tab_b"><!--TAB B-->
+                      <%= render 'user_info' %>
+					   </div><!--TAB B-->
+					   
+                </div><!-- tab content -->
+              </div><!--TEST12-->
+            </div><!--TEST12-->
+      </div><!--END COL-8--> 
+  </div>

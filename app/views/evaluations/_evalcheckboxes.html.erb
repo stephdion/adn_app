@@ -1,0 +1,45 @@
+<%= hidden_field_tag "evaluation[eval_test_ids][]", nil %>
+
+<div class="row">
+
+<%= render 'eval_tests/test_tree' %>
+
+  <div id="tests" class="span5 col-md-7 col-md-offset-1" style="border-style: solid; height: 500px; overflow: scroll; overflow-x: hidden;">
+      <% @tests.each do |test| %>
+        <% if test.test_subcategory_id %>
+          <% subcategory = test.test_subcategory_id.to_s %>
+          <% else %>
+          <% subcategory = "none"%>
+        <% end %>
+        <%= content_tag :div, class: "box-margin span1 tree_" + subcategory, style: "display: none;"  do -%>
+
+          <%= image_tag test.image.url(:thumbnail) %><br>
+          <%= check_box_tag "evaluation[eval_test_ids][]", test.id, @evaluation.eval_test_ids.include?(test.id), id: dom_id(test), onclick:"CheckBoxHandler('eval_test', #{test.id});" %>
+          <%= label_tag dom_id(test), test.short_name %>
+
+        <% end -%>
+      <% end %>
+    </div>
+
+</div>
+
+<script>
+        function CheckBoxHandler(check_box_tag, id) {
+          var checkbox_id = check_box_tag + "_" + id;
+          var box_class = "span1 " + check_box_tag + "_" + id;
+          checkbox = document.getElementById(checkbox_id);
+          exercises = document.getElementsByClassName(box_class);
+          if (checkbox.checked == true) {
+            for(var i=0; i<exercises.length; i++) {
+            exercises[i].style.display= "inline-block";
+            }
+          }
+          else {
+            for(var i=0; i<exercises.length; i++) {
+            exercises[i].style.display = "none";
+            }
+          }
+          //event.preventDefault();
+      }
+
+</script>

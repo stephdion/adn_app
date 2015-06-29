@@ -1,0 +1,38 @@
+<%= hidden_field :end_date_rapport, params[:end_date_rapport], :id => "end_date_rapport" %>
+<%= hidden_field :start_date_rapport, params[:start_date_rapport], :id => "start_date_rapport" %>
+<div class="col-md-7 wrapper-head-rapport">
+	<div class="wrapper-event-date-filter">
+		<span id="label-date-filter">Du 13 au 20 Fév.  2014</span>
+		<span class="fa fa-caret-down drop-arrow"></span>
+	</div>
+	<span class="wrapper-switch-date">
+		<span id="change-date-left" class="fa fa-caret-left drop-arrow"></span>
+		<span id="change-date-right" class="fa fa-caret-right drop-arrow"></span>
+	</span>
+	<div class="pop-up pop-up-date">
+		<div class="calendar-wrapper-pop-up">
+			<div id="calendar" class="yui3-skin-sam"> 
+				<div class="mycalendar"></div>
+			</div>
+		</div>
+		<div class="option-calendar-pop-up">
+			<div class="time-selector-wrapper">
+				<span id="sct-today">Aujourd'hui</span>
+				<span id="sct-this-week">Cette semaine</span>
+				<span id="sct-this-month">Ce mois-ci</span>
+				<span id="sct-this-year">Cette année</span>
+				<span id="sct-yesterday">Hier</span>
+				<span id="sct-last-week">La semaine dernière</span>
+				<span id="sct-last-month">Le mois dernier</span>
+				<span id="sct-last-year">L'année dernière</span>
+			</div>
+			<div class="wrapper-submit-calendar">
+				<%= submit_tag "Appliquer", :id => "blessure-filter-by-team", :class => "button-style", :remote => true %>
+				<span class="wrapper-spinner-date">
+					<%= render :file => "spinner/spinner" %>
+				</span>
+			</div>
+		</div>
+	</div>
+</div>
+

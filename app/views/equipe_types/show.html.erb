@@ -1,0 +1,17 @@
+<% provide(:title, @equipe_type.name) %>
+<div class="margin-bottom">
+<h1> <%= t(:equipe_type) %>: <%= @equipe_type.name %></h1>
+<p>
+  <b><%= I18n.t 'activerecord.attributes.eval_type.name' %>:</b>
+  <%= @equipe_type.name %>
+</br>
+
+  <b><%= I18n.t 'activerecord.attributes.eval_type.organization_id' %>:</b>
+  <% if @equipe_type.organization %>
+    <%= @equipe_type.organization.name %>
+  <% else %>
+    <td><%= t(:general_none) %></td>
+  <% end %>
+</p>
+
+<%= link_to t(:general_back), equipe_types_path, class: "btn btn-default" %>

@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b><%= t 'activerecord.attributes.blessuretype.name_fr' %>:</b>
+  <%= @blessuretype.name_fr %>
+</p>
+
+<p>
+  <b><%= t 'activerecord.attributes.blessuretype.code' %>:</b>
+  <%= @blessuretype.code %>
+</p>
+
+<p>
+  <b><%= t 'activerecord.attributes.blessuretype.description' %>:</b>
+  <%= @blessuretype.description %>
+</p>
+
+
+<%#= link_to 'Edit', edit_blessuretype_path(@blessuretype) %>
+<%= link_to t("general_back"), blessuretypes_path, :class=>"btn btn-default" %>

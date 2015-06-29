@@ -1,0 +1,148 @@
+<% provide(:title, @resultats.first.evaluation.name) %>
+
+<div class="row">
+  <div class="col-md-12 text-center">
+    <h1><%= @resultats.first.evaluation.name %></h1>
+  </div>
+</div>
+
+
+<% if @resultat_data.errors.any? %>
+  <div id="error_explanation">
+    <div class="alert alert-error">
+      <%= pluralize(@resultat_data.errors.count,  I18n.t(:error)) %> <%= I18n.t(:error_in_form)%>
+    </div>
+    <ul>
+      <% @resultat_data.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_tag (prise_donnees_resultats_path) do %>
+  <div class="row text-center">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+      <%= fields_for :resultat, @resultat_data do |r| %>
+        <div class="form-group">
+          <%= r.label :created_at_string, I18n.t(:general_date) + " - " + I18n.t(:general_date_format) %><br>
+          <%= r.text_field :created_at_string, :class => "form-control" %>
+        </div>
+        <div class="form-group">
+          <%= r.label :user_id, I18n.t(:general_evaluator) %>
+          <div class="styled-select">
+            <%= r.collection_select :user_id, User.in_organization(["TRAINER", "PHYSIO", "SYSADM", "DIR", "ADN_SYSADM"]).order(:last_name), :id, :name, {selected: @resultat_data[:user_id]}, {:class => "form-control", :style => "padding:0;width:360px"} %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-2">
+      <ul class="nav nav-pills nav-stacked eval_pill_menu">
+        <% index = 0 %>
+        <% @eval_tests.each do |eval_test| %>
+          <%index = index + 1%>
+          <% if eval_test.name == @current_eval_test.name%>
+            <li class="active" style="cursor:pointer;">
+          <% else %>
+            <li class="" style="cursor:pointer;">
+          <% end %>
+          <a onclick="$('#btn_<%= index %>').get(0).click()"><%= eval_test.name %></a>
+          <%= submit_tag eval_test.short_name, name: "next_test", value: eval_test.short_name, id: "btn_#{index}", style:"display:none" %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+
+    <div class="col-md-10">
+      <div class="tab-content">
+
+        <%= hidden_field_tag :current_eval_test_short_name, @current_eval_test.short_name %>
+        <div class="row">
+          <div class="col-md-12">
+            <h4>Test: <%= @current_eval_test.name %></h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <h4>Description:</h4>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <p><%= @current_eval_test.description %></p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <%= image_tag @current_eval_test.image.url(:medium) %>
+          </div>
+        </div>
+        
+        </br>
+        <div class="row">
+          <div class="col-xs-12 col-sm-6 col-md-4">
+            <table class="table">
+            <tr>
+              <th><%= t(:general_athlete)%></th>
+              <% if @resultats.first.left_side != 100 %>
+                <th><%= t(:general_side)%></th>
+              <% end %>
+              <th> 0 </th>
+              <th> 1 </th>
+              <th> 2 </th>
+              <th> 3 </th>
+              <th> ? </th>
+            </tr>
+                <% @resultats.each do |resultat| %>
+                  <%= fields_for "resultats[]", resultat do |f| %>
+                    <tr>
+                      <td class="left"><%= resultat.athlete_name %></td>
+                      <% if resultat.left_side != 100 %>
+                          <td><%= "Droite" %></td>
+                      <% end %>
+                      <td class="center"><%= f.radio_button :value, 0 %></td>
+                      <td class="center"><%= f.radio_button :value, 1 %></td>
+                      <td class="center"><%= f.radio_button :value, 2 %></td>
+                      <td class="center"><%= f.radio_button :value, 3 %></td>
+                      <td class="center"><%= f.radio_button :value, 99 %></td>
+                    </tr>
+                    <% if resultat.left_side != 100 %>
+                    <tr>
+                      <td class="left"><%= resultat.athlete_name %></td>
+                      <td><%= "Gauche" %></td>
+                      <td class="center"><%= f.radio_button :left_side, 0 %></td>
+                      <td class="center"><%= f.radio_button :left_side, 1 %></td>
+                      <td class="center"><%= f.radio_button :left_side, 2 %></td>
+                      <td class="center"><%= f.radio_button :left_side, 3 %></td>
+                      <td class="center"><%= f.radio_button :left_side, 99 %></td>
+                    </tr>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </table>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <p>0 = <%= @resultats.first.evaluation.point_desc0 %></p>
+            <p>1 = <%= @resultats.first.evaluation.point_desc1 %></p>
+            <p>2 = <%= @resultats.first.evaluation.point_desc2 %></p>
+            <p>3 = <%= @resultats.first.evaluation.point_desc3 %></p>
+          </div>
+        </div>
+            
+        <div class="row">
+          <div class="col-md-12">
+            <%= submit_tag I18n.t(:resultats_eval_finished), name: "next_test", value: I18n.t(:resultats_eval_finished), class: "btn btn-default" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

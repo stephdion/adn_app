@@ -1,0 +1,69 @@
+<% provide(:title, @exercise.name) %>
+<div class="margin-bottom">
+<h1_left><%= t(:exercise)%>: <%= @exercise.name %></h1_left>
+<br>
+<%= I18n.t 'activerecord.attributes.exercise.short_name' %>: <%= @exercise.short_name %>
+</br>
+</br>
+<%= image_tag @exercise.image.url(:medium) %>
+</br>
+</br>
+<%= I18n.t 'activerecord.attributes.exercise.exercise_subcategory_id' %>:
+<% if @exercise.exercise_subcategory_id? %>
+    <%= @exercise.exercise_subcategory.exercise_category.name %>->
+    <%= @exercise.exercise_subcategory.name %>
+<% else %>
+    <%=  t(:general_none) %>
+  <% end %>
+</br>
+</br>
+<%= I18n.t 'activerecord.attributes.exercise.organization_id' %>: <%= @exercise.organization.name %>
+</br></br>
+<%= I18n.t 'activerecord.attributes.exercise.short_desc' %>: <%= @exercise.short_desc %>
+</br>
+</br>
+<div id="video"></div>
+<%= I18n.t 'activerecord.attributes.exercise.description' %>: <%= @exercise.description.html_safe %>
+</br>
+</br>
+<% if @exercise.video? %>
+     <%= I18n.t 'activerecord.attributes.exercise.video' %>:
+     </br>
+	<%= raw(youtube_embed(@exercise.video)) %>
+	</br>
+	<% else %>
+  <%= t(:exercise_video_none) %>
+  </br>
+  </br>
+<% end %>
+
+<% if @exercise.eval_tests.count > 1 %>
+  <%= t(:exercise_linked_tests) %>:
+<% elsif @exercise.eval_tests.count == 1 %>
+  <%= t(:exercise_linked_test) %>:
+<% else @exercise.eval_tests.count == 0 %>
+  <%= t(:exercise_no_tests) %>
+<% end %>
+</br></br>
+<% @exercise.eval_tests.each do |eval_test| %>
+      <%= image_tag eval_test.image.url(:thumbnail) %>
+      <%= link_to eval_test.name, eval_test %>
+      </br>
+<% end %>
+</br>
+<% if @exercise.user %>
+<%= t(:general_owner) %>: <%= @exercise.user.name %>
+<% else %>
+  <%= t(:general_owner) %>: <%= t(:general_sysadmin) %>
+<% end %>
+  </br>
+  </br>
+	 <% if current_user?(@exercise.user) || is_current_user_sysadmin? %>
+      <%= link_to t(:button_edit), modifier_exercise_path(:id => @exercise.id), class: "btn btn-default" %>
+      <%= link_to t(:button_delete), @exercise, :confirm => t(:button_confirm_delete), class: "btn btn-default", method: :delete %>
+	 </br>
+	 </br>
+	 <% end %>
+</br>
+<%= link_to t(:exercise_return), exercises_path %>
+</div>

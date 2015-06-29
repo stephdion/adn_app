@@ -1,0 +1,332 @@
+<%= form_tag (user_path(@user) )+ '/ajax_result_eval', :id => 'form_result_picker_rapport', :method => 'get', :remote => true do %>
+<%= hidden_field :end_date_eval, params[:end_date_eval], :id => "end_date_rapport-eval" %>
+<%= hidden_field :start_date_eval, params[:start_date_eval], :id => "start_date_rapport-eval" %>
+<div class="col-md-5 wrapper-head-rapport" id="filter-eval">
+	<div class="wrapper-event-date-filter">
+		<span id="label-date-filter-eval">Du 13 au 20 Fév. 2014</span>
+		<span class="fa fa-caret-down drop-arrow"></span>
+	</div>
+	<span class="wrapper-switch-date">
+		<span id="change-date-left-eval" class="fa fa-caret-left drop-arrow"></span>
+		<span id="change-date-right-eval" class="fa fa-caret-right drop-arrow"></span>
+	</span>
+	<div class="pop-up pop-up-date">
+		<div class="calendar-wrapper-pop-up">
+			<div id="calendar" class="yui3-skin-sam"> 
+				<div id="mycalendareval"></div>
+			</div>
+		</div>
+		<div class="option-calendar-pop-up">
+			<div class="time-selector-wrapper" id="eval-elements">
+				<span class="sct-today-eval">Aujourd'hui</span>
+				<span class="sct-this-week-eval">Cette semaine</span>
+				<span class="sct-this-month-eval">Ce mois-ci</span>
+				<span class="sct-this-year-eval">Cette année</span>
+				<span class="sct-yesterday-eval">Hier</span>
+				<span class="sct-last-week-eval">La semaine dernière</span>
+				<span class="sct-last-month-eval">Le mois dernier</span>
+				<span class="sct-last-year-eval">L'année dernière</span>
+			</div>
+			<div class="wrapper-submit-calendar">
+				<%= submit_tag "Appliquer", :id => "blessure-filter-by-team", :class => "button-style", :remote => true %>
+				<span class="wrapper-spinner-date">
+					<%= render :file => "spinner/spinner" %>
+				</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="col-md-4 wrapper-head-rapport">
+	<div id="wrapper-event-team-filter" class="eval-pop-up-holder">
+		<span>Filtrer les résultats</span>
+		<span class="fa fa-caret-down drop-arrow"></span>
+	</div>
+	<div class="pop-up" id="pop-up-eval" >
+	   <h4>Évaluation(s)</h4>
+	   <div class="input-wrapper-rapport">
+			<%= select_tag :evaluation, options_from_collection_for_select(@current_organization.evaluations.order(:name), "id", "name", params[:evaluation]), multiple: true, :class => "form-control" %>
+		</div>
+		<h4>Test(s)</h4>
+	   <div class="input-wrapper-rapport refresh_link" id="test-wrapper-filter">
+			<%= select_tag :eval_test_id, options_from_collection_for_select(@special_cases, "id", "name", params[:special_case_test]), {:class => "form-control", :style => "padding:0;", :prompt => 'Tous'} %>
+		</div>
+		<h4>Equipe(s)</h4>
+		<div class="input-wrapper-rapport" id="equipe-wrapper-filter">
+			<%= select_tag 'multi_equipe_select', options_for_select(@team_picker, params[:multi_equipe_select]), multiple: true,
+						:id => "team_selected" %>
+		</div>
+		<span style="text-align: center; width: 100%; display: inline-block;">
+			<%= submit_tag "Appliquer", :id => "blessure-filter-by-team", :class => "button-style", :remote => true %>
+			<span class="wrapper-spinner-eval">
+				<%= render :file => "spinner/spinner" %>
+			</span>
+		</span>
+	</div>
+</div>
+<div class="col-md-3 wrapper-head-rapport">
+	<div id="wrapper-event-frequence-filter" class="frequence-pop-up-holder">
+		<span>Automatisation</span>
+		<span class="fa fa-caret-down drop-arrow"></span>
+	</div>
+	<div class="pop-up" id="pop-up-eval-frequence">
+	   <h4>Fréquences</h4>
+	   <div class="input-wrapper-rapport">
+			<%= select_tag :frequency, options_for_select([["Hebdomadaire", "1"], ["Mensuel", "2"], ["Annuel", "3"]]), :id => "frequence-filter-area", :style=>"width:100%"%>
+		</div>
+		<span style="text-align: center; width: 100%; display: inline-block;">
+			<%= submit_tag "Ajouter", :style=>"width: 100px;margin-left:-20px;", :id => "blessure-filter-by-frequence", :class => "button-style", :remote => true %>
+			<span class="wrapper-spinner2">
+				<%= render :file => "spinner/spinner" %>
+			</span>
+		</span>
+	</div>
+</div>
+<%end%>
+
+<script type="text/javascript">
+//###############################	IMPORTANT   ####################################
+////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////À implementer en module js///////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+YUI({lang:"fr-FR"}).use('intl', 'calendar', 'datatype-date', 'datatype-date-math', function(Y) {
+
+ Y.CalendarBase.CONTENT_TEMPLATE = Y.CalendarBase.TWO_PANE_TEMPLATE;
+
+ var calendareval = new Y.Calendar({
+   contentBox: "#mycalendareval",
+   width: "500px",
+   height: "263px",
+   showPrevMonth: true,
+   showNextMonth: true,
+   selectionMode: 'multiple'
+ }).render();
+
+ var rules = {
+   "all": {
+     "all": {
+       "all": {
+         "2,5": "tuesdays_and_fridays",
+         "0,6": "all_weekends"
+       }
+     }
+   }
+ };
+
+  calendareval.set("headerRenderer", function (curDate) {
+   var ydate = Y.DataType.Date,
+       output = ydate.format(curDate, {
+       format: "%B %Y"
+     }) + " &mdash; " + ydate.format(ydate.addMonths(curDate, 1), {
+       format: "%B %Y"
+     });
+   return output;
+ });
+
+ calendareval.on("selectionChange", function (e) {
+   end = new Date(e.newSelection[e.newSelection.length - 1]);
+   end.setDate(end.getDate() + 1);
+
+   $('#start_date_rapport-eval').val(moment(e.newSelection[0]).format('YYYY-MM-DD'));
+   $('#end_date_rapport-eval').val(moment(end).format('YYYY-MM-DD'));
+   refreshDateLabel();
+ });
+
+  //INIT 
+ start_init_date = new Date("2013-02-02");
+ end_init_date = new Date("2015-02-02");
+ array_date = selectRange(start_init_date, end_init_date);
+ calendareval.selectDates(array_date);
+ $('#end_date_rapport-eval').val(moment(end_init_date).format('YYYY-MM-DD'));
+ $('#start_date_rapport-eval').val(moment(start_init_date).format('YYYY-MM-DD'));
+ refreshDateLabel();
+
+ $(".sct-today-eval").click(function() {
+ 	calendareval.deselectDates();
+ 	calendareval.selectDates(new Date());
+ });
+
+$(".sct-this-week-eval").click(function() {
+	calendareval.deselectDates();
+	monday = getMonday(new Date());
+	sunday = getSundayFromMonday(monday);
+	array_date = selectRange(monday, sunday);
+
+	calendareval.selectDates(array_date);
+});
+
+$(".sct-this-month-eval").click(function() {
+	calendareval.deselectDates();
+	range_date = getFirstAndLastDayOfAMonth(new Date());
+	array_date = selectRange(range_date[0], range_date[1]);
+
+	calendareval.selectDates(array_date);
+});
+
+$(".sct-this-year-eval").click(function() {
+	calendareval.deselectDates();
+	year = new Date().getFullYear();
+	array_date = selectRange(year + "-01-01", year + "-12-31");
+
+	calendareval.selectDates(array_date);
+});
+
+$(".sct-yesterday-eval").click(function() {
+	calendareval.deselectDates();
+	date = new Date();
+	date.setDate(date.getDate() - 1);
+
+	calendareval.selectDates(date);
+});
+
+$(".sct-yesterday-eval").click(function() {
+	calendareval.deselectDates();
+	date = new Date();
+	date.setDate(date.getDate() - 1);
+
+	calendareval.selectDates(date);
+});
+
+$(".sct-last-week-eval").click(function() {
+	calendareval.deselectDates();
+	monday = new Date();
+	monday.setDate(monday.getDate() - 7);
+	monday = getMonday(monday);
+	sunday = getSundayFromMonday(monday);
+	array_date = selectRange(monday, sunday);
+
+	calendareval.selectDates(array_date);
+});
+
+$(".sct-last-month-eval").click(function() {
+	calendareval.deselectDates();
+	last_month = new Date();
+	last_month.setDate(last_month.getMonth() - 1);
+	range_date = getFirstAndLastDayOfAMonth(last_month);
+	array_date = selectRange(range_date[0], range_date[1]);
+
+	calendareval.selectDates(array_date);
+});
+
+$(".sct-last-year-eval").click(function() {
+	calendareval.deselectDates();
+	year = new Date();
+	year = year.getFullYear() - 1;
+	array_date = selectRange(year + "-01-01", year + "-12-31");
+
+	calendareval.selectDates(array_date);
+});
+
+function refreshDateLabel() {
+	end_date = new Date($('#end_date_rapport-eval').val());
+	end_date.setDate(end_date.getDate() + 1);
+	start_date = new Date($('#start_date_rapport-eval').val());
+	start_date.setDate(start_date.getDate() + 1); 
+	array_month = ["Jan.", "Fév.", "Mar.", "Avr.", "Mai", "Juin", "Juil.", "Août", "Sep.", "Oct.", "Nov.", "Déc."];
+
+	start_label = "";
+	end_label = "";
+	start_label_title = moment(start_date).format("YYYY-MM-DD");
+	end_label_title = moment(end_date).format("YYYY-MM-DD");
+
+	if (end_date.getMonth() != start_date.getMonth()) {
+		start_label = start_date.getDate() + " " + array_month[start_date.getMonth()];
+	} else {
+		start_label = start_date.getDate();
+	}
+
+	end_label = end_date.getDate() + " " + array_month[end_date.getMonth()] + " " + end_date.getFullYear();
+
+	$("#label-date-filter-eval").html("Du " + start_label + " au " + end_label); 
+	$(".date-rapport-title-eval").html(start_label_title + " au " + end_label_title);
+}
+
+$("#change-date-left-eval").click(function() { 
+	dateValue = new Date($('#end_date_rapport-eval').val());
+	calendareval.deselectDates();
+	dateValue.setDate(dateValue.getDate());
+	calendareval.selectDates(dateValue);
+});
+
+$("#change-date-right-eval").click(function() { 
+	dateValue = new Date($('#end_date_rapport-eval').val());
+	calendareval.deselectDates();
+	dateValue.setDate(dateValue.getDate() + 2);
+	calendareval.selectDates(dateValue);
+});
+
+
+//////////PARSING DATE FUNCTION////////////
+
+ function selectRange(startDate, endDate, addFn, interval) {
+
+	 addFn = addFn || Date.prototype.addDays;
+	 interval = interval || 1;
+
+	 var retVal = [];
+	 var current = new Date(startDate);
+	 var endDate = new Date(endDate);
+
+	 while (current <= endDate) {
+	  retVal.push(new Date(current));
+	  current.setDate(current.getDate() + 1);
+	 }
+
+	 return retVal;
+}
+
+function getMonday(currentDate) {
+	date = new Date(currentDate);
+	current_day = date.getDay();
+
+	if(current_day >= 1) {
+		while(current_day != 1) {
+			date.setDate(date.getDate() - 1);
+			current_day = date.getDay();
+		}
+	}
+	else {
+		date.setDate(date.getDate() + 1);
+	}
+
+	return date;
+}
+
+function getSundayFromMonday(monday) {
+	sunday = new Date(monday);
+	sunday = sunday.setDate(sunday.getDate() + 6);
+
+	return sunday;
+}
+
+function getFirstAndLastDayOfAMonth(date) {
+	var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+	var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+	return [firstDay, lastDay];
+}
+
+});
+
+///Rapport Event
+$('#filter-eval > .wrapper-event-date-filter').click(function(e) {
+	$('.pop-up-date').toggle();
+	$('#pop-up-eval').hide();
+	$('#pop-up-eval-frequence').hide();
+	e.preventDefault();
+});
+
+$('.eval-pop-up-holder').click(function(e) {
+	$('#pop-up-eval').toggle();
+	$('.pop-up-date').hide();
+	$('#pop-up-eval-frequence').hide();
+	e.preventDefault();
+});
+
+$('.frequence-pop-up-holder').click(function(e) {
+	$('#pop-up-eval-frequence').toggle();
+	$('#pop-up-eval').hide();
+	$('.pop-up-date').hide();
+	e.preventDefault();
+});
+</script>

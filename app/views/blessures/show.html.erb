@@ -1,0 +1,77 @@
+<% provide(:title, t(:general_injury)) %>
+<div class="span12">
+  <div class="margin-bottom">
+    <h1><%= t 'activerecord.attributes.models.blessure' %></h1>
+    <p>
+      <%= t 'activerecord.attributes.blessure.user_id' %>:
+      <%= link_to @blessure.user.name, @blessure.user %>
+
+    </p>
+
+    <p>
+      <%= t 'activerecord.attributes.blessure.date' %>: <%= @blessure.date %>
+    </p>
+
+    <p>
+      <%= t 'activerecord.attributes.blessure.equipe_type_id' %>: <%= sport_name @blessure %>
+    </p>
+
+    <p>
+      <%= t 'activerecord.attributes.blessure.type_de_blessure' %>:
+      <%= @blessure.type_de_blessure_name %>
+    </p>
+
+    <p>
+      <%= t 'activerecord.attributes.blessure.partie_du_corp' %>:
+      <%= @blessure.partie_du_corp_name %>
+    </p>
+
+    <p>
+      <%= t 'activerecord.attributes.blessure.symptomes' %>:
+      <%= get_values @blessure.symptomes, $symptomes %>
+    </p>
+
+    <p>
+      <%= t 'activerecord.attributes.blessure.mechanism' %>:
+      <%= get_value @blessure.mechanism, $mechanism %>
+    </p>
+
+    <p>
+      <%= t 'activerecord.attributes.blessure.surface' %>:
+      <%= get_value @blessure.surface, $surface %>
+    </p>
+
+    <p>
+      <%= t 'activerecord.attributes.blessure.retour_au_jeu' %>:
+      <%= get_value @blessure.retour_au_jeu, $yesno %>
+    </p>
+
+    <p>
+      <%= t 'activerecord.attributes.blessure.operation' %>:
+      <%= get_value @blessure.operation, $operation %>
+    </p>
+    <% if @blessure.operation_date!=nil %>
+        <p>
+          <%= t 'activerecord.attributes.blessure.operation_date' %>: <%= @blessure.operation_date %>
+        </p>
+    <% end %>
+    <p>
+      <%= t 'activerecord.attributes.blessure.detail' %>:
+      <%= @blessure.detail %>
+    </p>
+    <p>
+      <%= t 'activerecord.attributes.blessure.equipe' %>:
+      <%= @blessure.equipe.name %>
+    </p>
+  </div>
+
+  <% if correct_blessure_user?(@blessure) || is_current_user_sysadmin? %>
+      <%= link_to t(:button_edit), edit_blessure_path(@blessure), class: "btn btn-default" %>
+      <%= link_to t(:button_delete), @blessure, :confirm => t(:button_confirm_delete), method: :delete, class: "btn btn-default" %>
+  <% end %>
+
+  <% if !is_current_user_in_role?('ATHLETE') %>
+      <%#= link_to t(:blessure_return), blessures_path %>
+  <% end %>
+
+</div>

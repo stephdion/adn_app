@@ -1,0 +1,73 @@
+<% provide(:title, @eval_test.name) %>
+<div class="margin-bottom" style="padding-left:15px;">
+<h1_left><%= t(:eval_test)%>: <%= @eval_test.name %></h1_left>
+
+<%= image_tag @eval_test.image.url(:medium) %>
+</br>
+</br>
+<%= I18n.t 'activerecord.attributes.eval_test.short_name' %>: <%= @eval_test.short_name %>
+</br>
+</br>
+<%= I18n.t 'activerecord.attributes.eval_test.test_subcategory_id' %>: 
+  <% if @eval_test.test_subcategory_id? %>
+    <%= @eval_test.test_subcategory.test_category.name %>->
+    <%= @eval_test.test_subcategory.name %>
+    <% else %>
+    <%=  t(:general_none) %>
+  <% end %>
+</br>
+</br>
+<%= I18n.t 'activerecord.attributes.eval_test.organization_id' %>: <%= @eval_test.organization.name %>
+</br></br>
+<%= I18n.t 'activerecord.attributes.eval_test.description' %>: <%= @eval_test.description.html_safe %>
+</br>
+</br>
+<% if @eval_test.component %>
+  <%= t(:test_component) %>
+<% else %>
+  <%= t(:test_not_component) %>
+<% end %>
+</br>
+</br>
+<% if @eval_test.video? %>
+     <%= I18n.t 'activerecord.attributes.eval_test.video' %>:
+     </br>
+  <%= embed(@eval_test.video) %>
+	</br>
+<% else %>
+  <%= t(:test_video_none) %>
+  </br>
+  </br>
+<% end %>
+<% if @eval_test.exercises.count > 1 %>
+  <%= t(:test_linked_exs) %>:
+<% elsif @eval_test.exercises.count == 1 %>
+  <%= t(:test_linked_ex) %>:
+<% else @eval_test.exercises.count == 0 %>
+  <%= t(:test_no_exs) %>
+<% end %>
+</br>
+</br>
+<% @eval_test.prescriptions.each do |prescription| %>
+      <%= image_tag prescription.exercise.image.url(:thumbnail) %>
+      <%= link_to prescription.exercise.name, prescription.exercise %>
+      </br>
+      <% end %>
+</br>
+<td><%= link_to t(:test_modify_exercise_order), edit_exercise_order_eval_test_path %></td> 
+</br></br></br>
+<% if @eval_test.user %>  
+  <%= t(:general_owner) %>: <%= link_to @eval_test.user.name, @eval_test.user %>
+<% else %>
+  <%= t(:general_owner) %>: <%= t(:general_sysadmin) %>
+<% end %>
+  </br>
+  </br>
+<% if current_user?(@eval_test.user) || is_current_user_sysadmin? %>
+  <%= link_to t(:button_edit), modifier_test_path(:id => @eval_test.id), class: "btn btn-default" %>
+  <%= link_to t(:button_delete), @eval_test, :confirm =>  t(:button_confirm_delete), class: "btn btn-default",  method: :delete %>
+  </br>
+  </br>
+<% end %>
+<%= link_to t(:test_return), eval_tests_path %>
+</div>

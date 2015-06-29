@@ -1,0 +1,101 @@
+<% provide(:title, t(:test_modify)) %>
+<div class="margin-bottom">
+<h1_left><%= t(:test_modify) %></h1_left>
+</div>
+    <%= form_for(@eval_test) do |f| %>
+      <%= render 'shared/eval_test_error_messages' %>
+
+      <div class="span3">
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+
+      <%= f.label :short_name, t(:test_short_name) %>
+      <%= f.text_field :short_name %>
+
+      <div class="styled-select">
+      <%= f.label :test_subcategory_id %>
+      <%= f.grouped_collection_select :test_subcategory_id, TestCategory.where("organization_id IN (?)", [@current_organization]).order(:name), :test_subcategories, :name, :id, :name,{:include_blank => "Aucune"} %>
+      </div>
+
+      <div class="styled-select">
+        <%= f.label :organization_id %>
+        <%= f.collection_select :organization_id, @current_user.organizations, :id, :name %>
+      </div>
+
+      </div>
+
+      <div class="span6">
+      <%= f.label :description %>
+      <%= f.text_area :description, :size => "50x10" %>
+      </div>
+
+      <div class="span3 styled-select">
+      <%= f.label :user_id, t(:general_owner) %>
+      <%= f.collection_select :user_id, User.in_organization(["ADN_SYSADM","TRAINER", "SYSADM", "DIR", "PHYSIO"]).order(:last_name), :id, :name, {:include_blank => User.find(@eval_test.user_id).name,:selected => 0}%>
+      </div>
+
+      <div class="span6">
+
+      <div class="checkbox grid">
+      <%= f.check_box :component %> 
+      <%= f.label :component %>
+      </div>
+
+      <div class="checkbox grid">
+      <%= f.check_box :left_right %> 
+      <%= f.label :left_right, t(:test_left_right) %>
+      </div>
+
+      <%= f.label :image %>
+      <%= image_tag @eval_test.image.url(:medium) %>
+      </br> 
+      </br>
+      <%= t(:general_change_image) %>
+      </br>
+      <%= f.file_field :image %>
+      </br>
+      </br>
+      <%= t(:general_change_video) %>
+      </br>
+      <%= f.label :video %>
+      <%= f.text_field :video %>
+      </br>
+      </br>
+      <% if @eval_test.video? %> 
+        <p><%= raw(youtube_embed(@eval_test.video)) %></p>
+      </br>
+      </br>
+      <% end %>
+      </br>
+      <%= t(:test_linked_exs) %>:</br></br>
+      <% @exercises.each do |exercise|%>
+        <% if @eval_test.exercise_ids.include?(exercise.id)  %>
+          <% display_type = "inline-block;" %>
+            <% else %>
+          <% display_type = "none;"%>
+        <% end %>
+      <%= content_tag :div, class: "span1 " + "exercise_" + exercise.id.to_s, style: "display: " + display_type do -%>
+      <%= image_tag exercise.image.url(:thumbnail) %><br>
+      <%= link_to exercise.short_name, exercise %><br><br>
+      <% end -%>
+      <% end %><br> 
+
+      </br>
+      </br>
+      </div>
+
+
+      <div class="span6">
+      <%= t(:test_change_ex) %>:</br></br>
+      </div>
+
+      <%= render 'exercisecheckboxes' %>
+      </br>
+
+      <div class="submitButton">
+        <%= f.submit t(:button_edit), class: "btn btn-default" %>
+        </br>
+        </br>
+        <%= link_to t(:test_return), eval_tests_path %>
+      </div>
+    <% end %>

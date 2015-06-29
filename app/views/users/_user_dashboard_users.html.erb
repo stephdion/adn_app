@@ -1,0 +1,72 @@
+<div class="span12 row page-header">
+<div class="margin-bottom">
+
+<!-- Athletes -->
+<div class="orgUsersInfo_dashboard col-lg-2 col-md-2 col-sm-2 col-xs-12">
+	<div class="dashboard-stat blue-madison">
+		<div class="visual">
+			<i class="icon_stats" style="opacity:1;color:#BB9F11;">A</i>
+		</div>
+		<div class="details">
+			<div class="number"> <%= @athlete_count %> </div>
+			<div class="desc"><%= I18n.t(:general_athlete) %> </div>
+		</div>
+	</div>
+</div>
+
+<!-- Trainers -->
+<div class="orgUsersInfo_dashboard col-lg-2 col-md-2 col-sm-2 col-xs-12">
+	<div class="dashboard-stat blue-madison">
+		<div class="visual">
+			<i class="icon_stats" style="opacity:1;color:#BB9F11;">E</i>
+		</div>
+		<div class="details">
+			<div class="number"> <%= @trainer_admin %> </div>
+			<div class="desc"> <%= I18n.t(:general_trainer) %>  </div>
+		</div>
+	</div>
+</div>
+
+<!-- Responsables -->
+<div class="orgUsersInfo_dashboard col-lg-2 col-md-2 col-sm-2 col-xs-12">
+	<div class="dashboard-stat blue-madison">
+		<div class="visual">
+			<i class="icon_stats" style="opacity:1;color:#BB9F11;">R</i>
+		</div>
+		<div class="details">
+			<div class="number"> <%= @resp_admin %> </div>
+			<div class="desc"> <%= I18n.t(:general_programme_director) %>   </div>
+		</div>
+	</div>
+</div>
+
+<!-- Male Athletes -->
+<div class="orgUsersInfo_dashboard col-lg-2 col-md-2 col-sm-2 col-xs-12">
+	<div class="dashboard-stat blue-madison">
+		<div class="visual">
+			 <i class="icon_stats" style="opacity:1;color:#BB9F11;">H</i>
+		</div>
+		<div class="details">
+			<div class="number"> <%= @male_athletes %> </div>
+			<div class="desc"> <%= I18n.t(:general_male_athletes) %>  </div>
+		</div>
+	</div>
+</div>
+
+<!-- Female Athletes -->
+<div class="orgUsersInfo_dashboard col-lg-2 col-md-2 col-sm-2 col-xs-12">
+	<div class="dashboard-stat blue-madison">
+		<div class="visual">
+			 <i class="icon_stats" style="opacity:1;color:#BB9F11;">F</i>
+		</div>
+		<div class="details">
+			<div class="number"> <%= @female_athletes %> </div>
+			<div class="desc"> <%= I18n.t(:general_female_athletes) %> </div>
+		</div>
+	</div>
+</div>
+
+</div>
+</div>
+
+<%= render 'user_equipe_show' %>

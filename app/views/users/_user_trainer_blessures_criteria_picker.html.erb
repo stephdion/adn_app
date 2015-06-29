@@ -1,0 +1,45 @@
+<div class="row search_border_limit_injury">
+	<%= form_tag (user_path(@user) )+ '/ajax_result_trainer', :id => 'form_blessure_picker', :method => 'get', :remote => true do %>
+		<div class="row">
+			<div class="col-md-6">
+				<p class="form_label_search"><%= I18n.t(:criteria_start_date) %></p>
+				<div class="form-group">
+					<div id="datetimepicker5" class="input-group date" data-date-format="YYYY-MM-DD">
+						<%= text_field_tag :start_date, params[:start_date], 'data-behaviour'=> 'datepicker', :class => "form-control search_form" %>
+						<span class="input-group-addon">
+							<span class="glyphicon glyphicon-calendar"></span>
+						</span>
+					</div>
+				</div>
+				<p class="form_label_search"><%= I18n.t(:criteria_end_date) %></p>
+				<div class="form-group">
+					<div id="datetimepicker6" class="input-group date" data-date-format="YYYY-MM-DD">
+						 <%= text_field_tag :end_date, params[:end_date], 'data-behaviour'=> 'datepicker', :class => "form-control search_form" %>
+						<span class="input-group-addon">
+							<span class="glyphicon glyphicon-calendar"></span>
+						</span>
+					</div>
+				</div>
+
+				<p class="form_label_search"><%= I18n.t(:general_sport) %></p>
+				<%= select_tag :sport_select, options_for_select(@sport_picker, params[:sport_select]), {:class => "form-control", :style => "padding:0;"} %>
+
+				<p class="form_label_search"><%= I18n.t(:general_team) %></p>
+				<%= select_tag :equipe_select, options_for_select(@team_picker, params[:equipe_select]), {:class => "form-control", :style => "padding:0;"} %>
+			</div>	
+			<div class="col-md-6">
+				<p class="form_label_search"><%= I18n.t(:general_bp) %></p>
+				<%= select_tag :bp_select, options_for_select(@bodypart_picker, params[:bp_select]), {:class => "form-control", :style => "padding:0;"} %>
+
+				<p class="form_label_search"><%= I18n.t(:general_bt) %></p>
+				<%= select_tag :tb_select, options_for_select(@type_de_blessure_picker, params[:tb_select]), {:class => "form-control", :style => "padding:0;"} %>
+			 
+				<p class="form_label_search"><%= I18n.t(:general_sex) %></p>
+				<%= select_tag :sex_select, options_for_select([I18n.t(:general_all), I18n.t(:user_male), I18n.t(:user_female)], params[:sex_select]), {:class => "form-control", :style => "padding:0;"} %>
+
+				<br>
+				<%= submit_tag I18n.t(:search_refresh_resultats), :id => "result_blessure_update", :class => "btn btn-default", :remote => true, :onclick => "history.pushState('data', '', window.location.pathname + '?utf8=✓&start_date=' + $('#start_date').val() + '&end_date=' + $('#end_date').val() + '&sport_select=' + $('#sport_select').val() + '&equipe_select=' + $('#equipe_select').val() + '&bp_select=' + $('#bp_select').val() + '&tb_select=' + $('#tb_select').val() + '&sex_select=' + $('#sex_select').val() + '&commit=' + 'Rafra%C3%AEchir+R%C3%A9sultats');" %>
+			</div>
+		</div>
+	<%end%>
+</div>

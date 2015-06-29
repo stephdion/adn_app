@@ -1,0 +1,40 @@
+<% provide(:title, @programme.name) %>
+<div class="margin-bottom">
+  <h1 class="text-center"> <%= t(:programme) %>: <%= @programme.name %></h1>
+</div>
+<%= I18n.t 'activerecord.attributes.programme.description' %>: <%= @programme.description.html_safe %>
+</br>
+<% if @programme.exercises.count > 1 %>
+  <%= t(:programme_linked_exercices) %>:</br>
+<% elsif @programme.exercises.count == 1 %>
+  <%= t(:programme_linked_exercice) %>:</br>
+<% else @programme.exercises.count == 0 %>
+  <%= t(:programme_no_exercice) %></br>
+<% end %>
+</br>
+<div class="row">
+<% @programme.exercises.each do |exercise| %>
+  <div class="col-md-2" style="display:inline-block;margin-bottom:25px;">
+      <%= image_tag exercise.image.url(:thumbnail) %><br>
+      <%= link_to exercise.name, exercise %><br>
+      <% if exercise.user %>
+        <%= t(:general_owner) %>:
+        <%= link_to exercise.user.name, exercise.user %>
+      <% else %>
+        <%= t(:general_owner) %>: <%= t(:general_sysadmin) %>
+      <% end %>
+  </div>
+<% end %>
+</div>
+<% if @programme.user %>
+    <%= t(:general_owner) %>: <%= link_to @programme.user.name, @programme.user %>
+<% end %>
+</br>
+</br>
+	<% if correct_programme_user?(@programme.id) %>
+    <%= link_to t(:button_edit), modifier_programme_path(:id => @programme.id), class: "btn btn-default" %>
+    <%= link_to t(:button_delete), @programme, :confirm => t(:button_confirm_delete), class: "btn btn-default", :style=>"display:inline;margin-left:10px;", method: :delete %>
+	</br>
+	</br>
+	<% end %>
+<%= link_to t(:general_back), programmes_path, class: "btn btn-default" %>

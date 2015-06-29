@@ -1,0 +1,83 @@
+﻿<section id="result_raport_blessure">
+	<% if !@blessures.blank? %>
+	<div class="row">
+		<div class="col-md-12">
+			<%= render 'user_dashboard_blessures_date' %>
+		</div>
+		<div class="col-md-6" class="wrapper-graph-equipe">
+			<%= render 'user_dashboard_blessures_equipe' %>
+		</div>
+		<div class="col-md-6" class="wrapper-graph-equipe">
+			<%= render 'user_dashboard_blessures_type' %>
+		</div>
+	</div>
+	<div class="row">
+	    <div class="col-md-6">
+	        <%= render 'user_dashboard_blessures_totals' %>
+	    </div>
+
+	    <div class="col-md-6">
+	        <%= render 'user_dashboard_blessures_sport' %>
+	    </div>
+	</div>
+
+	<div class="row">
+	    <div class="col-md-6">
+	        <%= render 'user_dashboard_blessures_position' %>
+	    </div>
+	    <div class="col-md-6">
+	        <%= render 'user_dashboard_blessures_year_wounds' %>
+	    </div>
+	</div>
+
+	<div class="row">
+	     <div class="col-md-6">
+	        <%= render 'user_dashboard_blessures_sex' %>
+	    </div>
+	</div>
+	<div class="row" id="title-rapport-blessures">
+		<button class="button-style print-button" onclick="window.print();">Imprimer le rapport</button>
+	</div>
+	<% else %>
+
+	<h3 class="no-result-search">Aucun résultat pour cette recherche</h3>
+
+	<% end %>
+</section>
+<script>
+$(function() {
+var preview = $("#jump").data('preview');
+if (preview == true){
+$(document).scrollTop( $("#jump").offset().top );
+};
+});
+
+if(document.getElementById("pieTeamGraph") != null) {
+	//var sportCTX = document.getElementById("pieSportGraph").getContext("2d");
+	var teamCTX = document.getElementById("pieTeamGraph").getContext("2d");
+	var typeCTX = document.getElementById("pieTypeGraph").getContext("2d");
+	//var piesportdata = $('#pieSportGraph').data('values')
+	var pieteamdata = $('#pieTeamGraph').data('values')
+	var pietypedata = $('#pieTypeGraph').data('values')
+	var barCTX = document.getElementById("barGraph").getContext("2d");
+	var bardata = {
+	labels: $('#barGraph').data('labels'),
+	datasets: $('#barGraph').data('values')
+	};
+	//var mySportChart = new Chart(sportCTX).Pie(piesportdata);
+	var myTeamChart = new Chart(teamCTX).Pie(pieteamdata);
+	var myTypeChart = new Chart(typeCTX).Pie(pietypedata);
+	var myBarChart = new Chart(barCTX).Bar(bardata, { scaleOverlay : true,
+	scaleOverride : false,
+	scaleSteps : null,
+	scaleStepWidth : 1,
+	scaleStartValue : 0,
+	scaleShowLabels : true,
+	scaleFontStyle : "bold",
+	scaleFontSize : 12,
+	scaleFontColor : "grey",
+	angleLineWidth : 2,
+	scaleLineWidth : 2
+});
+}
+</script>

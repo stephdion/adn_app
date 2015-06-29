@@ -1,0 +1,34 @@
+<div>
+              <%= f.label :memberships %>
+              <table class="table">
+              <thead>
+              <tr>
+                <th>Delete</th>
+                <th>Organization</th>
+                <th>Role</th>
+              </tr>
+              </thead>
+              <tbody>
+              <%= f.fields_for :memberships do |memberships_form| %>
+                  <tr style="vertical-align:middle;text-align:center">
+                    <td>
+                      <% if !:id.blank? %>
+                          <%= memberships_form.check_box :_destroy %>
+                      <% end %>
+                    </td>
+                    <td>
+                      <%= memberships_form.select :organization_id,
+                                                  Organization.all.collect { |org| [org.name, org.id] },
+                                                  {:include_blank => true}, 
+                                                  {:class => "selectpicker", :style => "padding:0"} %>
+                    </td>
+                    <td>
+                      <%= memberships_form.select :role_id,
+                                                  Role.all.collect { |role| [role.name, role.id] },
+                                                  {:include_blank => true}, 
+                                                  {:class => "selectpicker", :style => "padding:0"} %>
+                    </td>
+                  </tr>
+              <% end %>
+              <%= f.submit class: "btn btn-default" %>
+</div>

@@ -1,0 +1,45 @@
+<h4><%= t(:resultats_equipe) %></h4>
+<table class="table table-hover table-striped table-responsive">
+              <tr>
+                <th><%= t(:general_date)%></th>
+                <th><%= t(:general_evaluation)%></th>
+                <th><%= t(:general_team)%></th>
+                <th><%= t(:general_evaluator)%></th>
+                <th></th>
+              </tr>
+<div class="row">
+  <div class="span6 offset3">
+    <% @resultats_equipe.each do |equipe_resultat| %>
+    <!--display all evals for teams in the current admin where user is the team admin or participates in the team. Sysadmins or Org Directors can see all teams -->
+
+<!--debug 
+        <td>team in org?<%= is_equipe_in_current_org?(equipe_resultat.equipe_admin.to_i) %>:<%= equipe_resultat.equipe_admin %></td>
+        <td>team admin user?<%= current_user.id == equipe_resultat.equipe_admin %> </td>
+        <td>admin user?<%= is_current_user_admin? %></td>
+        <td>participates?<%= @current_user_participations.include?(equipe_resultat.equipe_id) %></td>
+        <td>teams:<%= @current_user_participations %></td> 
+        <td> admin id: <%= equipe_resultat.equipe_admin %> </td>  -->
+        <tr>
+        <td><%= equipe_resultat.eval_day %></td>
+
+        <td><%= link_to equipe_resultat.evaluation_name, index_detail_resultats_path(:resultat_id => equipe_resultat.resultat_id) %></td>
+        <td><% if equipe_resultat.equipe != nil %>
+            <%= link_to equipe_resultat.equipe_name, equipe_resultat.equipe%>
+            <% end %>
+        </td>
+        <td><%= link_to equipe_resultat.user_name, user_path(equipe_resultat.admin_id) %></td>
+        <td class="td-last-2">
+          <% if equipe_resultat.evaluation_equipe? %>
+            <% if equipe_resultat.equipe %>
+              <%= link_to(restart_evaluation_resultats_path(:resultat_id => equipe_resultat.resultat_id)) do %>
+                <span class="glyphicon glyphicon-pencil"></span>
+              <% end %>
+            <% end %>
+            <%= link_to confirm_delete_resultats_path(:resultat_id => equipe_resultat.resultat_id, :delete_target => "team") do %>
+              <span class="glyphicon glyphicon-trash"></span>
+            <% end %>
+          <% end %>
+        </td>
+       <% end %>
+       </tr>
+  </table>

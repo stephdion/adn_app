@@ -1,0 +1,25 @@
+<% if @admin_equipes != [] %>
+    <fieldset>
+    <legend><%= t 'user_legend_teamadmin' %></legend>
+      <div class="span12 row">
+      <div class="margin-bottom">      
+                <table class="table table-condensed table-hover">
+                  <tr>
+                    <th><%= t(:general_team) %></th>
+                    <th><%= t(:general_admin) %></th>
+                  </tr>
+                  <% @admin_equipes.each do |equipe| %>
+                      <tr>
+                        <td><%= link_to equipe.name, equipe %></td>
+                        <% if equipe.user %>
+                            <td><%= link_to equipe.user.name, equipe.user %></td>
+                        <% else %>
+                            <td>Sysadmin</td>
+                        <% end %>
+                      </tr>
+                  <% end %>
+                </table>
+        </div>
+        </div>
+        </fieldset>
+<% end %>

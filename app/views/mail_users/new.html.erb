@@ -1,0 +1,205 @@
+<link rel="stylesheet" type="text/css" href="http://harvesthq.github.io/chosen/chosen.css">
+ <script src="http://harvesthq.github.io/chosen/chosen.jquery.js"></script> 
+<style>
+.chkcontainer { border:2px solid #ccc; width:300px; height: 100px; overflow-y: scroll; }
+.group-result {
+    cursor: pointer !important;
+}
+.chzn-container .chzn-results { 
+    clear: both; 
+
+}
+
+.chosen-container-multi .chosen-choices {
+    background-color: none !important; 
+    background-image: none !important;
+    border: none !important;
+}
+
+.chosen-container-active .chosen-choices {
+    border: none !important;
+    box-shadow: none !important;
+}
+.chosen-container{
+ background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555;
+    display: block;
+    font-size: 14px;
+    line-height: 1.42857;
+    padding: 2px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    width: 100%;
+
+}
+.chosen-container-multi .chosen-choices li.search-field input[type="text"]{
+	font-size: 20px !important;
+	font-family: inherit !important;
+}
+.chosen-container-multi .chosen-choices li.search-field {
+    //margin: -5px 0 0 !important;
+    padding: 0;
+    white-space: nowrap;
+}
+.chosen-container-multi .chosen-choices li.search-choice {
+	//margin-top:-5px;
+}
+#mail_picture_txt{
+
+	width: 250px;
+	white-space: nowrap;
+	overflow: hidden;
+	display: inline-block;
+	text-overflow: ellipsis;
+}
+#mail_picture_btn{
+	width:150px;
+	margin-top:-20px;
+}
+.image-container{
+	width:100%;
+	position:relative;
+	margin-top:20px;
+}
+</style>
+<h1>MESSAGE</h1>
+<div class="row ">
+	<%= form_tag('./create', :id => 'form_mail', :method => 'post', :multipart => true) %>
+	<div class="row">
+		<div class="col-md-6">
+		<%= label_tag t(:mail_subject), nil, class: '' %><br>
+		<%= text_field_tag :subject, params[:subject], :class => "form-control"%>
+		</div>
+		<div class="col-md-6">
+			<div class="image-container">
+			<%= file_field_tag :file, :id=>"mail_picture", :style=>"display:none"%>
+			<div style="z-index: 1;  left: 0px; display: inline-block;">
+			<button id="mail_picture_btn" class="btn btn-default button_profile_box_one" type="button">
+			<i class="glyphicon glyphicon-picture"></i>
+			Ajouter une image
+			</button>
+			<div id="mail_picture_txt">
+				Aucune image sélectionnée
+			</div>
+			</div>
+			</div>
+		
+			<% if is_current_user_sysadmin? || !is_current_user_in_any_role?(['ATHLETE', 'PARENT']) %>
+				<%= check_box_tag 'file_program', "1"%>
+				<%= label_tag "file_program","Programme (.pdf)" %>
+				<%= check_box_tag 'sall', "1"%>
+				<%= label_tag "sall","Envoyer à tous" %>
+			<% end %>
+		</div>
+
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<label for="link-yt">Lien Vidéo</label>
+			<input type="text" id="linkyt" class="form-control" name="linkyt">
+		</div>
+		<div class="col-md-6">
+			<%= label_tag t(:mail_to), nil %><br>
+			<select style="width:100%;" id="userz" name="uid_to[]" multiple="multiple" size="5" >
+  <%= @htmlUser.html_safe %>
+</select>
+
+		</div>
+	</div>
+	<div class="row col-md-12">
+		<%= label_tag t(:mail_message), nil, class: '' %><br>
+		<%= text_area(:message, :message, :style =>"width:100%;height:400px;") %><br>
+		<div style="float:right">
+			<%= link_to t(:general_cancel), mails_path, :id => "mail_cancel", :class => "btn btn-default" %>
+			<%= submit_tag t(:comment_send), :id => "mail_send", :class => "btn btn-default" %>
+		</div>
+	</div>
+	<% if is_current_user_sysadmin? || is_current_user_in_any_role?(['DIR', 'TRAINER', 'PHYSIO']) %>
+	
+  <% end %>
+
+
+
+			
+	</div>
+	
+	
+</div>
+<script>
+	$(document).ready(function(){
+		$('#userz').chosen({no_results_text: "Aucun résultat",
+			placeholder_text_multiple: "Destinataire"});
+		//$('#userz').trigger('liszt:updated');
+		// Add select/deselect all toggle to optgroups in chosen
+		    $('#userz').trigger('chosen:updated');
+		 $('.search-field > input').on('change', function(evt, params) {
+		  });
+	});
+	$(document).on('click', '.group-result', function() {
+	    // Get unselected items in this group
+	    var unselected = $(this).nextUntil('.group-result').not('.result-selected');
+	    if(unselected.length) {
+	        // Select all items in this group
+	        unselected.trigger('mouseup');
+	    } else {
+	        $(this).nextUntil('.group-result').each(function() {
+	            // Deselect all items in this group
+	            $('a.search-choice-close[data-option-array-index="' + $(this).data('option-array-index') + '"]').trigger('click');
+	        });
+	    }
+	});
+
+	$("#sall").on("click",function(){
+		if($(this).is(":checked") == true){
+			$('#userz option').prop('selected', true); // Selects all options
+		}else{
+			$('#userz option').prop('selected', false); // Selects all options
+		}
+		$('#userz').trigger('chosen:updated');
+	})
+	$("#mail_picture_btn").on("click",function(){
+		$("#mail_picture").get(0).click();
+	});
+
+	$("#mail_picture").on("change",function(){
+		console.log($("#mail_picture").val());
+		$("#mail_picture_txt").html($("#mail_picture").val());
+	});
+/*$("#mail_type").on("change",function(){
+	if($(this).val() == 0){
+		$("#data").hide();
+		$("#data").empty();
+		$("#link").hide();
+		$("#files").show();
+		$("#linkyt").val(null);
+		$("#linkvim").val(null);
+	}else if($(this).val() == 1){
+		$("#link").hide();
+		$("#linkyt").val(null);
+		$("#linkvim").val(null);
+		$.ajax({
+		  	url: '/ajax_prog/',
+			type: "POST"
+		});
+		$("#files").hide();
+		$("#file").val(null);
+		$("#data").show();
+	}else if($(this).val() == 2){
+		$("#files").hide();
+		$("#file").val(null);
+		$("#data").hide();
+		$("#data").empty();
+		$("#link").show();
+	}else{
+		$("#files").hide();
+		$("#file").val(null);
+		$("#data").hide();
+		$("#data").empty();
+		$("#linkyt").val(null);
+		$("#linkvim").val(null);
+	}
+})*/
+</script>

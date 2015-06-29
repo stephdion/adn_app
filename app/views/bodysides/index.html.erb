@@ -1,0 +1,30 @@
+<h1><%= t('bodyside_list') %></h1>
+<br>
+<%= link_to t('bodyside_new'), new_bodyside_path, :class=>"btn btn-default btn-lg margin-bottom-10" %>
+<table class="table table-hover table-striped table-responsive">
+  <tr>
+    <th><%= t('activerecord.models.bodyside') %></th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @bodysides.each do |bodyside| %>
+  <tr>
+    <td>
+      <%= bodyside.index_title %>
+    </td>
+    <td class="td-last-3">
+      <%= link_to bodyside do %>
+        <span class="glyphicon glyphicon-eye-open"></span>
+      <%end%>
+      <%= link_to edit_bodyside_path(bodyside) do %>
+        <span class="glyphicon glyphicon-pencil"></span>
+      <% end %>
+      <%= link_to bodyside, method: :delete, data: { confirm: 'Are you sure?' } do %>
+        <span class="glyphicon glyphicon-trash"></span>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+</table>

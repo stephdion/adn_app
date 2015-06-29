@@ -1,0 +1,29 @@
+<% if @participe_equipes != [] %>
+  <fieldset>
+                <% if !is_user_in_role?(@user, 'ATHLETE') %>
+                    <legend><%= t 'user_legend_trainer' %></legend>
+                <% else %>
+                    <legend><%= t 'user_legend_teams' %></legend>
+                <% end %>
+    <div class="span12 row">
+    <div class="margin-bottom">
+                <table class="table table-condensed table-hover">
+                  <tr>
+                    <th><%= t(:general_team) %></th>
+                    <th><%= t(:general_admin) %></th>
+                  </tr>
+                  <% @participe_equipes.each do |equipe| %>
+                      <tr>
+                        <td><%= link_to equipe.name, equipe %></td>
+                        <% if equipe.user %>
+                            <td><%= link_to equipe.user.name, equipe.user %></td>
+                        <% else %>
+                            <td>Sysadmin</td>
+                        <% end %>
+                      </tr>
+                  <% end %>
+                </table>
+              </div>
+            </div>
+  </fieldset>
+<% end %>

@@ -1,0 +1,35 @@
+<div class="row" class="wrapper-print-graph">
+  <blessuresPieTitle class="title-table-graph"><%= I18n.t(:chart_blessures_label_equipe) %>:</blessuresPieTitle>
+  <div class="row wrapper-graph-print">
+      <%= content_tag "canvas", id: "pieTeamGraph",
+                           width: "300",
+                           height:"300",
+                           class: "pie-chart-graph",
+                      data: {values: @pie_data_team} do %>
+          Loading graphic...
+      <% end %>
+      <%#= @pie_data_team.to_s %>
+  </div>
+  <div class="row" id="wrapper-print-table">
+    <table class="table table-condensed wrapper-table-graph" id="wrapper-print-table">
+      <thead>
+        <tr class="top-table-graph">
+          <td class="equipe-graph">Équipe</td>
+          <td class="qte-graph-top">Quantité</td>
+        </tr>
+      </thead>
+      <tbody>
+      <% (0..(@team_labels.size-1)).each do |i| %>
+          <%= content_tag(:tr) do%>
+            <td class="equipe-graph-content">
+              <span class="color-indicator" style='background-color: 
+              <%= @pie_colors[i] %>'></span>
+              <%= @team_labels[i][:name] %>
+            </td>
+            <%= content_tag(:td, @team_labels[i][:count] ,class: "qte-graph") %>
+          <%end%>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,286 @@
+<%= form_for (@blessure) do |f| %>
+
+    <%= render 'shared/blessure_error_messages' %>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="row">
+
+          <div class="col-md-3">
+            <%= f.label :user_id %>
+          </div>
+          <div class="col-md-9">
+              <% if is_current_user_in_role?('ATHLETE') %>
+                  <%= f.collection_select :user_id, User.where(:id => current_user.id, :deleted=>0),
+                                          :id, :name, {}, {:class=>"form-control"} %>
+              <% else %>
+                  <%= f.collection_select :user_id, User.in_organization(["ATHLETE"]),
+                                          :id, :name,
+                                          {:include_blank => true}, {:class=>"form-control"} %>
+              <% end %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <%= f.label :equipe_id %>
+          </div>
+          <div class="col-md-9">
+            <%= f.select(:equipe_id,
+                       options_for_select([["Veuillez sélectionner un athlète", "0"]]),
+                       {:include_blank => false},
+                       {:class => "selectpicker form-control", :id => 'select_equipe'}) %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <%= f.label :date %>
+          </div>
+          <div class="col-md-9">
+            <%= f.date_select :date,
+                          {
+                                  :start_year => Time.now.year - 13,
+                                  :end_year => Time.now.year + 5,
+                                  :prompt => {:day => I18n.t(:date_choose_day),
+                                              :month => I18n.t(:date_choose_month),
+                                              :year => I18n.t(:date_choose_year)},
+                                  :order => [:day, :month, :year]
+                          },
+                          {:style => "width: 100px;display:inline;",:class=>"form-control"} %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <%= f.label :equipe_type_id %>
+          </div>
+          <div class="col-md-9">
+            <%= f.collection_select :equipe_type_id, EquipeType.order(:name),
+                              :id, :name,
+                              {:include_blank => true},:class=>"form-control"
+            %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <%= f.label :type_de_blessure %>
+          </div>
+          <div class="col-md-9">
+            <%= f.select(:type_de_blessure,
+                   Blessuretype.all.collect { |blessuretype| [blessuretype.name, blessuretype.code] },
+                   {:include_blank => true},
+                   {:class => "selectpicker form-control"}) %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <%= f.label :partie_du_corp %>
+          </div>
+          <div class="col-md-9">
+            <%= f.select(:partie_du_corp,
+                       Bodypart.all.collect { |bodypart| [bodypart.name, bodypart.code] },
+                       {:include_blank => true},
+                       {:class => "selectpicker form-control"}) %>
+          </div>
+        </div>
+        <div class="row" id="body_side_container">
+          <div class="col-md-3">
+            <%= f.label :cote_du_corp %>
+          </div>
+          <div class="col-md-9">
+            <%= f.select(:cote_du_corp,
+                       Bodyside.all.collect { |bodyside| [bodyside.name, bodyside.code] },
+                       {:include_blank => true},
+                       {:class => "selectpicker form-control"}) %>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-3">
+            <%= f.label :symptomes %>
+          </div>
+          <div class="col-md-9">
+            <% $symptomes.each do |value| -%>
+                <div>
+                  <%= check_box_tag 'blessure[symptomes][]',
+                                    value[1],
+                                    @blessure.symptomes.detect { |ui| ui == value[1] } -%>
+                  <%= value[0] -%>
+                </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col-md-3">
+            <%= f.label :mechanism %>
+          </div>
+          <div class="col-md-9">
+            <%= f.select :mechanism,
+                     options_for_select($mechanism, @blessure.mechanism),
+                     {:include_blank => true}, :class=>"form-control"
+             %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <%= f.label :surface %>
+          </div>
+          <div class="col-md-9">
+            <%= f.select :surface,
+                   options_for_select($surface, @blessure.surface),
+                   {:include_blank => true}, :class=>"form-control"
+            %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <%= f.label :retour_au_jeu %>
+          </div>
+          <div class="col-md-9">
+            <%= f.select :retour_au_jeu,
+                   options_for_select($yesno, @blessure.retour_au_jeu),
+                   {:include_blank => true}, :class=>"form-control"
+            %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <%= f.label :operation %>
+          </div>
+          <div class="col-md-9">
+            <%= f.select :operation,
+                     options_for_select($operation, @blessure.operation),
+                     {:include_blank => false}, :class=>"form-control"
+            %>
+          </div>
+        </div>
+        <div class="row" id="operation_date_container">
+          <div class="col-md-3">
+            <%= f.label :operation_date %>
+          </div>
+          <div class="col-md-9">
+            <%= f.date_select :operation_date,
+                  {
+                          :start_year => Time.now.year - 13,
+                          :end_year => Time.now.year + 5,
+                          :prompt => {:day => I18n.t(:date_choose_day),
+                                      :month => I18n.t(:date_choose_month),
+                                      :year => I18n.t(:date_choose_year)},
+                          :order => [:day, :month, :year]
+                  },
+                  {:style => "width: 100px;display:inline;", :class=>"form-control"} %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <%= f.label :detail %>
+          </div>
+          <div class="col-md-9">
+            <%= f.text_area :detail, :rows => 5, :placeholder => I18n.t(:blessure_detail_placeholder), :class=>"form-control" %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row zoneFormBtn">
+      <%= f.submit "Sauvegarder", class: "btn btn-default" %>
+      <!--//TO DO BACK-->
+      <button onclick="window.history.back()" type="button" class="btn btn-default">Annuler</button>
+    </div>
+
+
+
+<% end %>
+<script type="text/javascript">
+
+    var FormControl = {
+        init: function () {
+            var operation = $("#blessure_operation").get(0);
+            var bodyPart  = $("#blessure_partie_du_corp").get(0);
+
+            operation.addEventListener('change', FormControl.changeOperationDate, false);
+            bodyPart .addEventListener('change', FormControl.changeBodyPart, false);
+
+            // first load
+            FormControl.changeOperationDateFields(operation.value);
+            FormControl.changeBodyPartFields(bodyPart.value);
+        },
+
+        changeOperationDate: function (event) {
+            var option = this.value;
+
+            FormControl.changeOperationDateFields(option);
+        },
+
+        changeOperationDateFields: function (optionSelected) {
+            var disabled = optionSelected != "op_na" && optionSelected != "";
+            if (!disabled) {
+                $("#operation_date_container").hide();
+            }
+            else {
+                $("#operation_date_container").show();
+            }
+        },
+
+        changeBodyPart: function (event) {
+            var option = this.value;
+
+            FormControl.changeBodyPartFields(option);
+        },
+
+        changeBodyPartFields: function (optionSelected) {
+            var show = optionSelected != "bp_na" &&
+                    <% Bodypart.all.each do |bodypart| %>
+                        <% if !bodypart.has_side %>
+                            optionSelected != '<%= bodypart.code %>' &&
+                        <% end %>
+                    <% end %>
+                    optionSelected != "";
+            //debugger;
+            if (!show) {
+                $("#body_side_container").hide();
+            }
+            else {
+                $("#body_side_container").show();
+            }
+        }
+    };
+
+    $('#blessure_user_id').change(function(e){
+      callTeamsForUser();
+    });
+
+    $('#blessure_user_id').ready(function() {
+      callTeamsForUser();
+    })
+
+    function callTeamsForUser() {
+      id = $('#blessure_user_id')[0].value
+      if(id != "") {
+        var url = "/blessures/" + id + "/ajax_get_equipe";
+
+        $.ajax({
+          url: url,
+          type: "GET",
+          success: function(data) {
+            manageSelectTeam(data);
+          },
+          error: function(data) {
+            manageSelectTeam(data);
+          }
+        });
+      } else {
+        $('#select_equipe').html("<option value='0'>Aucune équipe correspondant à ce joueur</option>");
+      }
+    }
+
+    function manageSelectTeam(data) {
+      if(data.responseText != "") {
+        $('#select_equipe').html(data.responseText);
+      }
+      else {
+        $('#select_equipe').html("<option value='0'>Aucune équipe correspondant à ce joueur</option>");
+      }
+    }
+
+    FormControl.init();
+</script>

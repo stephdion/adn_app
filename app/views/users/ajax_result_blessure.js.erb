@@ -1,0 +1,15 @@
+/*$("#form_blessure_picker").bind('ajax:success',function() {
+	$("#table_blessure_result").html("<%#= escape_javascript(render 'user_blessure_result') %>");
+});*/
+<% if @update == true %>
+$("#form_blessure_picker,#form_blessure_filter").bind('ajax:success',function() {
+	
+	$("#tab_f").html("<%= escape_javascript(render 'user_blessures') %>");
+	$("#result_raport_blessure").html("<%= escape_javascript(render 'user_blessure_rapport_graphics') %>").promise().done(function() {
+		$('.pop-up-date').hide();
+		$('#pop-up-team').hide();
+	});
+});
+<% end %>
+$('#pop-up-frequence').hide();
+$('.spinner').hide();

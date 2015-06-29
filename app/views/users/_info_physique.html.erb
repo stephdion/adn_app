@@ -1,0 +1,55 @@
+<table class="table table_contact_info_info" >
+<tr>
+  <td class="info_table_left_column_tag">Grandeur</td>
+ 
+  <td>
+	<% if @user.hasAnthropometrics? %>
+  <%# if UserAnthropometric.where(["user_id = ?", @user.id]).exists? %>
+		<%#= UserAnthropometric.find(@user).height_imperial + "(" + UserAnthropometric.find(@user).height + " cm)" %><%= UserAnthropometric.where(["user_id = ? and archive = ?", @user.id, false]).last.height_imperial + " (" + UserAnthropometric.where(["user_id = ? and archive = ?", @user.id, false]).last.height.to_s + " cm)" %>
+    <%#= @user.height %>
+	<%end%> 
+ </td>
+
+</tr>
+<tr>
+  <td class="info_table_left_column_tag">Poids</td>
+  
+  <td>
+    <% if @user.hasAnthropometrics? %>
+	  <%# if UserAnthropometric.where(["user_id = ?", @user.id]).exists? %>
+		<%#= UserAnthropometric.find(@user).weight + ' kg' %><%#= @user.user_anthropometrics[:id].to_s%><%= UserAnthropometric.where(["user_id = ? and archive = ?", @user.id, false]).first.weight.to_s + ' kg' %>
+    <%#= @user.weight %></td>
+	  <%end%>
+  </td>
+  </tr>
+<tr>
+  <td class="info_table_left_column_tag">Age</td>
+  <td>
+	<% if !@user.birthday.nil? %>
+		<%= @user.age %> (<%= @user.birthday.to_s %>)
+	<%end%>
+  </td>
+</tr>
+<tr>
+  <td class="info_table_left_column_tag">Sports</td>
+  <td><%= @info_sports %></td>
+</tr>
+<tr>
+  <td class="info_table_left_column_tag">Organisation</td>
+  <td><%=@current_organization.name%></td>
+</tr>
+<!--<tr>
+  <td class="info_table_left_column_tag">Status</td>
+  <td><%= @info_blessure %></td>
+</tr>
+<tr>
+  <td class="info_table_left_column_tag">Retour au Jeux</td>
+  <td><%= @retour %></td>
+</tr>-->
+<% if current_user?(@user) || is_current_user_sysadmin? %>
+<tr>
+<td><%= link_to "Modifier", [:ajax_info_physique, @user], remote: true, class: "btn btn-default button_profile_box_one" %>
+<!--<a class="btn btn-default button_profile_box_one" data-remote="true" href="/users/5/ajax_info_physique">Modifier<i class="glyphicon glyphicon-cog profile_user_button_icon_align"></i>--></td>
+</tr>
+<%end%>
+</table>

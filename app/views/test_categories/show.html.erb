@@ -1,0 +1,21 @@
+<% provide(:title, @test_category.name) %>
+<div class="margin-bottom">
+<h1 class="text-center"><%= @test_category.name %></h1>
+</div>
+
+<p>
+  <b>Name:</b>
+  <%= @test_category.name %>
+</p>
+
+<% if @test_category.test_subcategories.any? %>
+  <%= I18n.t(:category_contains_subcategories) %><br>
+    <% @test_category.test_subcategories.each do |subcategory| %>
+    <%= link_to edit_test_subcategory_path(subcategory) do %>
+      <span class="glyphicon glyphicon-chevron-right" style="font-size:14px;"></span> <%= subcategory.name %>
+    <% end %>
+    <% end %>
+    <br><br>
+  <% end %>
+
+  <%= link_to  t(:general_back), test_categories_path, :class=>"btn btn-default" %>

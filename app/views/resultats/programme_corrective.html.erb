@@ -1,0 +1,106 @@
+<% provide(:title, I18n.t(:resultats_prog_corr)) %>
+<div class="text-center" id="programme-correctif-wrapper">
+  <h1 class="top-header">
+    <%= I18n.t(:resultats_prog_corr) %>
+    <button class="button-print" onClick="print()">
+      Imprimer le programme
+    </button>
+  </h1>
+  <div class="wrapper-correctif-info-user">
+    <p>
+      <span class="name-title-programme"><%= link_to @first_record.athlete.name, @first_record.athlete %></span><br />
+      <%= @first_record.evaluation.name %> du
+      <%= @first_record.created_at.strftime("%e %b, %Y") %><br />
+      Evaluateur : <%= @first_record.user.name %><br />
+      <%= I18n.t(:general_score) %>:
+      <% if @score.to_i <= @maximum_score %>
+        <%= @score %>
+      <% else %>
+        <%= I18n.t(:resultats_incomplete)%>
+      <% end %>
+    </p>
+  </div>
+  <% i = 0
+    @resultats.each do |resultat| %>
+    <% if resultat.eval_test.prescriptions.count > 0 %>
+      <% if resultat.left_right?
+          if resultat.message("right").to_i > resultat.message("left").to_i %>
+            <% message = resultat.message("right")
+               prescription = resultat.get_prescription("right") %>
+          <% else %>
+            <% message = resultat.message("left")
+              prescription = resultat.get_prescription("left") %>
+          <% end %>
+      <% else %>
+        <% message = resultat.message("message")
+           prescription = resultat.get_prescription("message") %>
+      <% end %>
+      <% if resultat.print_exercises? %>
+      <% i += 1
+         if i > 1 %>
+      <% end %>
+        <div class="section-title-name-wrapper">
+          <h4><%= resultat.eval_test.name %></h4>
+        </div>
+        <div class="wrapper-exercice">
+          <div class="top-wrapper-exercice-infos">
+            <div class="comments-wrapper">
+              <span class="title-up-bloc">Commentaire de l'évaluateur :</span><br />
+              <span class="descriptif-comment">
+               <%= message %>
+              </span>
+            </div>
+            <div class="exercice-frequence">
+              <span class="title-up-bloc">Prescription:</span><br />
+              <span class="descriptif-comment">
+                <%= prescription %>x semaines
+              </span>
+            </div>
+          </div>
+          <div class="wrapper-exercice-description">
+        <% resultat.eval_test.prescriptions.reorder('exercise_order ASC').each do |prescription| %>
+            <div class="bloc-exercice">
+                <div class="img-exercice-wrapper">
+                  <%= image_tag prescription.exercise.image.url(:medium) %>
+                  <% if prescription.exercise.video != "" %>
+                    <span class="video-link">
+                      <%= link_to fa_icon("video-camera", class: "camera-icon"), youtube_embed_url(prescription.exercise.video) , :class=>"link"%>
+                    </span>
+                  <% end %>
+                  <span class="label-rep"><%= prescription.exercise.short_desc %></span>
+                </div>
+                <span class="description-exercice">
+                  <%= link_to prescription.exercise.name, prescription.exercise %><br>
+                  <%= prescription.exercise.description %> <br />
+                  <b class="printable-presc"><%= prescription.exercise.short_desc %></b>
+                <span>
+            </div>
+        <% end %>
+        </div>
+       <% end %>
+     <% end %>
+  <% end %>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body" style="background-color: rgba(255,255,255,0);">
+        <iframe src="" style="zoom:0.60" frameborder="0" height="400" width="99.9%" ></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+$(".link").on("click",function(e){
+  e.preventDefault();
+  frameSrc = $(this).attr("href");
+  
+    $('#myModal').on('shown.bs.modal', function () {
+
+        $('iframe').attr("src",frameSrc);
+      
+  });
+    $('#myModal').modal({show:true})
+});
+</script>

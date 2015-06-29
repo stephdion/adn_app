@@ -1,0 +1,109 @@
+@media print {
+	@page {
+		@top-left {
+			content: ' <span id="print-brand"><%= image_tag("idathletique/logo_print.jpg")  %></span>';
+		}
+	}
+	#print-brand {
+	    display: block;
+		position: running(pageHeader);
+		top: 10px;
+		left: 20px;
+		width: 130px;
+	}
+	.button-print {
+		display: none;
+	}
+	.footer {
+		display: none;
+	}
+	.top-header {
+		margin-left: 0;
+		font-size: 40px;
+	}
+	.page-break {
+		display: block;
+		padding-top: 40px;
+	}
+	.bloc-exercice {
+		display: block;
+		float: left;
+		margin-right: 40px;
+		width: 100%;
+		margin-top: 40px;
+		page-break-inside: avoid;
+	}
+	.img-exercice-wrapper {
+		width: 20%;
+		float: left;
+	}
+	.description-exercice {
+		float: left;
+		width: 70%;
+		margin-left: 10px;
+	}
+	.label-rep {
+		display: none;
+	}
+	.top-wrapper-exercice-infos {
+		height: 50px;
+	}
+	.wrapper-exercice-description {
+		min-height: 200px;
+	}
+	.section-title-name-wrapper {
+		display: inline-block;
+		border-top: 1px dotted black;
+		margin-top: 20px;
+	}
+	/*******************PRINT RAPPORT*******************/
+	.wrapper-head-rapport {
+		display: none;
+	}
+	.head-rapport-filter {
+		display: none;
+	}
+	.print-button {
+		display: none;
+	}
+	.nav_profile_banner_img {
+		display: none;
+	}
+	.wrapper-graph-equipe {
+		width: 100% !IMPORTANT;
+		display: block;
+		margin-bottom: 20px;
+	}
+	.wrapper-print-graph {
+		width: 45%;
+		float: left;
+		page-break-inside: avoid;
+	}
+	#wrapper-print-table {
+		float: right;
+	}
+	#wrapper-print-table > table {
+		width: 95% !IMPORTANT;
+	}
+	.wrapper-graph-print {
+		width: 45%;
+		float: left;
+	}
+	.wrapper-table-graph > tbody {
+		overflow: visible;
+		margin-bottom: 20px;
+		height: auto;
+	}
+	.printable-presc {
+		display: inline-block;
+		-webkit-print-color-adjust:exact;
+	}
+	.legend-blue {
+		-webkit-print-color-adjust:exact;
+    	background-color: #4884CB !IMPORTANT;
+	}
+	.legend-grey {
+		-webkit-print-color-adjust:exact;
+	    background-color: #4E5361 !IMPORTANT;
+	}
+}

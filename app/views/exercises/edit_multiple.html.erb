@@ -1,0 +1,40 @@
+<% provide(:title, t(:exercise_modify)) %>
+<div class="margin-bottom">
+  <h1 class="text-center"><%= t(:exercise_modify) %></h1>
+</div>
+
+<%= form_tag update_multiple_exercises_path, method: :put do %>
+  <% @exercises.each do |exercise| %>
+
+    <%= fields_for "exercises[]", exercise do |f| %>
+      
+      <% if exercise.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(exercise.errors.count, "error") %> prohibited this exercise from being saved:</h2>
+          <ul>
+          <% exercise.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+          </ul>
+        </div>
+        <% end %>
+
+      <div class="field">
+        <div class="span1 row">
+          <div class="col-md-1">
+            <%= image_tag exercise.image.url(:thumbnail) %><br>
+            <%= exercise.name %>
+          </div>
+          <div class="col-md-2">
+            <%= f.label :exercise_subcategory_id %>
+            <%= f.grouped_collection_select :exercise_subcategory_id, ExerciseCategory.where("organization_id IN (?)", [Organization.current_organization]).order(:name), :exercise_subcategories, :name, :id, :name, {include_blank: true}, :class=>"form-control" %>
+          </div>
+        </div>
+      </div>
+<hr>
+      <% end %>
+      <% end %>
+
+      <%= submit_tag t(:button_edit), class: "btn btn-default" %>
+      <%= link_to t(:general_back), exercises_path, class: "btn btn-default", :style=>"display:inline;margin-left:10px;" %>
+<% end %>

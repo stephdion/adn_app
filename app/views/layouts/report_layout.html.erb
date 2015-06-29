@@ -1,0 +1,388 @@
+﻿<!doctype html>
+<html>
+  <head>
+  	<style>
+  	.noBreak {
+    page-break-inside: avoid !important;
+}
+
+.page-break { display:block; clear:both; page-break-after:always; }
+  	</style>
+    <meta charset='utf-8' />
+   	  <%= wicked_pdf_stylesheet_link_tag    "application", media: "all" %>
+      <%= wicked_pdf_stylesheet_link_tag     "application-print", media: 'print' %>
+      <%= wicked_pdf_javascript_include_tag "application" %>
+      
+  </head>
+    <body>
+    <div id="header">
+      <span id="print-brand">
+<img alt="Logo print" src="/assets/idathletique/logo_print.jpg">
+</span>
+    </div>
+
+
+<% if params[:type] == 1 %>
+	<div class="row">
+	<div class="col-md-12">
+		<h4 class="title-rapport">Rapport d'évaluations</h4>
+	</div>
+  <div class="row" id="title-rapport-blessures">
+    <span>Rapport du <span class="date-rapport-title-eval"><%= @start_date %> au <%= @end_date %></span>
+    </h2>
+  </div>
+	<div class="col-md-12" id="result-evaluation-rapport">
+		<resultatsLabel class="title-moyenne"><%= I18n.t(:user_legend_equipe_moyennes)%></resultatsLabel></br>
+<resultatsLabel><%= I18n.t(:general_evaluation) %>: <%= link_to @evaluation.name, @evaluation %></resultatsLabel></br>
+<%= I18n.t(:resultats_max_score)%>: <%= @max_score %></br>
+<%= I18n.t(:resultats_max_differential)%>: <%= @evaluation.maximum_differential %></br></br>
+<% @team_averages.each do |data| %>
+  <div class="page-break"></div>
+  <%= ADN_Collapsible_Panel_Header("TeamTable" +  data[:id].to_s, data[:name] + " -   " + I18n.t(:resultats_avg_score) + ": " + data[:avg_score].round(2).to_s + ",   " + I18n.t(:resultats_avg_differential) + ": " + data[:avg_differential].round(2).to_s) %>
+    <%= ADN_Collapsible_Panel_Footer() %>
+  <div class="legend_eval">
+    <span class="legend_color legend-grey"></span>Gauche<br/>
+    <span class="legend_color legend-blue"></span>Droite
+  </div>
+  <%= content_tag "canvas",
+                   height:"300",
+                   width: "700",
+                   class: "bar-graph",
+                   data: {labels: @test_data[data[:id]], 
+                          values:  @team_graph_results_value[data[:id]]} do 
+  %>
+  Loading graphic...
+  <% end %>
+  <table class="table table-condensed datatable">
+  <thead>
+      <tr class="header-table">
+        <th><%= t(:general_athlete) %></th>
+        <th><%= t(:general_evaluation) %></th>
+        <th><%= t(:general_date) %></th>
+        <th><%= t(:general_score) %></th>
+        <th><%= t(:general_differential) %></th>
+      </tr>
+      <% @team_results[data[:id]].each do |resultat| %>
+          <tr class="content-table">
+            <td class="first-content"><%= resultat.athlete_name %></td>
+            <td><%= resultat.evaluation_name %></td>
+            <td><%= resultat.eval_day %></td>
+            <td><% if resultat.score.to_i <= @max_score.to_i %>
+                   <%= resultat.score %></td>
+                <% else %>
+                   <%= I18n.t(:resultats_incomplete) %></td>
+                <% end %>
+            <td><%= resultat.differential %></td>
+          </tr>
+      <% end %>
+  </table>
+
+<% end %>
+  </div>
+  <div class="row" id="title-rapport-blessures">
+  </div>
+</div>
+<script>
+
+alert = function() {};
+table = $('.datatable').DataTable( {
+    paging: false,
+    info: false,
+    filter: false
+});
+
+var barGraphs = document.getElementsByClassName("bar-graph");
+
+for(var i = 0; i < barGraphs.length; i++) {
+  currentBarGraphs = barGraphs.item(i).getContext("2d");
+
+  var bardata = {
+  labels: $(barGraphs.item(i)).data('labels'),
+  datasets: $(barGraphs.item(i)).data('values')
+  };
+
+  var myBarChart = new Chart(currentBarGraphs).Bar(bardata, { 
+  animation: false,
+  scaleShowLabels : true,
+  scaleFontStyle : "bold",
+  scaleFontSize : 12,
+  scaleFontColor : "grey",
+  angleLineWidth : 2,
+  scaleLineWidth : 2,
+  scaleShowVerticalLines: false,
+  scaleOverride: true,
+  scaleSteps: 6,
+  scaleStepWidth: 0.5,
+  scaleStartValue: 0
+  });
+}
+
+</script>
+
+<% else %>
+	<div class="row">
+	<div class="col-md-12">
+		<h4 class="title-rapport">Rapport de blessures</h4>
+	</div>
+</div>
+<div class="row" id="title-rapport-blessures">
+	<span>Rapport du <span class="date-rapport-title"><%= @start_date %> au <%= @end_date %></span>
+	</h2>
+</div>
+
+	<section id="result_raport_blessure">
+	<% if !@blessures.blank? %>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="span12 row">
+  <div class="span7 row">
+    <div class="margin-bottom">
+     <div style="graphicBox">
+      <blessuresLabel class="title-graph"><%= I18n.t(:chart_blessures_label_month) %>: </blessuresLabel>
+
+      <% (0..(@year_labels.size-1)).each do |i| %>
+      <%= content_tag(:div, content_tag(:p, @year_labels[i]), style: "color: " + @year_colors[i] + "; font-weight :bold; display: inline-block;font-size:24px;", class: "desc-graph") %>
+      <% end %>
+      <%= content_tag "canvas", id: "barGraph",
+                          width: "700",
+                          height:"200",
+                          data: {labels: @bar_labels, values: @bar_chart_data} do %>
+      Loading graphic...
+      <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+		</div>
+		<div class="col-md-6" class="wrapper-graph-equipe">
+			<div class="row" class="wrapper-print-graph">
+  <blessuresPieTitle class="title-table-graph"><%= I18n.t(:chart_blessures_label_equipe) %></blessuresPieTitle>
+  <div class="row wrapper-graph-print">
+      <%= content_tag "canvas", id: "pieTeamGraph",
+                           width: "300",
+                           height:"300",
+                           class: "pie-chart-graph",
+                      data: {values: @pie_data_team} do %>
+          Loading graphic...
+      <% end %>
+      <%#= @pie_data_team.to_s %>
+  </div>
+  <div class="row" class="wrapper-print-table">
+    <table class="table table-condensed" id="wrapper-print-table">
+        <tr class="top-table-graph">
+          <td class="equipe-graph">Équipe</td>
+          <td class="qte-graph-top">Quantité</td>
+        </tr>
+      <% (0..(@team_labels.size-1)).each do |i| %>
+          <%= content_tag(:tr) do%>
+            <td class="equipe-graph-content">
+              <span class="color-indicator" style='background-color: 
+              <%= @pie_colors[i] %>'></span>
+              <%= @team_labels[i][:name] %>
+            </td>
+            <%= content_tag(:td, @team_labels[i][:count] ,class: "qte-graph") %>
+          <%end%>
+      <% end %>
+    </table>
+  </div>
+</div>
+		</div>
+		<div class="col-md-6" class="wrapper-graph-equipe">
+			<div class="row" id="wrapper-print-graph" style="page-break-before: always;">
+  <blessuresPieTitle class="title-table-graph"><%= I18n.t(:chart_blessures_label_type) %></blessuresPieTitle>
+   <div class="row wrapper-graph-print">
+        <%= content_tag "canvas", id: "pieTypeGraph",
+                           width: "300",
+                           height:"300",
+                           class: "pie-chart-graph",
+                           data: {values: @pie_data_type} do %>
+        Loading graphic...
+        <% end %>
+      </div>
+      <div class="row" id="wrapper-print-table">
+      <table class="table table-condensed" id="wrapper-print-table">
+        <tr class="top-table-graph">
+          <td class="equipe-graph">Type de blessure</td>
+          <td class="qte-graph-top">Quantité</td>
+        </tr>
+        <% (0..(@type_labels.size-1)).each do |i| %>
+           <%= content_tag(:tr) do%>
+              <td class="equipe-graph-content">
+                <span class="color-indicator" style='background-color: 
+                <%= @pie_colors[i] %>'></span>
+                <%= @type_labels[i][:name]%>
+              </td>
+              <%= content_tag(:td, @type_labels[i][:count], class: "qte-graph") %>
+            <%end%>
+          <% end %>
+      </table>
+      </div>
+  </div>
+
+		</div>
+	</div>
+	<div class="row">
+	    <div class="col-md-6">
+	        <div class="row">
+<blessuresPieTitle class="title-table-graph"><%= I18n.t(:chart_blessures_label_totals) %> <%= @blessures.count('id').to_s %></blessuresPieTitle>
+    <div class="row">
+    <table class="table table-condensed">
+        <tr class="top-table-graph">
+          <td class="equipe-graph">Partie du corps</td>
+          <td class="qte-graph">Quantité</td>
+        </tr>
+          <% (0..(@blessures_totals.size-1)).each do |i| %>
+              <%= content_tag(:tr) %>
+              <%= content_tag(:td, @blessures_totals[i][:name]) %>
+              <%= content_tag(:td, @blessures_totals[i][:count], class: "qte-graph") %>
+          <% end %>
+      </table>
+    </div>
+</div>
+
+	    </div>
+
+	    <div class="col-md-6">
+	        <div class="row">
+<blessuresPieTitle class="title-table-graph"><%= I18n.t(:chart_blessures_label_sport) %></blessuresPieTitle>
+    <!-- <div class="row">
+    <%= content_tag "canvas", id: "pieSportGraph",
+                           width: "300",
+                           height:"300",
+                           class: "pie-chart-graph",
+                           data: {values: @pie_data_sport} do %>
+           Loading graphic...
+           <% end %>
+    </div> -->
+    <div class="row">
+    <table class="table table-condensed">
+        <tr class="top-table-graph">
+          <td class="equipe-graph">Sport</td>
+          <td class="qte-graph">Quantité</td>
+        </tr>
+          <% (0..(@sport_labels.size-1)).each do |i| %>
+            <%= content_tag(:tr) do%>
+              <%= content_tag(:td, @sport_labels[i][:name]) %>
+              <%= content_tag(:td, @sport_labels[i][:count], class: "qte-graph") %>
+            <%end%>
+          <% end %>
+      </table>
+    </div>
+</div>
+
+	    </div>
+	</div>
+
+	<div class="row">
+	    <div class="col-md-6">
+	        <div class="row">
+<blessuresPieTitle class="title-table-graph"><%= I18n.t(:chart_blessures_label_positions) %></blessuresPieTitle>
+    <div class="row">
+    <table class="table table-condensed">
+        <tr class="top-table-graph">
+          <td class="equipe-graph">Position</td>
+          <td class="qte-graph">Quantité</td>
+        </tr>
+          <% (0..(@position_totals.size-1)).each do |i| %>
+              <%= content_tag(:tr) %>
+              <%= content_tag(:td, @position_totals[i][:name]) %>
+              <%= content_tag(:td, @position_totals[i][:count], class: "qte-graph") %>
+          <% end %>
+      </table>
+    </div>
+</div>
+
+	    </div>
+	    <div class="col-md-6">
+	        <div class="row">
+<blessuresPieTitle class="title-table-graph"><%= I18n.t(:chart_blessures_label_year_wound) %></blessuresPieTitle>
+    <div class="row">
+    <table class="table table-condensed">
+        <tr class="top-table-graph">
+          <td class="equipe-graph">Année</td>
+          <td class="qte-graph">Quantité</td>
+        </tr>
+          <% (0..(@year_wounds_totals.size-1)).each do |i| %>
+              <%= content_tag(:tr) %>
+              <%= content_tag(:td, @year_wounds_totals[i][:name]) %>
+              <%= content_tag(:td, @year_wounds_totals[i][:count], class: "qte-graph") %>
+          <% end %>
+      </table>
+    </div>
+</div>
+
+	    </div>
+	</div>
+
+	<div class="row">
+	     <div class="col-md-6">
+	        <div class="row">
+<blessuresPieTitle class="title-table-graph"><%= I18n.t(:chart_blessures_label_sex) %></blessuresPieTitle>
+    <div class="row">
+    <table class="table table-condensed">
+        <tr class="top-table-graph">
+          <td class="equipe-graph">Sexe</td>
+          <td class="qte-graph">Quantité</td>
+        </tr>
+          <% (0..(@sex_totals.size-1)).each do |i| %>
+              <%= content_tag(:tr) %>
+              <%= content_tag(:td, @sex_totals[i][:name]) %>
+              <%= content_tag(:td, @sex_totals[i][:count], class: "qte-graph") %>
+          <% end %>
+      </table>
+    </div>
+</div>
+
+	    </div>
+	</div>
+	<% else %>
+
+	<h3 class="no-result-search">Aucun résultat pour cette recherche</h3>
+
+	<% end %>
+</section>
+<script>
+$(function() {
+var preview = $("#jump").data('preview');
+if (preview == true){
+$(document).scrollTop( $("#jump").offset().top );
+};
+});
+
+if(document.getElementById("pieTeamGraph") != null) {
+	//var sportCTX = document.getElementById("pieSportGraph").getContext("2d");
+	var teamCTX = document.getElementById("pieTeamGraph").getContext("2d");
+	var typeCTX = document.getElementById("pieTypeGraph").getContext("2d");
+	//var piesportdata = $('#pieSportGraph').data('values')
+	var pieteamdata = $('#pieTeamGraph').data('values')
+	var pietypedata = $('#pieTypeGraph').data('values')
+	var barCTX = document.getElementById("barGraph").getContext("2d");
+	var bardata = {
+	labels: $('#barGraph').data('labels'),
+	datasets: $('#barGraph').data('values')
+	};
+	//var mySportChart = new Chart(sportCTX).Pie(piesportdata);
+	var myTeamChart = new Chart(teamCTX).Pie(pieteamdata, {  animateRotate : false,
+  animateScale : false,});
+	var myTypeChart = new Chart(typeCTX).Pie(pietypedata, {  animateRotate : false,
+  animateScale : false,});
+	var myBarChart = new Chart(barCTX).Bar(bardata, { scaleOverlay : true,
+	animation: false,
+  scaleOverride : false,
+	scaleSteps : null,
+	scaleStepWidth : 1,
+	scaleStartValue : 0,
+	scaleShowLabels : true,
+	scaleFontStyle : "bold",
+	scaleFontSize : 12,
+	scaleFontColor : "grey",
+	angleLineWidth : 2,
+	scaleLineWidth : 2
+});
+}
+</script>
+
+<% end %>
+  </body>
+</html>

@@ -1,0 +1,179 @@
+
+  <div class="span12 row">
+    <div class="margin-bottom">
+
+      <%= ADN_Collapsible_Panel_Header("ScoreTable", I18n.t(:general_score) +  I18n.t(:general_between) + @low_score.to_s + I18n.t(:general_and) + @high_score.to_s) %>
+      <table class="table table-condensed datatable">
+        <thead>
+          <tr class="header-table">
+            <th><%= t(:general_athlete) %></th>
+            <th><%= t(:general_evaluation) %></th>
+            <th><%= t(:general_date) %></th>
+            <th><%= t(:general_score) %></th>
+            <th><%= t(:general_differential) %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @resultats_threshold_score.each do |resultat| %>
+              <tr class="content-table">
+                <td class="first-content"><%= resultat.athlete_name %></td>
+                <td><%= resultat.evaluation_name %></td>
+                <td><%= resultat.eval_day %></td>
+                <td><% if resultat.score.to_i <= @max_score.to_i %>
+                       <%= resultat.score %></td>
+                    <% else %>
+                       <%= I18n.t(:resultats_incomplete) %></td>
+                    <% end %>
+                <td><%= resultat.differential %></td>
+              </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <%= ADN_Collapsible_Panel_Footer() %>
+
+      <%= ADN_Collapsible_Panel_Header("DifferentialTable", I18n.t(:general_differential) +  I18n.t(:general_between) + @low_differential.to_s + I18n.t(:general_and) + @high_differential.to_s) %>
+      <table class="table table-condensed datatable">
+        <thead>
+          <tr class="header-table">
+            <th><%= t(:general_athlete) %></th>
+            <th><%= t(:general_evaluation) %></th>
+            <th><%= t(:general_date) %></th>
+            <th><%= t(:general_score) %></th>
+            <th><%= t(:general_differential) %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @resultats_threshold_differential.each do |resultat| %>
+              <tr class="content-table">
+                <td class="first-content"><%= resultat.athlete_name %></td>
+                <td><%= resultat.evaluation_name %></td>
+                <td><%= resultat.eval_day %></td>
+                <td><%= resultat.score %></td>
+                <td><%= resultat.differential %></td>
+              </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <%= ADN_Collapsible_Panel_Footer() %>
+
+      <%= ADN_Collapsible_Panel_Header("LeftRightTable", I18n.t(:user_legend_left_right)) %>
+      <table class="table table-condensed datatable">
+        <thead>
+          <tr class="header-table">
+            <th><%= t(:general_athlete) %></th>
+            <th><%= t(:general_evaluation) %></th>
+            <th><%= t(:general_date) %></th>
+            <th><%= t(:general_test) %></th>
+            <th><%= t(:resultat) %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @resultats_left_right.each do |resultat| %>
+              <tr class="content-table">
+                <td class="first-content"><%= resultat.athlete_name %></td>
+                <td><%= resultat.evaluation_name %></td>
+                <td><%= resultat.eval_day %></td>
+                <td><%= resultat.test_name %></td>
+                <td>
+                <% if resultat.left_right? %>
+                <%= I18n.t(:resultats_right_abbr) + "- " + resultat.right_side.to_s %>
+                <%= I18n.t(:resultats_left_abbr) + "- " + resultat.left_side.to_s %>
+                <% else %>
+                <%= resultat.right_side %>
+                <% end %>
+                </td>
+              </tr>
+          <% end %>
+        </tbody>
+      </table>
+       <%= ADN_Collapsible_Panel_Footer() %>
+
+      <%= ADN_Collapsible_Panel_Header("InjuriesTable", I18n.t(:user_legend_bless_identified)) %>
+      <table class="table table-condensed datatable">
+        <thead>
+          <tr class="header-table">
+            <th><%= t(:general_athlete) %></th>
+            <th><%= t(:general_evaluation) %></th>
+            <th><%= t(:general_date) %></th>
+            <th><%= t(:general_test) %></th>
+            <th><%= t(:resultat) %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @resultats_injuries.each do |resultat| %>
+              <tr class="content-table">
+                <td class="first-content"><%= resultat.athlete_name %></td>
+                <td><%= resultat.evaluation_name %></td>
+                <td><%= resultat.eval_day %></td>
+                <td><%= resultat.test_name %></td>
+                <td>
+                <% if resultat.left_right? %>
+                <%= I18n.t(:resultats_right_abbr) + "- " + resultat.right_side.to_s %>
+                <%= I18n.t(:resultats_left_abbr) + "- " + resultat.left_side.to_s %>
+                <% else %>
+                <%= resultat.right_side %>
+                <% end %>
+                </td>
+              </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <%= ADN_Collapsible_Panel_Footer() %>
+
+      <%= ADN_Collapsible_Panel_Header("SpecialCaseTable", I18n.t(:user_legend_special_cases) + EvalTest.find(@special_case_eval_test_id).name + I18n.t(:user_legend_special_cases2) + @special_case_value.to_s) %>
+      <table class="table table-condensed datatable">
+        <thead>
+          <tr class="header-table">
+            <th><%= t(:general_athlete) %></th>
+            <th><%= t(:general_evaluation) %></th>
+            <th><%= t(:general_date) %></th>
+            <th><%= t(:general_test) %></th>
+            <th><%= t(:resultat) %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @resultats_special_cases.each do |resultat| %>
+              <tr class="content-table">
+                <td class="first-content"><%= resultat.athlete_name %></td>
+                <td><%= resultat.evaluation_name %></td>
+                <td><%= resultat.eval_day %></td>
+                <td><%= resultat.test_name %></td>
+                <td>
+                <% if resultat.left_right? %>
+                <%= I18n.t(:resultats_right_abbr) + "- " + resultat.right_side.to_s %>
+                <%= I18n.t(:resultats_left_abbr) + "- " + resultat.left_side.to_s %>
+                <% else %>
+                <%= resultat.right_side %>
+                <% end %>
+                </td>
+              </tr>
+          <% end %>
+        </tbody>
+       </table>
+       <%= ADN_Collapsible_Panel_Footer() %>
+      </div>
+    </div>
+
+<script>
+    function DisplayTable(id) {
+          $('#' + id).show();
+          document.getElementById("hide" + id).style.display = "inline";
+          document.getElementById("show" + id).style.display = "none";
+    }
+
+    function HideTable(id) {
+          $('#' + id).hide();
+          document.getElementById("hide" + id).style.display = "none";
+          document.getElementById("show" + id).style.display = "inline";
+    }
+    if ( $.fn.dataTable.isDataTable( '.datatable' ) ) {
+        table = $('.datatable').DataTable();
+    }
+    else {
+        table = $('.datatable').DataTable( {
+            paging: false,
+            info: false,
+            filter: false
+        } );
+    }
+</script>

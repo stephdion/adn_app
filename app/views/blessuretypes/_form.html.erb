@@ -1,0 +1,40 @@
+<%= form_for(@blessuretype) do |f| %>
+    <div class="span12 col-md-6" style="padding-left:0px;">
+      <% if @blessuretype.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= pluralize(@blessuretype.errors.count, "error") %> prohibited this blessuretype from being
+              saved:</h2>
+
+            <ul>
+              <% @blessuretype.errors.full_messages.each do |msg| %>
+                  <li><%= msg %></li>
+              <% end %>
+            </ul>
+          </div>
+      <% end %>
+
+      <p>
+      <div class="field">
+        <%= f.label :name_fr %><br>
+        <%= f.text_field :name_fr, :class =>"form-control" %>
+      </div>
+      </p>
+      <p>
+
+      <div class="field">
+        <%= f.label :code %><br>
+        <%= f.text_field :code, :readonly => !@blessuretype.new_record?, :class =>"form-control" %>
+      </div>
+      </p>
+      <p>
+
+      <div class="field">
+        <%= f.label :description %><br>
+        <%= f.text_area :description, :rows => 5, :class =>"form-control" %>
+      </div>
+      </p>
+      <div class="actions">
+        <%= f.submit class: "btn btn-default" %> <%= link_to t("general_back"), blessuretypes_path, :class=>"btn btn-default", :style=>"display:inline;margin-left:10px;" %>
+      </div>
+    </div>
+<% end %>

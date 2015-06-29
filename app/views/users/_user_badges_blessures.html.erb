@@ -1,0 +1,3 @@
+<% if @user.blessures.count && is_user_in_role?(@user,'ATHLETE')  %>
+<span class="badge" id="badge_profile_sub_nav"><%= @user.blessures.count %></span>
+<% end %>

@@ -1,0 +1,25 @@
+<h1>Listing exercise_subcategories</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Exercise category</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @exercise_subcategories.each do |exercise_subcategory| %>
+  <tr>
+    <td><%= exercise_subcategory.name %></td>
+    <td><%= exercise_subcategory.exercise_category_id %></td>
+    <td><%= link_to 'Show', exercise_subcategory %></td>
+    <td><%= link_to 'Edit', edit_exercise_subcategory_path(exercise_subcategory) %></td>
+    <td><%= link_to 'Destroy', exercise_subcategory, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Exercise subcategory', new_exercise_subcategory_path %>

@@ -1,0 +1,10 @@
+<% @userlist.each do |user| %>
+	<div class="row user-item" id="<%=user.id%>" style="cursor:pointer">
+		<div class="col-md-1">
+			<%= check_box_tag "chk-#{user.id}", "1",false, class: "customchk", :style=>"cursor:pointer"%>
+		</div>
+		<div class="col-md-11">
+			<%=user.name%>
+		</div>
+	</div>
+<% end %>

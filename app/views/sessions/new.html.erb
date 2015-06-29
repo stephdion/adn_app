@@ -1,0 +1,32 @@
+<% provide(:title, I18n.t(:new_session)) %>
+<div class="row">
+  <div class="col-md-12 text-center login_pass_layout">
+  
+    <h1> <%= I18n.t(:new_session) %></h1>
+    <span class="fontello-login7 login_pass_icon"></span>
+  </div>
+</div>
+<div class="row text-center">
+  <div class="col-md-4">
+  </div>
+  <div class="col-md-4">
+    <%= form_for(:session, url: sessions_path) do |f| %>
+      <div class="form-group">
+          <%= f.label :email, I18n.t(:session_email), class: "gen_style_loginpw_form_labels" %>
+          <%= f.text_field :email, class: 'form-control', placeholder: 'example@domaine.com' %>
+      </div>
+      <div class="form-group">
+          <%= f.label :password, I18n.t(:session_password), class: "gen_style_loginpw_form_labels" %>
+          <%= f.password_field :password, class: 'form-control', placeholder: I18n.t(:session_password) %>
+      </div>
+      <%= f.submit I18n.t(:new_session), class: "btn btn-default gen_style_loginpw_form_button" %>
+    <% end %>
+  </div>
+  <div class="col-md-4">
+  </div>
+</div>
+<!-- <div class="row text-center margin-top-10">
+  <div class="col-md-12">
+    <%= I18n.t(:new_user) %>? <%= link_to I18n.t(:sign_up_now)+"!", inscription_path %>
+  </div>
+</div>-->

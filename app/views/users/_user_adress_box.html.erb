@@ -1,0 +1,39 @@
+      <!--QUARTER BOX-->
+      <div class="user_profile_box">
+        <div class="user_profile_box_header">
+          <h4><span class="fontello-businessman189 sub_nav_icons_reposition"></span>CARNET D'ADRESSES</h4>
+        </div>
+        <div class="row">
+          <div class="col-md-12" style="max-height:300px;overflow:auto;overflow-x:hidden;">
+            <table class="table">
+            <% @address.each do |user| %>
+            <% if(user.memberships.where(:organization_id => @current_organization).first != nil) %>
+              <tr class="profile_cartnet_table_tr">
+                <td><!--<img src="http://placehold.it/35x35">--></td>
+                <td>
+                <div class="profile_cartnet_table_name_td">
+                 <%= user.to_s%> - <%= user.memberships.where(:organization_id => @current_organization).first.getName%>
+                <br>
+                <% if user.user_phones.any? %>
+                  <%= user.user_phones[0].number %>
+                <% end %>
+                </div>
+                  <div style="float:right;margin-top:-30px;">
+                <%= link_to new_mail_path + "?id=#{user.id}", :class => "button small-button green-button" do %>
+                    <span class="fontello-mail navLiIcons"></span>
+                  <% end %>
+                </div>
+                </td>
+              </tr>
+              <% end %>
+            <% end %>
+           
+            </table>
+          </div>
+        </div>
+        <div class="row button_profile_quarter_section_margin">
+          <div class="col-lg-12">
+            <button type="button" class="btn btn-default button_profile_box_one">Accès au Carnet<i class="glyphicon glyphicon-cog profile_user_button_icon_align"></i></button>
+          </div>
+        </div>
+      </div>

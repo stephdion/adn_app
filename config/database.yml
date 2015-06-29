@@ -1,0 +1,35 @@
+development:
+  adapter: postgresql
+  encoding: utf8
+  database: daoa82nuj8smbi
+  host: localhost
+  port: 5432
+  pool: 10
+
+test: &TEST
+  adapter: postgresql
+  encoding: utf8
+  database: adnsolution_staging
+  host: localhost
+  port: 5432
+  pool: 10
+
+production:
+  adapter: postgresql
+  encoding: utf8
+  database: daoa82nuj8smbi
+  username: wqxcilltwmrgsi
+  password: sVVAWAWg2mceUTN1bliPGIFuQT
+  host: ec2-54-243-48-204.compute-1.amazonaws.com
+  port: 5432
+  pool: 10
+
+production_cortex:
+  adapter: postgresql
+  encoding: utf8
+  database: adnsolution_staging
+  username: adnsolution
+  password: cortex
+  host: localhost
+  port: 5432
+  pool: 10

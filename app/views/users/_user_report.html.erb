@@ -1,0 +1,44 @@
+ <!--QUARTER BOX-->
+<div class="user_profile_box">
+	<div class="user_profile_box_header">
+	  <h4>
+		  <span class="glyphicon glyphicon-briefcase" style="margin-right:15px"></span>MES RESSOURCES 
+		</h4>
+	</div>
+	<div style="max-height:300px;overflow:auto;overflow-x:hidden;">
+	  	<div class="row user_profile_box_user_post_box">
+		  <div class="col-md-2">
+		    <div class="user_profile_box_user_post_box_profile_pic" style="margin-left:-21px">
+		      <span class="glyphicon glyphicon-list-alt"></span>
+		    </div>
+		  </div>
+		  <div class="col-md-10">
+		    <div class="row">
+		      <div class="col-md-12">
+		      	<%= link_to :controller => :users, :action => :report do %>
+		        <p class="user_profile_box_user_post_uppertext">Rapports</p>
+		        <% end %>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	</div>
+	<div style="max-height:300px;overflow:auto;overflow-x:hidden;">
+	  	<div class="row user_profile_box_user_post_box">
+		  <div class="col-md-2">
+		    <div class="user_profile_box_user_post_box_profile_pic">
+		      <span class="glyphicon glyphicon-expand"></span>
+		    </div>
+		  </div>
+		  <div class="col-md-10">
+		    <div class="row">
+		      <div class="col-md-12">
+		      	<%= link_to :controller => :users, :action => :video do %>
+		        <p class="user_profile_box_user_post_uppertext">Vidéos</p>
+		        <% end %>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,74 @@
+<%= form_for(@user, remote: true, :html => { :id => "edit_form_general" }, :url => {:controller => "users", :action => "ajax_info_general_edit"}) do |f| %>
+<table class="table table_contact_info_info">
+<tr>
+<td class="info_table_left_column_tag">Adresse</td>
+	<td><%= f.text_field :address %></td>
+  </tr>
+  <tr>
+	<td class="info_table_left_column_tag">Ville</td>
+	<td><%= f.text_field :city %></td>
+  </tr>
+  <tr>
+	<td class="info_table_left_column_tag">Province</td>
+	<td><%= f.text_field :state %></td>
+  </tr>
+  <tr>
+	<td class="info_table_left_column_tag">Code Postale</td>
+	<td><%= f.text_field :postalCode %></td>
+  </tr>
+  <tr>
+	<td class="info_table_left_column_tag">Pays</td>
+	<td><%= f.text_field :country %></td>
+  </tr>
+  <tr>
+	<td class="info_table_left_column_tag">Email</td>
+	<td>
+	<indent><%= @user.email%></indent>
+	  <br/>
+	  <%@i = 0%>
+	<%= f.fields_for :user_emails do |emails_form| %>
+	<div id="email_<%=@i%>" class="opc_chk">
+		<%if !:id.blank? %>
+		  <%= emails_form.text_field :email %> 
+		  <%= emails_form.check_box :_destroy, id:"delete_email_#{@i}", class:"delete_email" %>
+		  <label for="delete_email_<%=@i%>"><span class="glyphicon glyphicon-remove"></span></label>
+		  <%= emails_form.select :email_type,
+                                             ["Email 1", "Email 2", "Email 3"],
+                                             {}, {:class => "selectpicker", :style => "padding:0;display:none;"} %>
+		  <%@i+=1%>
+		  </div>
+		<%end%>
+	<%end%>
+	<span style="width:75px;" class="btn btn-default button_profile_box_one" data-uid="<%=@i%>" id="add_email">add</span>
+  </td>
+  </tr>
+  <tr>
+	<td class="info_table_left_column_tag">Phone </td>
+	<td>
+	<%@i = 0%>
+	 <%= f.fields_for :user_phones do |phones_form| %>
+		<div id="phone_<%=@i%>" class="opc_chk">
+	   <%= phones_form.select :phone_type,
+		 ["Mobile", "Home", "Work"],
+		 {}, {:class => "selectpicker", :style => "padding:0"} %>
+		<%= phones_form.text_field :number %>
+	  <% if !:id.blank? %>
+		  <%= phones_form.check_box :_destroy, id:"delete_phone_#{@i}", class:"delete_phone"%>
+		  <label for="delete_phone_<%=@i%>"><span class="glyphicon glyphicon-remove"></span></label>
+		  <%@i+=1%>
+	  <% end %>
+		  </div>
+	  <% end %>
+	  <span style="width:75px;" class="btn btn-default button_profile_box_one" data-uid="<%=@i%>" id="add_phone">add</span>
+</td>
+  </tr>
+<tr>
+<td>
+<%= f.submit "Save", class: "btn btn-default button_profile_box_one" %>
+</td>
+<td>
+<%= link_to "Cancel", [:ajax_cancel, @user], remote: true, class: "btn btn-default button_profile_box_one", id: "user_general_cancel", style: "width:100px" %>
+<td/>
+</tr>
+</table>
+<%end%>

@@ -1,0 +1,35 @@
+<% provide(:title, t(:general_index) + ": " + t(:positions)) %>
+<h1 class="text-center"><%=t(:general_index) + ": " + t(:positions)%></h1>
+<%= link_to t(:position_new), new_position_path(@position), class: "btn btn-default btn-lg margin-bottom-10" %>
+<table class="table table-hover table-striped table-responsive">
+        <tr>
+           <th><%= I18n.t(:general_name) %></th>
+           <th><%= I18n.t('activerecord.attributes.position.equipe_type_id') %></th>
+           <th><%= I18n.t('activerecord.attributes.position.organization_id') %></th>
+           <th></th>
+        </tr>
+        <tr>
+  		<% @positions.each do |position| %>
+      		<td> <%= link_to position.name, edit_position_path(position) %></td>
+      		<td>
+        		<% if position.equipe_type %>
+  					<%= position.equipe_type.name %>
+  	 			<% else %>
+  	   	 			<%=t(:position_all_teams)%>
+    			<% end %>
+      		</td>
+          <td>
+            <% if position.try(:equipe_type).try(:organization) %>
+            <%= position.equipe_type.organization.name %>
+          <% else %>
+              <%=t(:general_none)%>
+          <% end %>
+
+          <td class="td-last-1">
+            <%= link_to position, method: :delete, data: { confirm:  I18n.t(:button_confirm_delete) } do %>
+              <span class="glyphicon glyphicon-trash"></span>
+            <% end %>
+          </td>
+      	</tr>
+  		<% end %>
+  	</table>

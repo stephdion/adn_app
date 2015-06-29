@@ -1,0 +1,5 @@
+<%# if @user.evaluations.any? %>
+<% if @eval_badge > 0 && is_user_in_role?(@user,'ATHLETE') %>
+<!--<span class="badge" id="badge_profile_sub_nav"><%= @user.evaluations.count %></span>-->
+<span class="badge" id="badge_profile_sub_nav"><%= @eval_badge %></span>
+<% end %>

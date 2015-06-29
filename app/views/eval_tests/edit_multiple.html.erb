@@ -1,0 +1,40 @@
+<% provide(:title, t(:test_modify)) %>
+<div class="margin-bottom">
+  <h1 class="text-center"><%= t(:test_modify) %></h1>
+</div>
+
+<%= form_tag update_multiple_eval_tests_path, method: :put do %>
+  <% @eval_tests.each do |eval_test| %>
+
+    <%= fields_for "eval_test[]", eval_test do |f| %>
+      
+      <% if eval_test.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(eval_test.errors.count, "error") %> prohibited this eval_test from being saved:</h2>
+          <ul>
+          <% eval_test.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+          </ul>
+        </div>
+        <% end %>
+
+      <div class="field">
+        <div class="span1 row">
+          <div class="col-md-1">
+            <%= image_tag eval_test.image.url(:thumbnail) %><br>
+            <%= eval_test.name %>
+          </div>
+          <div class="col-md-2">
+            <%= f.label :test_subcategory_id %><br>
+            <%= f.grouped_collection_select :test_subcategory_id, TestCategory.where("organization_id IN (?)", [Organization.current_organization]).order(:name), :test_subcategories, :name, :id, :name, {include_blank: true}, :class=>"form-control" %>
+          </div>
+        </div>
+      </div>
+<hr>
+      <% end %>
+      <% end %>
+
+      <%= submit_tag t(:button_edit), class: "btn btn-default" %>
+      <%= link_to t(:general_back), eval_tests_path, class: "btn btn-default", :style=>"display:inline;margin-left:10px;" %>
+<% end %>

@@ -1,0 +1,83 @@
+  <div class="row">
+    <div class="col-lg-4">
+      <!--QUARTER BOX-->
+		<div id="profile_box">
+        	<%= render 'user_profil_box' %>
+      	</div>
+		<!--JUNK------------------------------------------------------------------------ -->
+            <%= render 'user_adress_box' %>
+      <%= render 'user_msg_box' %>
+	  <!--JUNK------------------------------------------------------------------------ -->
+    </div>
+	
+    <!--UI-->
+    <div class="col-lg-8 margin profilePullMargin">
+        <div class="col-md-12 nav_profile_banner_img" style="background-image: url('<%= @user.banner.url(:large) %>');">
+          <nav class="navbar navbar-inverse" id="profile_sub_nav_repo_923" role="navigation">
+            <div class="container-fluid">
+              <!-- Brand and toggle get grouped for better mobile display -->
+              <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+              </div>
+              <!-- Collect the nav links, forms, and other content for toggling -->
+              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+                <ul class="nav navbar-nav">
+				
+				<li class="dropdown drop_profile_sub_nav">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+					<span class="fontello-users7 sub_nav_icons_reposition"></span>
+					Mes Equipes
+					<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu" role="menu">
+						<li>
+							<%= link_to "Tous mes équipes", (user_path(@user) )+ '/ajax_result_trainer?teamid=0#tab_a', :class => "team_tab", :controller => "users", :action => "ajax_trainer_result", :data =>{ :toggle => "tab" }, :remote => true %>
+						</li>
+						<% @i = 1 %>
+					<% if @participe_equipes != [] %>
+					 <% @participe_equipes.each do |equipe| %>
+						<li>
+							<%= link_to "#{equipe.name}", (user_path(@user) )+ "/ajax_result_trainer?teamid=#{equipe.id}#tab_a", :class => "team_tab", :controller => "users", :action => "ajax_trainer_result", :data =>{ :toggle => "tab" }, :remote => true %>
+						</li>
+						<% @i += 1 %>
+					 <%end%>
+					<%end%>
+					</ul>
+				</li>
+				<li><a href="#tab_b" data-toggle="tab"><span class="fontello-broken28 sub_nav_icons_reposition"></span></span>Blessures<%= render 'user_badges_blessures' %></a></li>
+				<li><a href="#tab_c" data-toggle="tab"><span class="fontello-business133 sub_nav_icons_reposition"></span>Info</a></li>
+				
+                  <!--<li><a href="#tab_e" data-toggle="tab"><span class="fontello-mail sub_nav_icons_reposition"></span>Inbox<span class="badge" id="badge_profile_sub_nav">1</span></a></li>-->
+                </ul>
+              </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+          </nav>
+        </div>
+        <!---TAB CONTENT /NAV-->
+            <div class="row"><!--TEST12-->
+              <div class="col-md-12"><!--TEST12-->
+                <div class="tab-content">
+				
+					<div class="tab-pane fade active in" id="tab_a" style="">
+						<%= render 'user_dashboard_users' %>
+					</div><!--END TAB A-->
+
+					   
+					<div class="tab-pane fade" id="tab_b"><!--TAB B-->
+						<%= render 'user_blessures_trainer' %> 
+					</div><!--TAB B-->
+					 
+					<div class="tab-pane fade" id="tab_c"><!--TAB C-->
+						<%= render 'user_info' %>
+					</div><!--TAB C-->
+				   
+                </div><!-- tab content -->
+              </div><!--TEST12-->
+            </div><!--TEST12-->
+      </div><!--END COL-8--> 
+  </div>

@@ -1,0 +1,39 @@
+<div class="col-md-6">
+<%= form_for(@exercise_subcategory) do |f| %>
+  <% if @exercise_subcategory.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@exercise_subcategory.errors.count, "error") %> prohibited this exercise_subcategory from being saved:</h2>
+
+      <ul>
+      <% @exercise_subcategory.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="styled-select">
+      <%= f.label :exercise_category_id %><br>
+      <%= f.collection_select :exercise_category_id, ExerciseCategory.where("organization_id IN (?)", [Organization.current_organization]).order(:name), :id, :name, {}, :class=>"form-control" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name, :class=>"form-control" %>
+  </div>
+
+  <% if @exercise_subcategory.exercises.any? %>
+  <%= I18n.t(:subcategory_contains_exercises) %><br>
+    <% @exercise_subcategory.exercises.each do |exercise| %>
+    <%= image_tag exercise.image.url(:thumbnail) %>
+    <%= link_to exercise.name, edit_exercise_path(exercise) %><br>
+    <% end %>
+    <br><br>
+  <% end %>
+  
+  <div class="actions">
+    <%= f.submit I18n.t(:button_submit), class: "btn btn-default" %>
+    <%= link_to  t(:general_back), exercise_categories_path, :class=>"btn btn-default", :style=>"display:inline;margin-left:10px;" %>
+  </div>
+<% end %>
+</div>

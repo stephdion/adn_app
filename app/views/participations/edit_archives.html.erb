@@ -1,0 +1,46 @@
+<% provide(:title, t(:equipe_edit_archives)) %>
+<div class="margin-bottom">
+	<h1_left><%= t(:equipe_edit_archives) %></h1_left>
+	</br><%= t(:equipe_archives_date_format) %>
+</div>
+<%= form_tag update_archives_participations_path, method: :put do %>
+	<% @participations.each do |participant| %>
+		<%= fields_for "participations[]", participant do |f| %>
+			<% if participant.errors.any? %>
+				<div id="error_explanation">
+					<b><%= pluralize(@participant.errors.count, "erreur") %> <%=t("helpers.errors", model: "la participation")%>:</b>
+					<ul>
+					<% participation.errors.full_messages.each do |msg| %>
+						<li>- <%= msg %></li>
+					<% end %>
+					</ul>
+				</div>
+			<% end %>
+			<div class="field col-md-4" style="border-style: solid;border-width:1px;">
+				<div class="col-md-4">
+					<%= image_tag participant.user.photo.url(:thumbnail) %><br>
+					<%= link_to participant.user.name, participant.user %>
+					<br><br>
+				</div>
+				<%= hidden_field_tag "equipe_id", @equipe.id %>
+				<div class="col-md-8">
+					<div class="styled-select row span2">
+						<%= f.label :created_at %>
+						<%= f.text_field :created_at, {:value => participant.created_at.strftime("%d-%m-%Y"),'data-behaviour'=> 'datepicker'} %>
+					</div>
+					<div class="styled-select row span2">
+						<%= f.label :archived %>
+						<% if participant.archived %>
+							<%= f.text_field :archived, {:value => participant.archived.strftime("%d-%m-%Y"), 'data-behaviour'=> 'datepicker'} %>
+						<% else %>
+							<%= f.text_field :archived, {'data-behaviour'=> 'datepicker'} %>
+						<% end %>
+					</div>
+				</div>
+			</div>
+		<% end %>
+	<% end %>
+	<div class="row col-md-12" style="display:block;">
+		<%= submit_tag t(:button_edit), class: "btn btn-info" %>
+	</div>
+<% end %>

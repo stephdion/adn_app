@@ -1,0 +1,260 @@
+<header>
+<nav class="navbar navbar-inverse navbar-fixed-top container" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/"><%= image_tag("idathletique/logo_adn-20.png")  %></a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <!--ORGAGNISATION-->
+      <% if signed_in? %>
+        <ul class="nav navbar-nav navbar-left">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle navOrganisationDropdownText" data-toggle="dropdown">
+                  <%= @current_organization.name %>
+                  <% if organizations_list.count > 0 
+                      colcount = 1 + (organizations_list.count - organizations_list.count % 10) / 10
+                      if colcount > 5 
+                        colcount = 5
+                      end
+                        %>
+                  <span class="caret"></span>
+                  <% end %>
+                  </a>
+            <ul class="dropdown-menu" style="-moz-column-count: <%= colcount%>;
+    -moz-column-gap: 2.5em;
+    -webkit-column-count: <%= colcount%>;
+    -webkit-column-gap: 2.5em;
+     column-count: <%= colcount%>;
+     column-gap: 2.5em;"role="menu">
+              <% organizations_list.each do |organization| %>
+              <li><%= link_to organization.name, set_current_organization_path(:id => organization.id) %></li>
+              <% end %>
+            </ul>
+          </li>
+        </ul>
+      <% end %>
+      <!--END ORGANISATION & LEFT MENU-->
+      <ul class="nav navbar-nav navbar-right">
+    <% if  current_page?('/') %>
+    <li><a href="#avantage" class="scrollable"><%= I18n.t(:navigation_advantages)%></a></li>
+        <li><a href="#discover" class="scrollable"><%= I18n.t(:navigation_discover)%></a></li>
+    <li><a href="#joinus" class="scrollable">Nous joindre</a></li>
+    <% end %>
+        <li><a href="#"><span class="fontello-facebook"></span></a></li>
+
+
+        <% if signed_in? %>
+        <!--TRAINER-->
+        <% if is_current_user_sysadmin? || is_current_user_in_any_role?(['DIR', 'TRAINER', 'PHYSIO']) %>
+        <li class="dropdown">
+          <% if is_current_user_in_role?('PHYSIO') %>
+          <a href="#" class="dropdown-toggle navOrganisationDropdownText" data-toggle="dropdown"><%= I18n.t(:roles_physio) %>
+            <span class="caret"></span></a>
+          <% else %>
+          <a href="#" class="dropdown-toggle navOrganisationDropdownText" data-toggle="dropdown"><%= I18n.t(:roles_trainer) %>
+            <span class="caret"></span></a>
+          <% end %>
+
+          <ul class="dropdown-menu" role="menu">
+            <li>
+              <%= link_to scat2s_path do %>
+                <span class="fontello-bald7 navLiIcons"></span>
+                <%= I18n.t(:navigation_scat2) %>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to blessures_path do %>
+                <span class="fontello-broken28 navLiIcons"></span>
+                <%= I18n.t(:navigation_injuries) %>
+              <% end %>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <%= link_to equipes_path do %>
+                <span class="fontello-connected navLiIcons"></span>
+                <%= I18n.t(:navigation_teams) %>
+              <% end %>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <%= link_to evaluation_athlete_path do %>
+                <span class="fontello-note navLiIcons"></span>
+                <%= I18n.t(:navigation_evaluate_athlete) %>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to evaluation_equipe_path do %>
+                <span class="fontello-note navLiIcons"></span>
+                <%= I18n.t(:navigation_evaluate_team) %>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to resultats_path do %>
+                <span class="fontello-note navLiIcons"></span>
+                <%= I18n.t(:navigation_evaluation_results) %>
+              <% end %>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <%= link_to eval_tests_path do %>
+                <span class="fontello-running31 navLiIcons"></span>
+                <%= I18n.t(:navigation_tests) %>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to exercises_path do %>
+                <span class="fontello-weight navLiIcons"></span>
+                <%= I18n.t(:navigation_exercises) %>
+              <% end %>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <%= link_to evaluations_path do %>
+                <span class="fontello-note navLiIcons"></span>
+                <%= I18n.t(:navigation_evaluations) %>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to programmes_path do %>
+                <span class="fontello-note navLiIcons"></span>
+                <%= I18n.t(:navigation_programs) %>
+              <% end %>
+            </li>
+          </ul>
+        </li>
+        <% end %>
+        <!--ADN SYSADMIN MENU-->
+        <% if is_current_user_sysadmin? %>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle navOrganisationDropdownText" data-toggle="dropdown">Admin <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li>
+              <%= link_to users_path do %>
+                <span class="fontello-users7 navLiIcons"></span>
+                <%= I18n.t(:navigation_users) %>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to exercise_categories_path do %>
+                <span class="fontello-category navLiIcons"></span>
+                <%= I18n.t(:navigation_exercise_categories) %>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to test_categories_path do %>
+                <span class="fontello-category navLiIcons"></span>
+                <%= I18n.t(:navigation_test_categories) %>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to organizations_path do %>
+                <span class="fontello-category navLiIcons"></span>
+                <%= I18n.t(:navigation_organizations) %>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to roles_path do %>
+                <span class="fontello-category navLiIcons"></span>
+                <%= I18n.t(:navigation_roles) %>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to vouchers_path do %>
+                <span class="fontello-category navLiIcons"></span>
+                <%= I18n.t(:navigation_vouchers) %>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to equipe_types_path do %>
+                <span class="fontello-category navLiIcons"></span>
+                <%= I18n.t(:navigation_team_types) %>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to eval_types_path do %>
+                <span class="fontello-category navLiIcons"></span>
+                <%= I18n.t(:navigation_evaluation_types) %>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to positions_path do %>
+                <span class="fontello-category navLiIcons"></span>
+                <%= I18n.t(:navigation_positions) %>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to comments_path do %>
+                <span class="fontello-category navLiIcons"></span>
+                <%= I18n.t(:navigation_comments) %>
+              <% end %>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <%= link_to bodyparts_path do %>
+                <span class="fontello-category navLiIcons"></span>
+                <%= I18n.t('activerecord.models.bodypart') %>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to bodysides_path do %>
+                <span class="fontello-category navLiIcons"></span>
+                <%= I18n.t('activerecord.models.bodyside') %>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to blessuretypes_path do %>
+                <span class="fontello-category navLiIcons"></span>
+                <%= I18n.t('activerecord.models.blessuretype') %>
+              <% end %>
+            </li>
+          </ul>
+        </li>
+        <% end %>
+        <!--USER-->
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle navOrganisationDropdownText" data-toggle="dropdown">Compte <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li>
+              <%= link_to current_user do %>
+                <span class="fontello-profile9 navLiIcons"></span>
+                <%= I18n.t(:navigation_profile) %>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to mails_path do %>
+                <span class="fontello-mail navLiIcons"></span>
+                Messagerie
+              <% end %>
+            </li>
+            <li>
+              <%= link_to change_password_user_path(:id => current_user) do %>
+                <span class="fontello-pencil43 navLiIcons"></span>
+                <%= I18n.t(:navigation_change_password) %>
+              <% end %>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <%= link_to fermeture_path, method: "delete" do %>
+                <span class="fontello-on navLiIcons"></span>
+                <%= I18n.t(:navigation_sign_out) %>
+              <% end %>
+            </li>
+          </ul>
+        </li>
+        <% else %>
+          <li><%= link_to I18n.t(:navigation_sign_in), ouverture_path %><%#= link_to I18n.t(:navigation_sign_in), "http://radiant-headland-4014.herokuapp.com/ouverture" %></li>
+        <% end %>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+</header>

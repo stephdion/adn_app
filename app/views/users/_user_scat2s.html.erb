@@ -1,0 +1,151 @@
+<% if @user.last_scat2s.any? %>
+    <legend><%= t 'user_legend_scat2' %></legend>
+    <div class="row-fluid">
+      <h1_left>Informations à l’attention de l’athlète</h1_left><br/>
+      <span class="scat2_warn">Tout athlète susceptible d’avoir une commotion cérébrale doit être retiré du jeu et
+        se soumettre à un examen médical.</span>
+      <br/><br/>
+      <div class="span5">
+        <b>Phénomènes à surveiller</b><br/>
+        Des problèmes peuvent survenir au cours des 24 à 48 heures qui
+        suivent l’incident. Vous ne devez pas rester seul. Vous devrez vous
+        rendre immédiatement à l‘hôpital dans les cas suivants :<br/>
+        <ul>
+          <li>Mal de tête qui s’aggrave</li>
+          <li>Forte somnolence ou impossibilité d’être réveillé (par quelqu’un)</li>
+          <li>Incapacité de reconnaître des personnes ou des lieux</li>
+          <li>V omissements répétés</li>
+          <li>Comportement inhabituel, confusion apparente et très grande irritabilité</li>
+          <li>Crise d‘épilepsie (bras et jambes s’agitant de façon incontrôlable)</li>
+          <li>Engourdissement des bras ou des jambes</li>
+          <li>Instabilité en position debout, élocution pâteuse</li>
+        </ul>
+        <b>N’oubliez pas que la sécurité est prioritaire.</b><br/>
+        <span class="scat2_warn_bold">Consultez votre médecin après une suspicion de commotion
+        cérébrale.</span>
+      </div>
+      <div class="span5">
+        <b>Retour sur le terrain</b><br/>
+        Les athlètes ne doivent pas reprendre le sport le jour même de l‘incident.
+        Lorsque les athlètes reprennent le sport, ils doivent se conformer à un programme
+        progressif limité par les symptômes, en plusieurs étapes.
+        Par exemple :<br/>
+        <ol>
+          <li>Repos jusqu‘à l‘absence de symptômes (repos physique et mental)</li>
+          <li>Exercices aérobies légers (par exemple sur ergomètre)</li>
+          <li>Exercices spécifiques au sport</li>
+          <li>Entraînement sans contact
+            (commencer un entraînement léger de résistance)</li>
+          <li>Entraînement en plein contact après autorisation médicale</li>
+          <li>Retour aux compétitions (match)</li>
+        </ol>
+        Chaque étape nécessite environ 24 heures (ou plus), et le joueur devrait
+        revenir à l’étape précédente si les symptômes réapparaissent. L’entraînement
+        de résistance ne devrait être ajouté que dans les dernières étapes.<br/>
+        <span class="scat2_warn_bold">Une autorisation médicale est nécessaire pour recommencer à jouer.</span>
+      </div>
+    </div>
+    <br/><br/>
+    <table class="table scat2_report_table">
+      <tr>
+        <th colspan="2">Outil</th>
+        <th>Domaine testé</th>
+        <th>Temps</th>
+        <th colspan="4">Score</th>
+      </tr>
+      <tr>
+        <td class="blueLight" colspan="4" style="text-align: right">Date d'examen</td>
+        <% @user.last_scat2s.each do |scat2| %>
+            <td class="blueStrong" style="text-align: center"><%= link_to scat2.date_to_s(scat2.evaluation_datetime), scat2 %></td>
+        <% end %>
+      </tr>
+      <tr>
+        <td class="blueLight" colspan="4" style="text-align: right">Nombre de jours depuis l’incident</td>
+        <% @user.last_scat2s.each do |scat2| %>
+            <td class="blueStrong" style="text-align: center"><%= (DateTime.now.to_date - scat2.incident_datetime.to_date).to_i %></td>
+        <% end %>
+      </tr>
+      <tr>
+        <td class="blueLight" colspan="2" rowspan="5" style="text-align:center;vertical-align:middle">SCAT2</td>
+        <td class="blueLight" colspan="2">Score des symptômes</td>
+        <% @user.last_scat2s.each do |scat2| %>
+            <td class="blueStrong" style="text-align: center"><%= scat2.get_score_symptoms %></td>
+        <% end %>
+      </tr>
+      <tr>
+        <td class="blueLight" colspan="2">Score des signes physiques</td>
+        <% @user.last_scat2s.each do |scat2| %>
+            <td class="blueStrong" style="text-align: center"><%= scat2.get_score_physical %></td>
+        <% end %>
+      </tr>
+      <tr>
+        <td class="blueLight" colspan="2">Score de Glasgow (E + V + M)</td>
+        <% @user.last_scat2s.each do |scat2| %>
+            <td class="blueStrong" style="text-align: center"><%= scat2.get_score_glasgow %></td>
+        <% end %>
+      </tr>
+      <tr>
+        <td class="blueLight" colspan="2">Score de l’équilibre</td>
+        <% @user.last_scat2s.each do |scat2| %>
+            <td class="blueStrong" style="text-align: center"><%= scat2.get_score_stability %></td>
+        <% end %>
+      </tr>
+      <tr>
+        <td class="blueLight" colspan="2">Score de la coordination</td>
+        <% @user.last_scat2s.each do |scat2| %>
+            <td class="blueStrong" style="text-align: center"><%= scat2.get_score_coordination %></td>
+        <% end %>
+      </tr>
+      <tr>
+        <td class="blueLight" rowspan="5" style="width:5%"></td>
+        <td class="orangeLight" rowspan="5" style="text-align:center;vertical-align:middle">SAC</td>
+        <td class="orangeLight" colspan="2">Score de l’orientation</td>
+        <% @user.last_scat2s.each do |scat2| %>
+            <td class="orangeStrong" style="text-align: center"><%= scat2.get_score_orientation %></td>
+        <% end %>
+      </tr>
+      <tr>
+        <td class="orangeLight" colspan="2">Score de la mémoire immédiate</td>
+        <% @user.last_scat2s.each do |scat2| %>
+            <td class="orangeStrong" style="text-align: center"><%= scat2.get_score_memory %></td>
+        <% end %>
+      </tr>
+      <tr>
+        <td class="orangeLight" colspan="2">Score de la concentration</td>
+        <% @user.last_scat2s.each do |scat2| %>
+            <td class="orangeStrong" style="text-align: center"><%= scat2.get_score_concentration %></td>
+        <% end %>
+      </tr>
+      <tr>
+        <td class="orangeLight" colspan="2">Score de la mémoire différée</td>
+        <% @user.last_scat2s.each do |scat2| %>
+            <td class="orangeStrong" style="text-align: center"><%= scat2.get_score_cognition %></td>
+        <% end %>
+      </tr>
+      <tr>
+        <td class="orangeLight" colspan="2">SAC Score</td>
+        <% @user.last_scat2s.each do |scat2| %>
+            <td class="orangeStrong" style="text-align: center"><%= scat2.get_score_sac %></td>
+        <% end %>
+      </tr>
+      <tr>
+        <td class="blueLight" colspan="2" style="vertical-align:middle">Total</td>
+        <td class="blueLight" colspan="2">SCAT2</td>
+        <% @user.last_scat2s.each do |scat2| %>
+            <td class="blueStrong" style="text-align: center"><%= scat2.get_score_scat2_total %></td>
+        <% end %>
+      </tr>
+      <tr>
+        <td class="blueLight" colspan="4" style="vertical-align:middle">Score de sévérité des symptômes (132 au maximum)</td>
+        <% @user.last_scat2s.each do |scat2| %>
+            <td class="blueStrong" style="text-align: center"><%= scat2.get_score_symptoms_severity %></td>
+        <% end %>
+      </tr>
+      <tr>
+        <td class="blueLight" colspan="4" style="vertical-align:middle">Retour à la compétition</td>
+        <% @user.last_scat2s.each do |scat2| %>
+            <td class="blueStrong" style="text-align: center"><%= get_value scat2.return_to_competition, $yesno %></td>
+        <% end %>
+      </tr>
+    </table>
+<% end %>

@@ -1,0 +1,56 @@
+  <h4 class="text-center">Blessures</h4>
+	  <div class="row">
+		<div id="injuriesBody" class="panel">
+		  <%= render 'blessures/body', :injuries => build_injuries_map(@user.blessures) %>
+		</div>
+		<div class="col-md-12">
+		  <div class="margin-bottom">
+			<%= link_to I18n.t(:blessure_declare), new_blessure_path, class: "btn btn-default" %>
+		  </div>
+		  <h4><%= t 'user_legend_injuries' %></h4>
+		  <table class="table table-condensed table-hover">
+			<tbody>
+			<% @i = 0 %>
+			  <% if @user.blessures.any? %>
+				<% @user.blessures.each do |blessure| %>
+				  <tr>
+					<td><span id="<%=@i%>" class="toggle_blessure" style="cursor:pointer;"><%= blessure.title %></span>
+						<div id="blessure_<%=@i%>" class="row eval_border_limit blessure_frame" style="display:none;">
+						  <div class="col-md-12">
+							<h4 class="text-center"><%=blessure.title_wo_date%></h4>
+						  </div>
+							<div class="col-md-6">
+								<ul class="list-group">
+								  <li class="list-group-item">Athlète: <%= link_to blessure.user.to_s, blessure.user %></a></li>
+								  <li class="list-group-item">Date de la blesssure: <%= blessure.date %></li>
+								  <li class="list-group-item">Sport: <%= blessure.sport_name(blessure)%></li>
+								  <li class="list-group-item">Type de blessure: <%= blessure.type_de_blessure_name %></li>
+								  <li class="list-group-item">Partie du corps: <%= blessure.partie_du_corp_name %></li>
+							  </ul>
+								<!-- <button type="button" class="btn btn-default button_profile_box_one" id="profile_user_access_button_margin">Modifier<i class="glyphicon glyphicon-cog profile_user_button_icon_align"></i></button>
+								<button type="button" class="btn btn-default button_profile_box_one" id="profile_user_access_button_margin">Supprimer<i class="glyphicon glyphicon-cog profile_user_button_icon_align"></i></button> -->
+							</div>
+							<div class="col-md-6">
+							  <ul class="list-group">
+								  <li class="list-group-item">Symptomes: <%= get_values blessure.symptomes, $symptomes %></li>
+								  <li class="list-group-item">Mécanisme: <%= get_value blessure.mechanism, $mechanism %></li>
+								  <li class="list-group-item">Surface: <%= get_value blessure.surface, $surface %></li>
+								  <li class="list-group-item">Retour au jeu/entraînement dans les 24/48 heures: <%= blessure.retour_au_jeu%></li>
+								  <li class="list-group-item">Opération: <%#= blessure.operation_print %></li>
+								  <li class="list-group-item">Détail: <%= blessure.detail %></li>
+							  </ul>
+							</div>
+						  </div>
+						</td>
+				  </tr>
+				  <%@i += 1%>
+				<% end %>
+			  <% else %>
+				<tr>
+				  <td><%= t 'general_no_injury' %></td>
+				</tr>
+			  <% end %>
+			</tbody>
+		  </table>
+		</div>
+	  </div>

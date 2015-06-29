@@ -1,0 +1,44 @@
+<% provide(:title, I18n.t(:evaluation_index)) %>
+<div class="margin-bottom">
+<h1 class="text-center"><%= t :evaluation_index %></h1>
+<%= link_to t(:evaluation_new), nouvelle_evaluation_path, class: "btn btn-default btn-lg margin-bottom-10" %>
+<table class="table table-hover table-striped table-responsive">
+  <tr>
+    <th><%= I18n.t('activerecord.attributes.evaluation.name') %></th>
+    <th><%= I18n.t('activerecord.attributes.evaluation.organization_id') %></th>
+    <th><%= I18n.t('activerecord.attributes.evaluation.user_id') %></th>
+    <th><%= I18n.t('activerecord.attributes.evaluation.eval_type_id') %></th>
+    <th></th>
+  </tr>
+  <% @evaluations.each do |evaluation| %>
+  <% if evaluation.user %>
+      <tr>
+      <td><%= link_to evaluation.name, evaluation %></td>
+      <td><%= evaluation.organization.name %></td>
+      <td><%= link_to evaluation.user.name, evaluation.user %> </td>
+
+      <% if evaluation.eval_type %>
+        <td><%= evaluation.eval_type.name %></td>
+      <% else %>
+        <td><%= t(:general_none) %></td>
+      <% end %>
+
+      <% if (correct_evaluation_user?(evaluation.id) || is_current_user_sysadmin?) %>
+        <td class="td-last-2">
+          <%= link_to modifier_evaluation_path(:id => evaluation.id) do %>
+            <span class="glyphicon glyphicon-pencil"></span>
+          <% end %>
+          <%= link_to evaluation, :confirm => t(:button_confirm_delete), method: :delete do %>
+            <span class="glyphicon glyphicon-trash"></span>
+          <% end %>
+        </td>
+      <% else %>
+      <td></td>
+      <% end %>
+
+     </tr>
+    <% end %>
+  <% end %>
+</table>
+</div>
+</div>

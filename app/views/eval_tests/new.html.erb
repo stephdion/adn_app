@@ -1,0 +1,75 @@
+<% provide(:title, t(:test_new)) %>
+<div class="margin-bottom">
+  <h1 class="text-center"><%= t(:test_new) %></h1>
+</div>
+
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <%= form_for(@eval_test) do |f| %>
+      <%= render 'shared/eval_test_error_messages' %>
+
+      <%= f.label :name %><br>
+      <%= f.text_field :name, class: "form-control" %>
+
+      <%= f.label :short_name, t(:test_short_name) %><br>
+      <%= f.text_field :short_name, class: "form-control" %>
+
+      <div class="styled-select">
+        <%= f.label :test_subcategory_id %><br>
+        <%= f.grouped_collection_select :test_subcategory_id, TestCategory.where("organization_id IN (?)", [Organization.current_organization]).order(:name), :test_subcategories, :name, :id, :name, {},{:class=>"form-control"} %>
+      </div>
+
+      <div class="styled-select">
+        <%= f.label :organization_id %><br>
+        <%= f.collection_select :organization_id, @current_user.organizations, :id, :name, {},{:class=>"form-control"} %>
+      </div>
+
+      <div class="margin-bottom">
+        <%= f.label :description %><br>
+        <%= f.text_field :description, class: "form-control" %>
+      </div>
+
+      <div class="checkbox grid" style="display:inline; margin-left:25px; margin-top:0px;">
+        <%= f.check_box :left_right, style:"margin-top:8px;"%> 
+        <%= f.label :left_right, t(:test_left_right), style:"padding-left:0px;" %>
+      </div>
+
+      <div class="checkbox grid" style="display:inline; margin-left:25px; margin-top:0px;">
+        <%= f.check_box :component, style:"margin-top:8px;" %>
+        <%= f.label :component , style:"padding-left:0px;"%>
+      </div>
+      </br>
+      <br>
+      <%= f.label :image, accept: 'image/png,image/jpeg'%>
+      <%= f.file_field :image %><br>
+
+      <%= f.label :video, t(:general_video) %><br>
+      <%= f.text_field :video, class:"form-control" %>
+      <%= t(:test_add_ex) %>
+      </br>
+      <%= t(:test_linked_exs) %>:
+      <div class="well row" style="margin-right:-15px;" >
+        <% @exercises.each do |exercise|%>
+          <% if @eval_test.exercise_ids.include?(exercise.id)  %>
+            <% display_type = "inline-block;" %>
+          <% else %>
+            <% display_type = "none;"%>
+          <% end %>
+          <%= content_tag :div, class: "box-margin span1 " + "exercise_" + exercise.id.to_s, style: "display:#{display_type}"  do %>
+            <%= image_tag exercise.image.url(:thumbnail) %><br>
+            <%= link_to exercise.short_name, exercise %><br><br>
+          <% end %>
+        <% end %>
+      </div>
+</div>
+     
+      <%# @classtree = " col-md-offset-1" %>
+      <%= render 'exercisecheckboxes' %>
+      <br>
+      <div class="submitButton">
+        <%= f.submit t(:button_submit), class: "btn btn-default" %>
+        <%= link_to t(:general_back), eval_tests_path, class: "btn btn-default", style:"display:inline;margin-left:10px;" %>
+      </div>
+    <% end %>
+  </div>

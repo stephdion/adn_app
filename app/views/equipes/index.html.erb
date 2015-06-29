@@ -1,0 +1,35 @@
+<% provide(:title, t(:equipe_index)) %>
+
+<h1 class="text-center"><%= t(:equipe_index) %></h1>
+
+<%= link_to t(:equipe_new), nouvelle_equipe_path, class: "btn btn-default btn-lg margin-bottom-10" %>
+
+<table class="table table-hover table-striped table-responsive">
+  <tr>
+    <th><%= t 'activerecord.attributes.equipe.name' %></th>
+    <th><%= t 'activerecord.attributes.equipe.description' %></th>
+    <th><%= t 'activerecord.attributes.equipe.equipe_type_id' %></th>
+    <th></th>
+  </tr>
+  <% @equipes.each do |equipe| %>
+    <tr>
+      <td><%= equipe.name %></td>
+      <td><%= equipe.description %></td>
+      <td><%= equipe.equipe_type.name %></td>
+      <td class="td-last-3">
+        <%= link_to(equipe) do %>
+          <span class="glyphicon glyphicon-eye-open"></span>
+        <% end %>
+        <% if is_current_user_sysadmin? %>
+          <%= link_to(edit_equipe_path(equipe)) do %>
+            <span class="glyphicon glyphicon-pencil"></span>
+          <% end %>
+          <%= link_to equipe, method: :delete, data: { confirm:  I18n.t(:button_confirm_delete) } do %>
+            <span class="glyphicon glyphicon-trash"></span>
+          <% end %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+

@@ -1,0 +1,80 @@
+<% if !@team_averages.blank? %>
+	<% @arrAll = Array.new %>
+	<h2>Équipes</h2>
+	<% flag_not_empty = 0 %>
+	<% @team_averages.each_with_index do |data,index| %>
+		<% team_data = Array.new
+		   team_data = @team_results[data[:id]] #+ @resultats_threshold_score + @resultats_left_right + @resultats_injuries + @resultats_special_cases%>
+		<% athlete_array = [] %>
+		<% if !team_data.blank? %>
+			<% @arr = Array.new %>
+			<div>
+			  <% team_data.each do |resultat| %>
+				
+				<%  if @arr.find{|e| e == resultat.athlete_id} == nil
+						@arr << resultat.athlete_id
+						
+					end
+
+					if @arrAll.find{|e| e == resultat.athlete_id} == nil
+						@arrAll << resultat.athlete_id
+					end
+					%>
+				<%end%>
+			<span id="<%= index %>" class="toggle_eval_result" style="
+			<% if index % 2 == 1 %>color:#ffd602;<%end%>
+			cursor:pointer;font-size:28px;"><%=	data[:name] + " -   " + I18n.t(:resultats_avg_score) + ": " + data[:avg_score].round(2).to_s + ",   " + I18n.t(:resultats_avg_differential) + ": " + data[:avg_differential].round(2).to_s %></span>
+	 		<%= link_to new_mail_path(:arr => @arr), :class => "button small-button green-button" do %>
+			        <span class="fontello-mail navLiIcons">Envoyer à l'équipe</span>
+			      <% end %>
+					<table id="eval_result_<%= index %>" class="table table-condensed table-hover eval_result_frame" 
+					<% if index > 0 %>
+						style="display:none; "
+					<% end %>
+					>
+					  <tr>
+						<th><%= t(:general_athlete) %></th>
+						<th><%= t(:general_evaluation) %></th>
+						<th><%= t(:general_date) %></th>
+						<th><%= t(:general_score) %></th>
+						<th><%= t(:general_differential) %></th>
+					  </tr>
+	<% team_data.each do |resultat| %>
+				<% flag_not_empty = 1 %>
+					  <tr>
+						<td><%= resultat.athlete_name %></td>
+						<td><%= resultat.evaluation_name %></td>
+						<td><%= resultat.eval_day %></td>
+						<td><% if resultat.score.to_i <= @max_score.to_i %>
+							   <%= resultat.score %></td>
+							<% else %>
+							   <%= I18n.t(:resultats_incomplete) %></td>
+							<% end %>
+						<td><%= resultat.differential %></td>
+					  </tr>
+					  <% end %>
+					</table>
+				
+			</div>
+		<% end %>
+
+	<% end %>
+	<% if flag_not_empty == 1 %>
+	<br>
+	<%= link_to new_mail_path(:arr => @arrAll), :id =>"btn_mail", :class => "btn btn-default col-md-4", :style => "" do %>
+		<span class="fontello-mail navLiIcons">Envoyer à tous</span>
+	<% end %>
+	<% else %>
+		<div class="row">
+			<div class="col-md-12">
+				<h4 class="text-center">La recherche que vous avez effectué ne retourne aucun résultat.</h4>
+			</div>
+		</div>
+	<% end %>
+<% else %>
+	<div class="row">
+		<div class="col-md-12">
+			<h4 class="text-center">La recherche que vous avez effectué ne retourne aucun résultat.</h4>
+		</div>
+	</div>
+<% end %>

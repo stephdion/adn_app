@@ -1,0 +1,40 @@
+<% provide(:title, I18n.t(:blessure_index)) %>
+<h1 class="text-center"><%= I18n.t(:blessure_index) %></h1>
+
+<%= link_to I18n.t(:blessure_new), new_blessure_path(@blessure), class: "btn btn-default btn-lg margin-bottom-10" %>
+<br>
+<%= will_paginate renderer: BootstrapPagination::Rails%>
+<table class="table table-hover table-striped table-responsive">
+  <tr>
+    <th><%= t 'activerecord.attributes.blessure.user_id' %></th>
+    <th><%= t 'activerecord.attributes.blessure.date' %></th>
+    <th><%= t 'activerecord.attributes.blessure.type_de_blessure' %></th>
+    <th>Dernière modification</th>
+    <th></th>
+  </tr>
+  <% @blessures.each do |blessure| %>
+     <% if blessure.user %>
+      <tr>
+        <td><%= blessure.user %></td>
+        <td><%= blessure.date %></td>
+        <td><%= blessure.index_title %></td>
+        <td>
+          <% if !blessure.reporter_id.nil? %>
+          <%= User.find(blessure.reporter_id).name %>
+          <%end%>
+        </td>
+        <td class="td-last-3">
+          <%= link_to(blessure) do %>
+            <span class="glyphicon glyphicon-eye-open"></span>
+          <% end %>
+          <%= link_to(edit_blessure_path(blessure)) do %>
+            <span class="glyphicon glyphicon-pencil"></span>
+          <% end %>
+          <%= link_to blessure, method: :delete, data: { confirm:  I18n.t(:button_confirm_delete) } do %>
+            <span class="glyphicon glyphicon-trash"></span>
+          <% end %>
+    </td>
+      </tr>
+     <% end %>
+  <% end %>
+</table>

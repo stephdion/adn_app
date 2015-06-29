@@ -1,0 +1,86 @@
+<%= form_for(@comment) do |f| %>
+    <% if @comment.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@comment.errors.count, "error") %> prohibited this comment from being saved:</h2>
+
+          <ul>
+            <% @comment.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="span12 row">
+      <div class="row">
+        <div class="span4 field">
+          <%= f.label :nom %>
+          <br/>
+          <%= f.text_field :nom %>
+        </div>
+        <div class="span4 field">
+          <%= f.label :prenom %>
+          <br/>
+          <%= f.text_field :prenom %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="span8 field">
+          <%= f.label :organization %>
+          <br/>
+          <%= f.text_field :organization, :placeholder => I18n.t(:comment_organization_placeholder) %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="span8 field">
+          <%= f.label :user_type %>
+          <br/>
+
+          <div class="styled-select">
+            <%= f.select :user_type,
+                         options_for_select($user_type, @comment.user_type),
+                         {:include_blank => true}
+            %>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="span4 field">
+          <%= f.label :email %>
+          <br/>
+          <%= f.text_field :email %>
+        </div>
+        <div class="span4 field">
+          <%= f.label :telephone %>
+          <br/>
+          <%= f.text_field :telephone %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="span8 field">
+          <%= f.label :other %>
+          <br/>
+          <%= f.text_area :other, :rows => 5, :placeholder => I18n.t(:comment_other_placeholder) %>
+        </div>
+      </div>
+
+      <p>
+        <%= f.label :receive_news %>
+        <%= f.check_box :receive_news  %>
+      </p>
+
+      <% if is_current_user_sysadmin? %>
+          <p>
+            <%= f.label :archive %>
+            <%= f.check_box :archive %>
+          </p>
+      <% end %>
+
+      <div class="actions">
+        <%= f.submit I18n.t(:comment_send), class: "btn btn-default"  %>
+      </div>
+    </div>
+
+    </div>
+<% end %>

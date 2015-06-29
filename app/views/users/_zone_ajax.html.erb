@@ -1,0 +1,38 @@
+      <%# @sports = "" %>
+      <%# @profileTeam.each do |equipe|%>
+        <%#if equipe[:position_id] && Organization.find(Equipe.find(equipe[:equipe_id]).organization_id) == @current_organization %>
+          <%# @sports << Position.find(equipe[:position_id]).name  + ' - ' + EquipeType.find(Equipe.find(equipe[:equipe_id]).equipe_type_id).name + ' // '%>
+        <%#end%>
+      <%#end%>
+      <%#if @sports != "" 
+        @sports[0..-5]
+        end%>
+<tr>
+  <td class="info_table_left_column_tag">Grandeur</td>
+  <td><%#= UserAnthropometric.where(["user_id = ? and archive = ?", params[:id], "f"]).last.height_imperial %></td>
+</tr>
+<tr>
+  <td class="info_table_left_column_tag">Poids</td>
+  <td><%#= UserAnthropometric.where(["user_id = ? and archive = ?", params[:id], "f"]).last.weight.to_s + ' kg' %></td>
+</tr>
+<tr>
+  <td class="info_table_left_column_tag">Age</td>
+  <td><%#= @user.age %></td>
+</tr>
+<tr>
+  <td class="info_table_left_column_tag">Sports</td>
+
+  <td><%# @sports %></td>
+</tr>
+<tr>
+  <td class="info_table_left_column_tag">Organization</td>
+  <td><%#=@current_organization.name%></td>
+</tr>
+<tr>
+  <td class="info_table_left_column_tag">Status</td>
+  <td>Blessé - Cheville - Gauche</td>
+</tr>
+<tr>
+  <td class="info_table_left_column_tag">Retour au Jeux</td>
+  <td>30 Sept 2014</td>
+</tr>

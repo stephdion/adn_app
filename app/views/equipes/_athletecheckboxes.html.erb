@@ -1,0 +1,13 @@
+<%= hidden_field_tag "equipe[user_ids][]", nil %>
+    <div>
+      <ul class="checkbox-grid">
+      <% User.in_organization(["ATHLETE", "TRAINER", "PHYSIO"]).each do |user| %>
+      <li>
+        <div class="checkboxes">
+        <%= check_box_tag "equipe[user_ids][]", user.id, @participants.include?(user.id), id: dom_id(user) %>
+        <%= label_tag dom_id(user), user.name %>
+        </div>
+      </li>
+      <% end %>
+      </ul>
+    </div>

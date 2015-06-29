@@ -1,0 +1,21 @@
+<p>
+  <strong>Name:</strong>
+  <%= @organization.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @organization.description %>
+</p>
+
+<div class="span11 left">
+  <tr>
+    <td>
+      <%= link_to 'Edit', edit_organization_path(@organization), class: "btn btn-default" %>
+    </td>
+    <td>
+      <%= link_to 'Destroy', organization_path(@organization),
+                  method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-default" %>
+    </td>
+  </tr>
+</div>

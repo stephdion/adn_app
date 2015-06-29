@@ -1,0 +1,40 @@
+<% provide(:title, t(:equipe_new)) %>
+
+<div class="row">
+  <div class="col-md-12 text-center">
+    <h1><%= t(:equipe_new) %></h1>
+  </div>
+</div>
+
+<div class="row text-center">
+  <div class="col-md-3">
+  </div>
+  <div class="col-md-6">
+    <%= form_for(@equipe) do |f| %>
+    <%= render 'shared/equipe_error_messages' %>
+    
+      <div class="form-group">
+        <%= f.label :name %>
+        <%= f.text_field :name, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :organization_id %>
+        <%= f.collection_select :organization_id, @current_user.organizations, :id, :name, {}, {:class=>"form-control"} %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :description %>
+        <%= f.text_field :description, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :equipe_type %>
+        <%= f.collection_select :equipe_type_id, @current_organization.equipe_types, :id, :name, {}, {:class=>"form-control"} %>
+      </div>
+      <%= f.submit t(:button_submit), class: "btn btn-default btn-lg" %>
+    <% end %>
+  </div>
+  <div class="col-md-3">
+  </div>
+</div>

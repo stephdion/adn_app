@@ -1,0 +1,37 @@
+<style>
+.modal-dialog{
+  z-index:9999;
+}
+</style>
+<div class="row">
+<% if !@videoList.empty? %>
+<% @videoList.each do |link| %>
+<div class="col-md-4" style="display:inline-block;margin-bottom:15px;">
+	<%= youtube_thumb("#{link}") %>
+</div>
+<% end %>
+<% end %>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body" style="background-color: rgba(255,255,255,0);">
+        <iframe src="" style="zoom:0.60" frameborder="0" height="400" width="99.9%" ></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+$(".thumb").on("click",function(){
+	frameSrc = $(this).attr("data-url");
+	
+    $('#myModal').on('shown.bs.modal', function () {
+
+        $('iframe').attr("src",frameSrc);
+      
+	});
+    $('#myModal').modal({show:true})
+});
+</script>

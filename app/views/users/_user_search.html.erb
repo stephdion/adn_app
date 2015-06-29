@@ -1,0 +1,15 @@
+<div class="row-fluid" >
+  <%= form_tag :controller => 'users', :action => 'search' do %>
+      <%= text_field_tag :search, params[:search], :id => 'search_field',
+                         :placeholder => I18n.t(:user_search_placeholder), :class=>"form-control", style: "display:inline;width:30%;" %>
+      <%= select_tag 'role', options_from_collection_for_select(Role.all.where("id != 7 AND id != 9").order(:name), 'id', 'name', :selected => params[:role]),{ prompt: "Tous" ,:class => 'selectpicker', :style => 'padding:0'} %>
+
+      <%= submit_tag I18n.t(:user_search), :name => nil, class: "btn btn-default", style: "display:inline;margin-left:15px;" %>
+  <% end %>
+  <script>
+  	$("#role").change(function(){
+
+  		//$(this).parents('form:first').submit();
+  	})
+  </script>
+</div>

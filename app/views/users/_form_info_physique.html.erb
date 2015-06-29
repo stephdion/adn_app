@@ -1,0 +1,53 @@
+<%= form_for(@user, remote: true, :html => { :id => "edit_form_physique" }, :url => {:controller => "users", :action => "ajax_info_physique_edit"}) do |f| %>
+<table class="table table_contact_info_info" >
+<%= f.fields_for :user_anthropometrics do |anthropometry_form| %>
+	<% if !anthropometry_form.object.archive? %>
+	<tr>
+	  <td class="info_table_left_column_tag">Grandeur</td>
+	  <td><%= anthropometry_form.text_field :height %> cm</td>
+	</tr>
+	<tr>
+	  <td class="info_table_left_column_tag">Poids</td>
+	  <td><%= anthropometry_form.text_field :weight %> kg</td>
+	</tr>
+	<%end%>
+<%end%>
+
+<tr>
+  <td class="info_table_left_column_tag">Age</td>
+  <td><%= f.date_select :birthday,
+                            {
+                                    :start_year => Time.now.year - 50,
+                                    :prompt => {:day => I18n.t(:date_choose_day),
+                                                :month => I18n.t(:date_choose_month),
+                                                :year => I18n.t(:date_choose_year)},
+                                    :order => [:day, :month, :year]
+                            },
+                            {:style => "padding:0"} %></td>
+</tr>
+<tr>
+  <td class="info_table_left_column_tag">Sports</td>
+  <td><%= @info_sports %></td>
+</tr>
+<tr>
+  <td class="info_table_left_column_tag">Organisation</td>
+  <td><%=@current_organization.name%></td>
+</tr>
+<!--<tr>
+  <td class="info_table_left_column_tag">Status</td>
+  <td><%= @info_blessure %></td>
+</tr>
+<tr>
+  <td class="info_table_left_column_tag">Retour au Jeux</td>
+  <td><%= @retour %></td>
+</tr>-->
+<tr>
+<td>
+<%= f.submit "Save", class: "btn btn-default button_profile_box_one" %>
+</td>
+<td>
+<%= link_to "Cancel", [:ajax_cancel, @user], remote: true, class: "btn btn-default button_profile_box_one", id: "user_physique_cancel", style: "width:100px" %>
+<td/>
+</tr>
+</table>
+<%end%>

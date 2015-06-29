@@ -1,0 +1,62 @@
+<% if !@blessures.blank? %>
+
+	<% @arr = Array.new
+	@blessures.each do |blessure|
+		if @arr.find{|e| e == blessure.user.id} == nil
+			@arr << blessure.user.id
+		end
+		end%>
+
+	<table class="table table-hover table-striped table-responsive">
+		<thead>
+			<tr class="top-table-rapport">
+				<td>Athlète</td>
+				<td>Date</td>
+				<td>Type Blessure</td>
+				<td>Partie du corps</td>
+				<td>Sexe</td>
+				<td>Sport</td>
+				<td>Équipe</td>
+				<td class="icon-row">Actions</td>
+			</tr>
+		</thead>
+		<tbody>
+		<% @blessures.each_with_index do |blessure,index| %>
+			<tr class="search-result-row">
+				<td><%= blessure.user.to_s %></td>
+				<td><%= blessure.date %></td>
+				<td><%= blessure.type_de_blessure_name %></td>
+				<td><%= blessure.partie_du_corp_name %></td>
+				<td><%= blessure.user.sex.to_s[0,1].upcase %></td>
+				<td><%= blessure.sport_name(blessure) %></td>
+				<td>
+					<% if !blessure.equipe.nil? %>
+						<%= blessure.equipe.name %>
+					<% end %>
+				</td>
+				<td class="icon-row">
+					<%= link_to blessure, :class => "button small-button green-button" do %>
+					  <span class="glyphicon glyphicon-eye-open"></span>
+					<% end %>
+
+					<%= link_to edit_blessure_path(blessure), :class => "button small-button green-button" do %>
+					  <span class="glyphicon glyphicon-pencil"></span>
+					<% end %>
+
+					<%= link_to blessure, 'data-method' => :delete, :confirm => "Are you sure ?", :class => "button small-button green-button" do %>
+					  <span class="glyphicon glyphicon-trash"></span>
+					<% end %>
+
+				</td>
+			</tr>
+		<% end %>
+		</tbody>
+	</table>
+	<%= link_to new_mail_path(:arr => @arr), :class => "btn btn-default col-md-3" do %>
+        <span class="fontello-mail navLiIcons">Envoyer à tous</span>
+      <% end %>
+<% else %>
+
+<h3 class="no-result-search">Aucun résultat pour cette recherche</h3>
+
+<% end %>

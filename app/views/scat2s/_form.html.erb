@@ -1,0 +1,1268 @@
+<div id="scat2">
+  <%= form_for(@scat2) do |f| %>
+
+    <% if @scat2.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@scat2.errors.count, "error") %> prohibited this scat2 from being saved:</h2>
+
+          <ul>
+            <% @scat2.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="row">
+
+      <!-- Section editable -->
+      <% if editable %>
+
+        <div class="col-md-4">
+          <div class="form-group">
+            <%= f.label :user %>
+            <% if is_current_user_in_role?('ATHLETE') %>
+                <%= f.collection_select :user_id, User.where(:id => current_user.id, :deleted=>0),
+                                        :id, :name, {}, {:class=>"form-control"} %>
+            <% else %>
+                <%= f.collection_select :user_id, User.order(:last_name),
+                                        :id, :name,
+                                        {:include_blank => true}, {:class=>"form-control"} %>
+            <% end %>
+          </div>
+          <div class="form-group">
+            <%= f.label :equipe_type %>
+            <%= f.collection_select :equipe_type_id, EquipeType.order(:name), :id, :name, {:include_blank => true}, {:class=>"form-control"} %>
+          </div>
+          <div class="form-group">
+              <%= f.label :owner %>
+              <% if is_current_user_in_role?('ATHLETE') %>
+                  <%= f.collection_select :owner_id, User.where(:id => current_user.id, :deleted=>0),
+                                          :id, :name, {}, {:class=>"form-control"} %>
+              <% else %>
+                  <%= f.collection_select :owner_id, User.where(:deleted=>0).order(:last_name),
+                                          :id, :name,
+                                          {:include_blank => true}, {:class=>"form-control"} %>
+              <% end %>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <%= f.label :incident_datetime %>
+            <div class="input-group date" id="datetimepicker8" data-date-format="YYYY-MM-DD HH:mm" >
+              <%= text_field_tag :incident_datetime, params[:incident_datetime] || @scat2.date_to_s(@scat2.incident_datetime), :class => "form-control" %>
+              <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+              </span>
+            </div>
+            <script type="text/javascript">
+                $(function () {
+                  $('#datetimepicker8').datetimepicker({
+                      pickTime: true
+                  });
+              });
+            </script>
+          </div>
+          <div class="form-group">
+            <%= f.label :evaluation_datetime %>
+            <div class="input-group date" id="datetimepicker9" data-date-format="YYYY-MM-DD HH:mm" >
+              <%= text_field_tag :evaluation_datetime, params[:evaluation_datetime] || @scat2.date_to_s(@scat2.evaluation_datetime), :class => "form-control" %>
+              <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+              </span>
+            </div>
+            <script type="text/javascript">
+                $(function () {
+                  $('#datetimepicker9').datetimepicker({
+                      pickTime: true
+                  });
+              });
+            </script>
+          </div>
+        </div>
+        <div class="col-md-4">
+        </div>
+
+      <% elsif %>
+        <!-- Section non editable -->
+
+        <div class="col-md-4 text-centerr">
+          <%= link_to (@scat2.user) do %>
+            <%= image_tag @scat2.user.photo.url(:medium), :class =>'img-circle', size: "150x150" %>
+            <h4><%= t 'activerecord.attributes.scat2.user' %></h4>
+            <h4><%= @scat2.user.name %></h4>
+            <h6><%= @scat2.equipe_type.name %></h6>
+          <% end %>
+        </div>
+        <div class="col-md-4 text-centerr scat_middle_col">
+          <ul class="list_style_remover">
+            <li class="profile_cartnet_table_name_td"><%= f.label :incident_datetime %></li>
+            <li><%= @scat2.date_to_s(@scat2.incident_datetime) %></li>
+            <li class="profile_cartnet_table_name_td"><%= f.label :evaluation_datetime %></li>
+            <li><%= @scat2.date_to_s(@scat2.evaluation_datetime) %></li>
+          </ul>
+        </div>
+        <div class="col-md-4 text-centerr">
+          <%= link_to (@scat2.owner) do %>
+            <%= image_tag @scat2.owner.photo.url(:medium), :class =>'img-circle', size: "150x150" %>
+            <h4><%= t 'activerecord.attributes.scat2.owner' %></h4>
+            <h4><%= @scat2.owner.name %></h4>
+          <% end %>
+        </div>
+        
+      <% end %>
+      
+    </div> <!-- End Row -->
+
+    <div class="row">
+      <div class="col-md-6 col-xs-12">
+        <h2>Qu’est-ce que l’outil SCAT2 ?</h2>
+        <p>Le SCAT2 (Sport Concussion Assessment Tool) est une
+          méthode d’évaluation standardisée des athlètes ayant subi
+          une commotion cérébrale. Il peut être utilisé chez les athlètes
+          à partir de 10 ans. Il remplace l’ancien outil SCAT publié en
+          2005 2 et permet aussi de calculer le score SAC (Standardized
+          Assessment of Concussion) 3, 4 et les questions de Maddocks 5
+          pour une évaluation accessoire de la commotion cérébrale.</p>
+        <h2>Instructions d’utilisation de SCAT2</h2>
+        <p>L’outil d’évaluation SCAT2 est conçu à l’usage des professionnels
+          de la santé. Il peut être utile d’effectuer un test initial
+          avec SCAT2 avant la saison pour pouvoir mieux interpréter les
+          scores après une blessure. Les mots en italique du SCAT2 sont
+          des instructions à donner par l’examinateur à l’athlète.
+          Cet outil peut être copié gratuitement pour être distribué à
+          des personnes, équipes, groupes ou organisations</p>
+        <h2>Qu’est-ce qu’une commotion cérébrale ?</h2>
+        <p>Une commotion cérébrale est une perturbation de la fonction
+          cérébrale provoquée par un choc direct ou indirect à la tête.
+          Elle cause tout une série de symptômes non spécifiques
+          (comme ceux énoncés ci-dessous), souvent sans perte de
+          connaissance. Une commotion cérébrale doit être suspectée
+          en présence d’un ou de plusieurs signes parmi les suivants :</p>
+        <ul>
+          <li>Symptômes (par exemple mal à la tête)</li>
+          <li>Signes physiques (par exemple instabilité)</li>
+          <li>Altération de la fonction cérébrale (confusion)</li>
+          <li>Comportement anormal</li>
+        </ul>
+        <p class="scat2_warn">Tout sportif avec suspicion d’une commotion cérébrale
+          doit être RETIRÉ DU JEU, soumis à une évaluation médicale
+          et observé (il ne doit pas être laissé seul) pour déceler
+          d’éventuels signes d’aggravation ; il ne doit pas non
+          plus conduire.</p>
+
+      </div>
+      <div id="evalSymptome" class="col-md-6 col-xs-12">
+        <h2>Évaluation des symptômes</h2>
+        <h3>Comment vous sentez-vous ?</h3>
+        <p>Vous devez évaluer vous-même dans quelle mesure vous ressentez
+            actuellement les symptômes suivants :</p>
+        <div class="table-responsive miniTable">
+          <table class="table table-striped">
+            <tr>
+              <th></th>
+              <th>aucun</th>
+              <th colspan=2>légers</th>
+              <th colspan=2>modérés</th>
+              <th colspan=2>sévères</th>
+            </tr>
+            <tr>
+              <td></td>
+              <% [0, 1, 2, 3, 4, 5, 6].each do |idx| %>
+                  <td style="text-align:center"><%= idx %></td>
+              <% end %>
+            </tr>
+            <% $scat2_symptoms.each do |value| %>
+                <tr>
+                  <td>
+                    <%= value[0] %>
+                  </td>
+
+                  <% [0, 1, 2, 3, 4, 5, 6].each do |idx| %>
+                      <td style="text-align:center">
+                        <%= radio_button 'symp', value[1], idx,
+                            {
+                                    :checked => @scat2.get_symp_value(value[1])==idx,
+                                    :disabled => !editable
+                            }
+                            %>
+                      </td>
+                  <% end %>
+                </tr>
+            <% end %>
+          </table>
+
+          <table class="content">
+            <tr>
+              <td><b>Nombre total de symptômes</b><br/>
+                <small>(22 au maximum)</small>
+              </td>
+              <td id="symptoms_nb" class="score"></td>
+            </tr>
+            <tr>
+              <td><b>Score de sévérité des symptômes</b><br/>
+                <small>(addition de tous les scores du tableau, au maximum 22 x 6 = 132)</small>
+              </td>
+              <td id="symptoms_score_severity" class="score"></td>
+            </tr>
+            <tr>
+              <td>
+                Les symptômes s‘aggravent-ils avec l’effort physique ?
+              </td>
+              <td class="value">
+                <%= f.check_box :symptoms_worst_physical, :disabled => !editable %>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Les symptômes s‘aggravent-ils avec l’effort mental ?
+              </td>
+              <td class="value">
+                <%= f.check_box :symptoms_worst_mental, :disabled => !editable %>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Estimation globale</b></br>
+                Si vous connaissiez l’athlète bien avant l’incident, en quoi son comportement
+                diffère-t-il ?
+              </td>
+              <td class="value scat2-select">
+                <%= f.select :global_estimation,
+                             options_for_select($scat2_esti, @scat2.global_estimation),
+                             {:include_blank => true}, :disabled => !editable
+                %>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-md-12 col-xs-12">
+        <h2>Évaluation cognitive et physique</h2>
+        <hr>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 col-xs-12 bot-row-space-10">
+        <div class="row">
+          <div class="eval_nb col-md-1 col-xs-1 light-blue box">1</div>
+          <div class="col-md-11 col-xs-11 light-blue outline">
+            <div class="row">
+              <div class="col-md-12 col-xs-12">
+                <h3>Score des symptômes</h3>
+              </div>
+            </div>
+            <div class="row">
+              <table class="table">
+                <tr>
+                  <td>22 moins le nombre de symptômes</td>
+                  <td class="score"><span id="score_symptoms"></span> sur 22</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="eval_nb col-md-1 col-xs-1 light-blue box">2</div>
+          <div class="col-md-11 col-xs-11 light-blue outline">
+            <div class="row">
+              <div class="col-md-12 col-xs-12">
+                <h3>Score des signes physiques</h3>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 col-xs-12">
+                <table class="table">
+                  <tr>
+                    <td>Y a-t-il eu perte de connaissance ou absence de réponse ?</td>
+                    <td class="value">
+                      <!--%= f.check_box :unconsciousness, :disabled => !editable %-->
+                      <%= f.radio_button :unconsciousness, 0, :disabled => !editable %>Oui
+                      <%= f.radio_button :unconsciousness, 1, :disabled => !editable %>Non
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Si oui, combien de temps (minutes) ?</td>
+                    <td class="value">
+                      <%= f.number_field :unconsciousness_time, :disabled => !editable, :style => "color:black" %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Y a-t-il un problème d’équilibre / instabilité ?</td>
+                    <td class="value">
+                      <!--%= f.check_box :balance_problem, :disabled => !editable %-->
+                      <%= f.radio_button :balance_problem, 0, :disabled => !editable %>Oui
+                      <%= f.radio_button :balance_problem, 1, :disabled => !editable %>Non
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><b>Score des signes physiques</b>
+                      (1 point pour chaque réponse négative)
+                    </td>
+                    <td class="score"><span id="score_physical"></span> sur 2</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="eval_nb col-md-1 col-xs-1 light-blue box">3</div>
+          <div class="col-md-11 col-xs-11 light-blue outline">
+            <div class="row">
+              <div class="col-md-12 col-xs-12">
+                <h3>Échelle de Glasgow (GCS)</h3>
+              </div>
+            </div>
+            <table class="table">
+              <tr>
+                <td>Meilleure réponse oculaire (E pour «eye»)</td>
+                <td class="value">
+                  <div class="scat2-select">
+                    <%= f.select(:glasgow_eye, {"1-Aucune ouverture des yeux" => 1,
+                                                "2-Ouverture des yeux en réaction à la douleur" => 2,
+                                                "3-Ouverture des yeux en parlant" => 3,
+                                                "4-Ouverture des yeux spontanée" => 4},
+                                 {:prompt => 'Select'},
+                                 {:disabled => !editable}) %>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Meilleure réponse verbale (V)</td>
+                <td class="value">
+                  <div class="scat2-select">
+                    <%= f.select(:glasgow_verbal, {"1-Aucune réponse verbale" => 1,
+                                                   "2-Sons incompréhensibles" => 2,
+                                                   "3-Paroles inappropriées" => 3,
+                                                   "4-Réponse confuse" => 4,
+                                                   "5-Réponse orientée" => 5},
+                                 {:prompt => 'Select'},
+                                 {:disabled => !editable}) %>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Meilleure réponse motrice (M)</td>
+                <td class="value">
+                  <div class="scat2-select">
+                    <%= f.select(:glasgow_mouvement, {"1-Aucune réponse motrice" => 1,
+                                                  "2-Extension à la douleur" => 2,
+                                                  "3-Flexion anormale à la douleur" => 3,
+                                                  "4-Flexion / évitement à la douleur" => 4,
+                                                  "5-Réaction orientée" => 5,
+                                                  "6-Exécute des ordres" => 6},
+                             {:prompt => 'Select'},
+                             {:disabled => !editable}) %>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><b>Score à l’échelle de Glasgow (E + V + M)</b>
+                  Le score de Glasgow doit être noté chez tous les athlètes
+                  en cas de détérioration ultérieure de leur état.
+                </td>
+                <td class="score"><span id="score_glasgow"></span> sur 15</td>
+              </tr>
+            </table>          
+          </div>
+        </div>
+        <div class="row">
+          <div class="eval_nb col-md-1 col-xs-1 dark-orange box">4</div>
+          <div class="col-md-11 col-xs-11 light-blue outline">
+            <div class="row">
+              <div class="col-md-12 col-xs-12">
+                <h3>Évaluation accessoire: score Maddocks</h3>
+                <p>« Je vais vous poser quelques questions, écoutez-moi bien
+                  et répondez du mieux que vous pouvez ! »</p>
+                <p><b>Questionnaire de Maddocks modifié</b> (1 point pour chaque réponse correcte)</p>
+              </div>
+            </div>
+            <table class="table orange">
+              <tr>
+                <td>Dans quel stade sommes-nous aujourd’hui ?</td>
+                <td class="value">
+                  <%= f.check_box :maddocks_state, :disabled => !editable %>
+                </td>
+              </tr>
+              <tr>
+                <td>À quelle mi-temps sommes-nous ?</td>
+                <td class="value">
+                  <%= f.check_box :maddocks_half_time, :disabled => !editable %>
+                </td>
+              </tr>
+              <tr>
+                <td>Qui a marqué en dernier ?</td>
+                <td class="value">
+                  <%= f.check_box :maddocks_last_goal, :disabled => !editable %>
+                </td>
+              </tr>
+              <tr>
+                <td>Contre quelle équipe avez-vous joué la semaine dernière / le dernier match ?</td>
+                <td class="value">
+                  <%= f.check_box :maddocks_last_team, :disabled => !editable %>
+                </td>
+              </tr>
+              <tr>
+                <td>Votre équipe a-t-elle gagné le dernier match ?</td>
+                <td class="value">
+                  <%= f.check_box :maddocks_last_win, :disabled => !editable %>
+                </td>
+              </tr>
+              <tr>
+                <td><b>Score Maddocks</b></td>
+                <td class="score"><span id="score_maddocks"></span> sur 5</td>
+              </tr>
+            </table>
+            <div class="row">
+              <div class="col-md-12 col-xs-12">
+                <p>Le score Maddocks est validé pour le diagnostic accessoire des commotions
+              cérébrales uniquement ; il n’est pas compris dans le score d’ensemble du
+              SCAT2 pour des tests périodiques.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-md-6 col-xs-12 bot-row-space-10">
+        <div class="row">
+          <div class="eval_nb col-md-1 col-xs-1 dark-orange box">5</div>
+          <div class="col-md-11 col-xs-11 dark-orange outline">
+            <div class="row">
+              <div class="col-md-12 col-xs-12">
+                <h3>Évaluation cognitive</h3>
+                <p>Évaluation standardisée des commotions (SAC)</p>
+                <h4>Orientation</h4>
+                <p>(1 point pour chaque réponse correcte)</p>
+              </div>
+            </div>
+            <table class="orange table">
+              <tr>
+                <td>Quel mois sommes-nous ?</td>
+                <td class="value">
+                  <%= f.check_box :cognitive_month, :disabled => !editable %>
+                </td>
+              </tr>
+              <tr>
+                <td>Quelle est la date d’aujourd’hui ?</td>
+                <td class="value">
+                  <%= f.check_box :cognitive_date, :disabled => !editable %>
+                </td>
+              </tr>
+              <tr>
+                <td>Quel jour sommes-nous ?</td>
+                <td class="value">
+                  <%= f.check_box :cognitive_day, :disabled => !editable %>
+                </td>
+              </tr>
+              <tr>
+                <td>En quelle année sommes-nous ?</td>
+                <td class="value">
+                  <%= f.check_box :cognitive_year, :disabled => !editable %>
+                </td>
+              </tr>
+              <tr>
+                <td>Quelle heure est-il maintenant ? (à 1 h près)</td>
+                <td class="value">
+                  <%= f.check_box :cognitive_hrs, :disabled => !editable %>
+                </td>
+              </tr>
+              <tr>
+                <td><b>Score d’orientation</b></td>
+                <td class="score"><span id="score_cognitive"></span> sur 5</td>
+              </tr>
+            </table>
+            <div class="row">
+              <div class="col-md-12 col-xs-12">
+                <h4>Mémoire immédiate</h4>
+                <p>« Je vais tester votre mémoire. Je vais vous lire une liste de mots
+                  et quand j’aurai fini, vous répéterez tous les mots dont vous vous
+                  souviendrez, dans n’importe quel ordre. »</p>
+                <p><strong>Essais 2 et 3 :</strong></p>
+                <p>« Je vais répéter la même liste encore une fois. Répétez ensuite
+                  tous les mots dont vous vous souviendrez, dans n’importe quel
+                  ordre, y compris les mots que vous avez déjà répétés auparavant. »</p>
+                <p><small>Effectuer trois essais, indépendamment des scores obtenus aux essais 1 et 2. Lisez
+                  les mots au rythme d’un mot par seconde. Comptez un point pour chaque réponse
+                  correcte. Score total : somme des scores des trois essais. N’informez pas l’athlète
+                  qu’un test de mémoire différée sera effectué ultérieurement.</small></p>
+              </div>
+            </div>
+            <table class="table table-condensed orange" style="font-size:65%">
+              <tr>
+                <th>Liste</th>
+                <th>Essaie 1</th>
+                <th>Essaie 2</th>
+                <th>Essaie 3</th>
+                <th colspan="3">Listes alternative</th>
+              </tr>
+              <tr>
+                <td>coude</td>
+                <td><%= check_box "memory", "1", {checked: @scat2.get_memory_value("1"), :disabled => !editable} %></td>
+                <td><%= check_box "memory", "2", {checked: @scat2.get_memory_value("2"), :disabled => !editable} %></td>
+                <td><%= check_box "memory", "3", {checked: @scat2.get_memory_value("3"), :disabled => !editable} %></td>
+                <td>bougie</td>
+                <td>bébé</td>
+                <td>doigt</td>
+              </tr>
+              <tr>
+                <td>pomme</td>
+                <td><%= check_box "memory", "4", {checked: @scat2.get_memory_value("4"), :disabled => !editable} %></td>
+                <td><%= check_box "memory", "5", {checked: @scat2.get_memory_value("5"), :disabled => !editable} %></td>
+                <td><%= check_box "memory", "6", {checked: @scat2.get_memory_value("6"), :disabled => !editable} %></td>
+                <td>papier</td>
+                <td>singe</td>
+                <td>monnaie</td>
+              </tr>
+              <tr>
+                <td>tapis</td>
+                <td><%= check_box "memory", "7", {checked: @scat2.get_memory_value("7"), :disabled => !editable} %></td>
+                <td><%= check_box "memory", "8", {checked: @scat2.get_memory_value("8"), :disabled => !editable} %></td>
+                <td><%= check_box "memory", "9", {checked: @scat2.get_memory_value("9"), :disabled => !editable} %></td>
+                <td>sucre</td>
+                <td>parfun</td>
+                <td>couverture</td>
+              </tr>
+              <tr>
+                <td>selle</td>
+                <td><%= check_box "memory", "10", {checked: @scat2.get_memory_value("10"), :disabled => !editable} %></td>
+                <td><%= check_box "memory", "11", {checked: @scat2.get_memory_value("11"), :disabled => !editable} %></td>
+                <td><%= check_box "memory", "12", {checked: @scat2.get_memory_value("12"), :disabled => !editable} %></td>
+                <td>sandwich</td>
+                <td>coucher de soleil</td>
+                <td>citron</td>
+              </tr>
+              <tr>
+                <td>bulle</td>
+                <td><%= check_box "memory", "13", {checked: @scat2.get_memory_value("13"), :disabled => !editable} %></td>
+                <td><%= check_box "memory", "14", {checked: @scat2.get_memory_value("14"), :disabled => !editable} %></td>
+                <td><%= check_box "memory", "15", {checked: @scat2.get_memory_value("15"), :disabled => !editable} %></td>
+                <td>wagon</td>
+                <td>fer</td>
+                <td>insect</td>
+              </tr>
+            </table>
+
+            <table class="content">
+              <tr>
+                <td><b>Score de mémoire immédiate</b></td>
+                <td class="score"><span id="score_memory"></span> sur 15</td>
+              </tr>
+            </table>
+
+            <div class="row">
+              <div class="col-md-12 col-xs-12">
+                <h4>Concentration</h4>
+                <p>Compte à rebours :<br>
+                  « Je vais vous lire une série de chiffres et quand j’aurai fini, vous
+                  les répéterez en ordre inverse. Si je dis par exemple ‘7-1-9’, vous
+                  direz ‘9-1-7’. »</p>
+                <p><small>Si la réponse est correcte, passez à la prochaine longueur de séries de chiffres. Si
+                  la réponse est incorrecte, lisez une seconde fois. Un point est donnépour chaque
+                  longueur de série. Arrêtez après une réponse incorrecte aux deux essais. Les chiffres
+                  doivent être lus au rythme d’un chiffre par seconde.</small></p>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12 col-xs-12">
+                <p>Listes alternative</p>
+              </div>
+            </div>
+
+            <table class="table table-condensed oragne">
+              <tr>
+                <td>4-9-3</td>
+                <td><%= check_box "concentration", "1", {checked: @scat2.get_concentration_value("1"), :disabled => !editable} %></td>
+                <td>6-2-9</td>
+                <td>5-2-6</td>
+                <td>4-1-5</td>
+              </tr>
+              <tr>
+                <td>3-8-1-4</td>
+                <td><%= check_box "concentration", "2", {checked: @scat2.get_concentration_value("2"), :disabled => !editable} %></td>
+                <td>3-2-7-9</td>
+                <td>1-7-9-5</td>
+                <td>4-9-6-8</td>
+              </tr>
+              <tr>
+                <td>6-2-9-7-1</td>
+                <td><%= check_box "concentration", "3", {checked: @scat2.get_concentration_value("3"), :disabled => !editable} %></td>
+                <td>1-5-2-8-6</td>
+                <td>3-8-5-2-7</td>
+                <td>6-1-8-4-3</td>
+              </tr>
+              <tr>
+                <td>7-1-8-4-6-2</td>
+                <td><%= check_box "concentration", "4", {checked: @scat2.get_concentration_value("4"), :disabled => !editable} %></td>
+                <td>5-3-9-1-4-8</td>
+                <td>8-3-1-9-6-4</td>
+                <td>7-2-4-8-5-6</td>
+              </tr>
+            </table>
+            
+            <div class="row">
+              <div class="col-md-12 col-xs-12">
+                <p><strong>Mois en sens inverse :</strong><br>
+                  « À présent, énoncez les mois de l’année en sens inverse.
+                  Commencez par le dernier mois et revenez en arrière. Ainsi, vous
+                  direz ‘décembre, novembre, etc.’. Allez-y ! »
+                </p>
+                <p>Un point pour chaque séquence correcte complète.</p>
+              </div>
+            </div>
+
+            <table class="table orange">
+              <tr>
+                <td>Déc-Nov-Oct-Sept-Août-Juil-Juin-Mai-Avr-Mar-Fév-Jan</td>
+                <td class="value">
+                  <%= check_box "concentration", "5", {checked: @scat2.get_concentration_value("5"), :disabled => !editable} %>
+                </td>
+              </tr>
+              <tr>
+                <td><b>Score de concentration</b></td>
+                <td class="score"><span id="score_concentration"></span> sur 5</td>
+              </tr>
+            </table>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 col-xs-12">
+        <hr>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 col-xs-12 bot-row-space-10">
+        <div class="row">
+          <div class="eval_nb col-md-1 col-xs-1 light-blue box">6</div>
+          <div class="col-md-11 col-xs-11 outline">
+            <div class="row">
+              <div class="col-md-12 col-xs-12">
+                <h2>Examen de l’équilibre</h2>
+                <p><small>L’épreuve d’équilibre repose sur une version modifiée du BESS (Balance Error Scoring
+                    System) 6. Le test exige l’utilisation d’un chronomètre ou d’une montre indiquant
+                    les secondes.
+                  </small></p>
+                <h5>Épreuves d’équilibre</h5>
+                <p>« Je vais maintenant tester votre équilibre. Veuillez retirer
+                  vos chaussures, rouler le bas de votre pantalon au-dessus des
+                  chevilles [le cas échéant] et retirer tout bandage des chevilles
+                  [le cas échéant]. Ce test consistera en trois épreuves de 20
+                  secondes réalisées dans différentes positions. »</p>
+                <h5>(a) Position sur deux pieds :</h5>
+                <p>« La première position est : debout, les pieds joints, les mains
+                  sur les hanches et les yeux fermés. Vous devez essayer de
+                  garder l’équilibre dans cette position pendant 20 secondes.
+                  Je vais compter le nombre de fois que vous quitterez cette
+                  position. Je commencerai à chronométrer dès que vous
+                  aurez les yeux fermés. »</p>
+                <h5>(b) Position sur un pied :</h5>
+                <p>« Si vous deviez taper dans un ballon, quel pied utiliseriezvous
+                  ? [Ce pied est le pied dominant] Maintenant, restez debout
+                  sur votre pied non dominant. Le pied dominant doit être
+                  maintenu en flexion d’environ 30 degrés par rapport à la
+                  hanche, avec flexion du genou d’environ 45 degrés. Essayez à
+                  nouveau de garder votre équilibre pendant 20 secondes avec
+                  les mains sur les hanches et les yeux fermés. Je vais compter le
+                  nombre de fois que vous quitterez cette position. Si vous êtes
+                  déséquilibré, ouvrez vos yeux, reprenez la position correcte et
+                  continuez à garder l’équilibre. Je commencerai à chronométrer
+                  dès que vous aurez pris la position et fermé les yeux. »</p>
+                <h5>(c) Position pieds alignés :</h5>
+                <p>«À présent, alignez vos pieds en plaçant le pied non dominant
+                  derrière l’autre, la pointe contre son talon. Votre poids doit
+                  être bien réparti sur les deux pieds. Essayez à nouveau de
+                  garder l’équilibre pendant 20 secondes, les mains sur les
+                  hanches et les yeux fermés. Je vais compter le nombre de fois
+                  que vous quitterez cette position. Si vous êtes déséquilibré,
+                  ouvrez vos yeux, reprenez la position correcte et continuez à
+                  garder l’équilibre. Je commencerai à chronométrer dès que
+                  vous aurez pris la position et fermé les yeux.»</p>
+                <h5>Épreuves d’équilibre : types d’erreurs</h5>
+                <ol>
+                  <li>Mains quittant la crête iliaque.</li>
+                  <li>Ouverture des yeux.</li>
+                  <li>Pas, trébuchement voire chute.</li>
+                  <li>Déplacement des hanches en abduction > 30 degrés.</li>
+                  <li>Soulèvement de l’avant-pied ou du talon.</li>
+                  <li>Abandon de la position pour plus de 5 sec.</li>
+                </ol>
+                <p>Chacune des épreuves de 20 secondes est évaluée en comptant les
+                  erreurs ou déviations de la position correcte accumulées par l’athlète.
+                  L’examinateur ne commencera à compter les erreurs qu’à partir du
+                  moment où l’athlète aura pris la bonne position. <strong>On calcule le score
+                  de BESS modifié en ajoutant un point d’erreur à chaque erreur
+                  faite au cours des trois épreuves de 20 secondes. Le nombre
+                  maximal d’erreurs par épreuve est de 10</strong>. Si un athlète fait
+                  plusieurs erreurs en même temps, une seule erreur sera enregistrée,
+                  mais l’athlète devra reprendre rapidement la position testée et les
+                  erreurs faites à partir de là seront à nouveau comptées. Si l’athlète est
+                  incapable de maintenir la position testée au moins cinq secondes au
+                  début, le nombre maximal d’erreurs (dix) sera compté pour l’épreuve
+                  en question.</p>
+                <table class="table">
+                  <tr>
+                    <td>
+                      Pied testé<br/>
+                      <small>(c’est-à-dire que ce pied est le pied non dominant)</small>
+                    </td>
+                    <td class="value scat2-select">
+                      <%= f.select :foot_tested,
+                                   options_for_select($scat2_side, @scat2.foot_tested),
+                                   {:include_blank => true}, :disabled => !editable
+                      %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><b>Position</b></td>
+                    <td class="score"><b>Erreurs au total</b></td>
+                  </tr>
+                  <tr>
+                    <td>Position sur deux pieds (pieds joints) sur 10</td>
+                    <td class="value">
+                      <%= f.number_field :stability_two_feet, in: 0...11, :disabled => !editable %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Position sur un pied (pied non dominant) sur 10</td>
+                    <td class="value">
+                      <%= f.number_field :stability_one_foot, in: 0...11, :disabled => !editable %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Position pieds alignés (pied non dominant derrière l’autre) sur 10</td>
+                    <td class="value">
+                      <%= f.number_field :stability_feet_aligned, in: 0...11, :disabled => !editable %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><b>Score du test d’équilibre</b><br>
+                      <small>(30 moins le nombre total d’erreurs)</small>
+                    </td>
+                    <td class="score"><span id="score_stability"></span> sur 30</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      <div class="col-md-6 col-xs-12 bot-row-space-10">
+        <div class="row">
+          <div class="eval_nb col-md-1 col-xs-1 light-blue box">7</div>
+          <div class="col-md-11 col-xs-11 outline">
+            <div class="row">
+              <div class="col-md-12 col-xs-12">
+                <h2>Examen de la coordination</h2>
+                <h5>Coordination des membres supérieurs</h5>
+                <p>Épreuve doigt-nez (EDN ) : « Je vais maintenant tester votre
+                  coordination. Veuillez vous asseoir confortablement sur la chaise,
+                  les yeux ouverts et le bras (droit ou gauche) étendu (l’épaule
+                  fléchie à 90 degrés, le coude et les doigts en extension). Lorsque
+                  je donnerai le signal de départ, vous porterez cinq fois de suite
+                  l’index au bout du nez avec autant de rapidité et de précision
+                  que possible. »</p>
+              </div>
+            </div>
+            <table class="table">
+              <tr>
+                <td>Bras testé :</td>
+                <td class="value scat2-select">
+                  <%= f.select :hand_tested,
+                               options_for_select($scat2_side, @scat2.hand_tested),
+                               {:include_blank => true}, :disabled => !editable
+                  %>
+                </td>
+              </tr>
+              <tr>
+                <td>Score : 5 correct repetitions in < 4 seconds</td>
+                <td class="value">
+                  <%= f.check_box :coordination, :disabled => !editable %>
+                </td>
+              </tr>
+              <tr>
+                <td colspan=2>Remarque aux examinateurs : L’athlète n’a pas réussi le test s’il ne touche pas son
+                  nez, n’étend pas complètement le coude ou ne répète
+                  pas l’exercice cinq fois. Un échec correspond à 0 point.
+                </td>
+              </tr>
+              <tr>
+                <td><b>Score de coordination</b></td>
+                <td class="score"><span id="score_coordination"></span> sur 1</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="row">
+          <div class="eval_nb col-md-1 col-xs-1 dark-orange box">8</div>
+          <div class="col-md-11 col-xs-11 outline">
+            <div class="row">
+              <div class="col-md-12 col-xs-12">
+                <h2>Examen de la cognition</h2>
+                <h5>Évaluation standardisée des commotions (SAC)</h5>
+                <h4>Mémoire différée</h4>
+                <p>« Vous souvenez-vous de la liste de mots que j’avais lue tout à
+                  l’heure ? Nommez-en autant de mots que vous pouvez, dans
+                  n’importe-quel ordre ! »</p>
+                <p><small>Entourez chaque mot correctement nommé. Le score total correspond au nombre
+                  de mots dont l’athlète se souvient.
+                  </small></p>
+              </div>
+            </div>
+            <table class="table table-condensed" style="font-size:65%">
+              <tr>
+                <th>Liste</th>
+                <th colspan=3>Listes alternatives</th>
+              </tr>
+              <tr>
+                <td>
+                  <%= check_box "cognition", "elbow", {checked: @scat2.get_cognition_value("elbow"), :disabled => !editable} %>
+                  coude
+                </td>
+                <td><%= check_box "cognition", "candle", {checked: @scat2.get_cognition_value("candle"), :disabled => !editable} %>
+                  bougie
+                </td>
+                <td><%= check_box "cognition", "baby", {checked: @scat2.get_cognition_value("baby"), :disabled => !editable} %>
+                  bébé
+                </td>
+                <td><%= check_box "cognition", "finger", {checked: @scat2.get_cognition_value("finger"), :disabled => !editable} %>
+                  doigt
+                </td>
+              </tr>
+              <tr>
+                <td><%= check_box "cognition", "apple", {checked: @scat2.get_cognition_value("apple"), :disabled => !editable} %>
+                  pomme
+                </td>
+                <td><%= check_box "cognition", "paper", {checked: @scat2.get_cognition_value("paper"), :disabled => !editable} %>
+                  papier
+                </td>
+                <td><%= check_box "cognition", "monkey", {checked: @scat2.get_cognition_value("monkey"), :disabled => !editable} %>
+                  singe
+                </td>
+                <td><%= check_box "cognition", "money", {checked: @scat2.get_cognition_value("money"), :disabled => !editable} %>
+                  monnaie
+                </td>
+              </tr>
+              <tr>
+                <td><%= check_box "cognition", "carpet", {checked: @scat2.get_cognition_value("carpet"), :disabled => !editable} %>
+                  tapis
+                </td>
+                <td><%= check_box "cognition", "sugar", {checked: @scat2.get_cognition_value("sugar"), :disabled => !editable} %>
+                  sucre
+                </td>
+                <td><%= check_box "cognition", "perfume", {checked: @scat2.get_cognition_value("perfume"), :disabled => !editable} %>
+                  parfum
+                </td>
+                <td><%= check_box "cognition", "cover", {checked: @scat2.get_cognition_value("cover"), :disabled => !editable} %>
+                  couverture
+                </td>
+              </tr>
+              <tr>
+                <td><%= check_box "cognition", "saddle", {checked: @scat2.get_cognition_value("saddle"), :disabled => !editable} %>
+                  selle
+                </td>
+                <td><%= check_box "cognition", "sandwich", {checked: @scat2.get_cognition_value("sandwich"), :disabled => !editable} %>
+                  sandwich
+                </td>
+                <td><%= check_box "cognition", "sunset", {checked: @scat2.get_cognition_value("sunset"), :disabled => !editable} %>
+                  coucher de soleil
+                </td>
+                <td><%= check_box "cognition", "lime", {checked: @scat2.get_cognition_value("lime"), :disabled => !editable} %>
+                  citron
+                </td>
+              </tr>
+              <tr>
+                <td><%= check_box "cognition", "bubble", {checked: @scat2.get_cognition_value("bubble"), :disabled => !editable} %>
+                  bulle
+                </td>
+                <td><%= check_box "cognition", "wagon", {checked: @scat2.get_cognition_value("wagon"), :disabled => !editable} %>
+                  wagon
+                </td>
+                <td><%= check_box "cognition", "iron", {checked: @scat2.get_cognition_value("iron"), :disabled => !editable} %>
+                  fer
+                </td>
+                <td><%= check_box "cognition", "insect", {checked: @scat2.get_cognition_value("insect"), :disabled => !editable} %>
+                  insecte
+                </td>
+              </tr>
+            </table>
+            <table class="table orange">
+              <tr>
+                <td>Score de la mémoire différée</td>
+                <td class="score"><span id="score_cognition"></span> sur 5</td>
+              </tr>
+              <tr>
+                <td>Retour à la compétition</td>
+                <td class="value scat2-select">
+                  <%= f.select :return_to_competition,
+                               options_for_select($yesno, @scat2.return_to_competition),
+                               {:include_blank => true}, :disabled => !editable
+                  %>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-1 col-xs-1"></div>
+          <div class="col-md-11 col-xs-11 outline">
+            <div class="row">
+              <div class="col-md-12 col-xs-12">
+                <h2>Score total</h2>
+              <!-- rendu ici -->
+
+              </div>
+              <table class="scat2_table_score table">
+                <tr>
+                  <th style="text-align: left">Domaine testé</th>
+                  <th>Score</th>
+                </tr>
+                <tr>
+                  <td class="blue">Score des symptômes</td>
+                  <td class="blue center"><span id="rep_score_symptoms"></span> sur 22</td>
+                </tr>
+                <tr>
+                  <td class="blue">Score des signes physiques</td>
+                  <td class="blue center"><span id="rep_score_physical"></span> sur 2</td>
+                </tr>
+                <tr>
+                  <td class="blue">Score de Glasgow (E + V + M)</td>
+                  <td class="blue center"><span id="rep_score_glasgow"></span> sur 15</td>
+                </tr>
+                <tr>
+                  <td class="blue">Score de l’équilibre</td>
+                  <td class="blue center"><span id="rep_score_stability"></span> sur 30</td>
+                </tr>
+                <tr>
+                  <td class="blue">Score de la coordination</td>
+                  <td class="blue center"><span id="rep_score_coordination"></span> sur 1</td>
+                </tr>
+                <tr>
+                  <td class="blue_dark">Sous-total</td>
+                  <td class="blue_dark center"><span id="rep_total"></span> sur 70</td>
+                </tr>
+
+                <tr>
+                  <td class="orange">Score d’orientation</td>
+                  <td class="orange center"><span id="rep_score_cognitive"></span> sur 5</td>
+                </tr>
+                <tr>
+                  <td class="orange">Score de la mémoire immédiate</td>
+                  <td class="orange center"><span id="rep_score_memory"></span> sur 15</td>
+                </tr>
+                <tr>
+                  <td class="orange">Score de concentration</td>
+                  <td class="orange center"><span id="rep_score_concentration"></span> sur 5</td>
+                </tr>
+                <tr>
+                  <td class="orange">Score de la mémoire différée</td>
+                  <td class="orange center"><span id="rep_score_cognition"></span> sur 5</td>
+                </tr>
+                <tr>
+                  <td class="orange_dark">Sous-total SAC</td>
+                  <td class="orange_dark center"><span id="rep_total_sac"></span> sur 30</td>
+                </tr>
+
+                <tr>
+                  <td class="scat2">SCAT2 total</td>
+                  <td class="scat2 center"><span id="rep_total_sac2"></span> sur 100</td>
+                </tr>
+                <tr>
+                  <td class="maddocks">Score Maddocks</td>
+                  <td class="maddocks center"><span id="rep_score_maddocks"></span> sur 5</td>
+                </tr>
+              </table>
+              <div class="row">
+                <div class="col-md-12 col-xs-12">
+                  <p>Il n’existe actuellement pas de données normatives définitives pour
+                    le score seuil du SCAT2. Celui-ci fera l’objet d’études prospectives.
+                    Le score SAC est intégré au SCAT2 et peut être utilisé séparément
+                    dans la prise en charge des commotions cérébrales. Le système
+                    d’attribution des points revêt une signification clinique particulière
+                    lors d’évaluations périodiques permettant de documenter une
+                    détérioration ou une amélioration des fonctions neurologiques.</p>
+                  <p>Les données de score SCAT2 ou SAC ne doivent pas être
+                    utilisées comme seule méthode pour diagnostiquer une
+                    commotion cérébrale, pour évaluer la convalescence de
+                    l’athlète ou pour décider de son aptitude à reprendre la
+                    compétition après la commotion.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+      <div class="col-md-12 col-xs-12">
+        <% if editable %>
+          <%= f.submit class: "btn btn-default" %>
+        <% else %>
+          <%= link_to t(:scat2_edit), edit_scat2_path(@scat2), class: "btn btn-default btn-lg" %>
+        <% end %>
+        <%= link_to 'Retour', scat2s_path, class: "btn btn-default", :style=>"display:inline;margin-left:10px;" %>
+      </div>
+
+    </div>
+
+  <% end %>
+</div>
+
+<script type="text/javascript">
+
+    var FormControl = {
+        init: function () {
+            //Symptoms
+            <% $scat2_symptoms.each do |value| %>
+                <% [0,1,2,3,4,5,6].each do |idx| %>
+                    $("#symp_<%= value[1] %>_<%= idx %>").get(0).addEventListener('change', FormControl.changeSymptoms, false);
+                <% end %>
+            <% end %>
+            //Sign Physical
+            $("#scat2_unconsciousness_1").get(0).addEventListener('change', FormControl.changePhysical, false);
+            $("#scat2_unconsciousness_0").get(0).addEventListener('change', FormControl.changePhysical, false);
+            $("#scat2_balance_problem_1").get(0).addEventListener('change', FormControl.changePhysical, false);
+            $("#scat2_balance_problem_0").get(0).addEventListener('change', FormControl.changePhysical, false);
+
+            //Glassgow
+            <% ['eye', 'verbal', 'mouvement'].each do |code| %>
+            $("#scat2_glasgow_<%= code %>").get(0).addEventListener('change', FormControl.changeGlasgow, false);
+            <% end %>
+
+            //Sign Maddocks
+            <% ['state', 'half_time', 'last_goal', 'last_team', 'last_win'].each do |code| %>
+            $("#scat2_maddocks_<%= code %>").get(0).addEventListener('change', FormControl.changeMaddocks, false);
+            <% end %>
+
+            //Sign Cognitive
+            <% ['month', 'date', 'day', 'year', 'hrs'].each do |code| %>
+            $("#scat2_cognitive_<%= code %>").get(0).addEventListener('change', FormControl.changeCognitive, false);
+            <% end %>
+
+            //Sign Memory
+            <% (1..15).each do |i| %>
+            $("#memory_<%= i %>").get(0).addEventListener('change', FormControl.changeMemory, false);
+            <% end %>
+
+            //Sign concentration
+            <% (1..5).each do |i| %>
+            $("#concentration_<%= i %>").get(0).addEventListener('change', FormControl.changeConcentration, false);
+            <% end %>
+
+            //Sign stability
+            <% ['two_feet', 'one_foot', 'feet_aligned'].each do |code| %>
+            $("#scat2_stability_<%= code %>").get(0).addEventListener('change', FormControl.changeStability, false);
+            <% end %>
+
+            //Sign coordination
+            $("#scat2_coordination").get(0).addEventListener('change', FormControl.changeCoordination, false);
+
+            //Sign cognition
+            <% ['elbow', 'candle', 'baby', 'finger', 'apple', 'paper', 'monkey', 'money',
+                'carpet', 'sugar', 'perfume', 'cover', 'saddle', 'sandwich', 'sunset',
+                'lime', 'bubble', 'wagon', 'iron', 'insect' ].each do |code| %>
+            $("#cognition_<%= code %>").get(0).addEventListener('change', FormControl.changeCognition, false);
+            <% end %>
+
+            //raport
+            $("#rep_score_symptoms").get(0).addEventListener('change', FormControl.changeReport, false);
+
+            // first load
+            FormControl.changeSymptoms();
+            FormControl.changePhysical();
+            FormControl.changeGlasgow();
+            FormControl.changeMaddocks();
+            FormControl.changeMemory();
+            FormControl.changeConcentration();
+            FormControl.changeStability();
+            FormControl.changeCoordination();
+            FormControl.changeCognition();
+            FormControl.changeCognitive();
+
+
+        },
+
+
+        changeSymptoms: function (event) {
+            var nbSymptoms = 0;
+            var scoreSeveritySymptoms = 0;
+            <% $scat2_symptoms.each do |value| -%>
+                <% [0,1,2,3,4,5,6].each do |idx| %>
+                    value = $("#symp_<%= value[1] %>_<%= idx %>").get(0);
+                    if (value.checked) {
+                        scoreSeveritySymptoms += parseInt(value.value);
+                        nbSymptoms++;
+                    }
+                <% end %>
+            <% end %>
+            $("#symptoms_nb").html(nbSymptoms);
+            $("#score_symptoms").html(22 - nbSymptoms)
+            $("#symptoms_score_severity").html(scoreSeveritySymptoms);
+            FormControl.changeReport();
+        },
+
+        changePhysical: function (event) {
+            var scorePhysical = 0;
+            //debugger;
+            if ($("#scat2_unconsciousness_1").get(0).checked) {
+                scorePhysical++
+            }
+            if ($("#scat2_balance_problem_1").get(0).checked) {
+                scorePhysical++
+            }
+
+
+            $("#score_physical").html(scorePhysical);
+            FormControl.changeReport();
+        },
+
+        changeGlasgow: function (event) {
+            var scoreGlasgow = 0;
+            <% ['eye', 'verbal', 'mouvement'].each do |code| %>
+            value = $("#scat2_glasgow_<%= code %>").get(0).value;
+            if (value != undefined && value != '') {
+                scoreGlasgow += parseInt(value);
+            }
+            <% end %>
+            $("#score_glasgow").html(scoreGlasgow);
+            FormControl.changeReport();
+        },
+
+        changeMaddocks: function (event) {
+            var scoreMaddocks = 0;
+            <% ['state', 'half_time', 'last_goal', 'last_team', 'last_win'].each do |code| %>
+            if ($("#scat2_maddocks_<%= code %>").is(':checked')) {
+                scoreMaddocks++;
+            }
+            <% end %>
+            //console.log("scoreMaddocks" + scoreMaddocks);
+            $("#score_maddocks").html(scoreMaddocks);
+            FormControl.changeReport();
+        },
+
+        changeCognitive: function (event) {
+            var scoreCognitive = 0;
+            <% ['month', 'date', 'day', 'year', 'hrs'].each do |code| %>
+            if ($("#scat2_cognitive_<%= code %>").is(':checked')) {
+                scoreCognitive++;
+            }
+            <% end %>
+
+            $("#score_cognitive").html(scoreCognitive);
+            FormControl.changeReport();
+        },
+
+        changeMemory: function (event) {
+            var scoreMemory = 0;
+            <% (1..15).each do |i| %>
+            if ($("#memory_" +<%= i %>).is(':checked')) {
+                scoreMemory++;
+            }
+            <% end %>
+
+            $("#score_memory").html(scoreMemory);
+            FormControl.changeReport();
+        },
+
+        changeConcentration: function (event) {
+            var scoreConcentration = 0;
+            <% (1..5).each do |i| %>
+            if ($("#concentration_" +<%= i %>).is(':checked')) {
+                scoreConcentration++;
+            }
+            <% end %>
+
+            $("#score_concentration").html(scoreConcentration);
+            FormControl.changeReport();
+        },
+
+        changeStability: function (event) {
+            var scoreStability = 0;
+            <% ['two_feet', 'one_foot', 'feet_aligned'].each do |code| %>
+            value = $("#scat2_stability_<%= code %>").get(0).value;
+            if (value != undefined && value != '') {
+                scoreStability += parseInt(value);
+            }
+            <% end %>
+
+            $("#score_stability").html(scoreStability);
+            FormControl.changeReport();
+        },
+
+        changeCoordination: function (event) {
+            var scoreCoordination = 0;
+            if ($("#scat2_coordination").is(':checked')) {
+                scoreCoordination++;
+            }
+
+            $("#score_coordination").html(scoreCoordination);
+            FormControl.changeReport();
+        },
+
+        changeCognition: function (event) {
+            var scoreCognition = 0;
+            <% ['elbow', 'candle', 'baby', 'finger', 'apple', 'paper', 'monkey', 'money',
+                'carpet', 'sugar', 'perfume', 'cover', 'saddle', 'sandwich', 'sunset',
+                'lime', 'bubble', 'wagon', 'iron', 'insect' ].each do |code| %>
+            if ($("#cognition_<%= code %>").is(':checked')) {
+                scoreCognition++;
+            }
+            <% end %>
+
+            if (scoreCognition > 5) {
+                scoreCognition = 5;
+            }
+            $("#score_cognition").html(scoreCognition);
+            FormControl.changeReport();
+        },
+
+        changeReport: function (event) {
+            //debugger;
+            $("#rep_score_symptoms").html($("#score_symptoms").get(0).innerText);
+            $("#rep_score_physical").html($("#score_physical").get(0).innerText);
+            $("#rep_score_glasgow").html($("#score_glasgow").get(0).innerText);
+            $("#rep_score_stability").html($("#score_stability").get(0).innerText);
+            $("#rep_score_coordination").html($("#score_coordination").get(0).innerText);
+            rep_total = 0;
+            rep_total += parseInt($("#score_symptoms").get(0).innerText);
+            rep_total += parseInt($("#score_physical").get(0).innerText);
+            rep_total += parseInt($("#score_glasgow").get(0).innerText);
+            rep_total += parseInt($("#score_stability").get(0).innerText);
+            rep_total += parseInt($("#score_coordination").get(0).innerText);
+            $("#rep_total").html(rep_total);
+
+            $("#rep_score_cognitive").html($("#score_cognitive").get(0).innerText);
+            $("#rep_score_memory").html($("#score_memory").get(0).innerText);
+            $("#rep_score_concentration").html($("#score_concentration").get(0).innerText);
+            $("#rep_score_cognition").html($("#score_cognition").get(0).innerText);
+            rep_total_sac = 0;
+            rep_total_sac += parseInt($("#score_cognitive").get(0).innerText);
+            rep_total_sac += parseInt($("#score_memory").get(0).innerText);
+            rep_total_sac += parseInt($("#score_concentration").get(0).innerText);
+            rep_total_sac += parseInt($("#score_cognition").get(0).innerText);
+            $("#rep_total_sac").html(rep_total_sac);
+
+            $("#rep_total_sac2").html(rep_total_sac + rep_total);
+
+            $("#rep_score_maddocks").html($("#score_maddocks").get(0).innerText);
+
+        }
+    };
+
+    FormControl.init();
+</script>

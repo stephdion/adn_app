@@ -1,0 +1,24 @@
+<% row = 0 %>
+<% users.each_with_index do |user,index| %>
+	<% if index % 6 == 0 && row == 0 %>
+		<% row = 1 %>
+		<div class="row">
+	<%end%>
+      <div class="trainerBox col-md-2">
+        <% if user.participations.where(:equipe_id => @equipe.id).first.position %>
+        <%= user.participations.where(:equipe_id => @equipe.id).first.position.name %></br>
+        <% else %></br>
+      <% end %>
+      <%= image_tag user.photo.url(:thumbnail), :class => "img-circle" %>
+      </br>
+      <%= link_to user.name, user %>
+      </div>
+	  <% if index % 6 == 5 && row == 1%>
+		</div>
+		<% row = 0 %>
+		<%end%>
+<% end %>
+<% if row == 1 %>
+</div>
+<% row = 0 %>
+<%end%>

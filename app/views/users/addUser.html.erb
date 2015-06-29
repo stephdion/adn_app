@@ -1,0 +1,79 @@
+<script>
+    function updateEmail()
+    {
+        $('input[id=user_email]').val(
+                $('input[id=user_last_name]') .val()+'.'+
+                $('input[id=user_first_name]').val()+
+                '@<%=I18n.t(:user_temp_email)%>');
+
+    }
+</script>
+<% provide(:title, I18n.t(:user_inscription)) %>
+<h1><%= t :user_inscription %></h1>
+
+<div class="row">
+    <%= form_tag :controller => 'users', :action => 'addUser_save' do %>
+  <div class="col-md-4" style="border-right: 2px solid;">
+    
+        <%= render 'shared/error_messages' %>
+        <br>
+
+        <%= label_tag 'user[memberships_attributes][0][role_id]', 'Role' %>
+        <%= select_tag 'user[memberships_attributes][0][role_id]', options_from_collection_for_select(Role.all.where("id != 7 AND id != 9").order(:name), 'id', 'name'),{:class => 'selectpicker', :style => 'padding:0'} %><br>
+        <%= label_tag 'user[memberships_attributes][0][organization_id]', 'Organization' %>
+        <%= select_tag 'user[memberships_attributes][0][organization_id]', options_from_collection_for_select(Organization.all.order(:name), 'id', 'name',:selected => @current_organization.id),{:class => 'selectpicker', :style => 'padding:0'} %>
+        <br>
+        <%= label_tag 'user[last_name]', "Last_name" %><br>
+        <%= text_field_tag 'user[last_name]',"", :onkeyup => "updateEmail()"%><br>
+
+        <%= label_tag 'user[first_name]', 'First name' %><br>
+        <%= text_field_tag 'user[first_name]',"", :onkeyup => "updateEmail()"%><br>
+        <br>
+
+        <%= label_tag 'user[password]', 'Password' %><br>
+        <%= text_field_tag 'user[password]',"solutionadn"%><br>
+
+        <%= label_tag 'user[email]', 'Email' %><br>
+        <%= text_field_tag 'user[email]'%><br>
+
+        <p>
+          <%= label_tag 'user[change_password_required]', "Change Password Required" %>
+          <%= check_box_tag 'user[change_password_required]',1, {:checked=>true} %>
+        </p>
+
+        <p>
+          <%= label_tag 'user[is_enabled]', "Is Enabled" %>
+          <%= check_box_tag 'user[is_enabled]',1, {:checked=>true} %>
+        </p>
+<br>
+        <%= submit_tag I18n.t(:user_add_user), class: "btn btn-default" %>
+  </div>
+  <div class="col-md-8" >
+        <h3>Parent(s)</h3>
+        <div class="row">
+            <%= button_tag "Ajouter un parent", :type=>"button", :class=>"btn btn-default", :id=>"addParent" %>
+        </div>
+  </div>
+  <% end %>
+</div>
+<script>   
+var i = 0;
+$('#addParent').on("click",function(){
+ var html = "";
+ 
+ html += "<div class='col-md-6'>" +
+ "Nom parent :<br><input id='parent[][last_name]' type='text' size='30' name='parent[][last_name]'><br>" +
+ "Prenom parent :<br><input id='parent[][first_name]' type='text' size='30' name='parent[][first_name]'><br>" +
+ "Email parent :<br><input id='parent[][email]' type='text' size='30' name='parent[][email]'>" +
+'<br>Status : <br><select class="form-control" id="parent[][relationship]" name="parent[][relationship]"><option value="Mère">Mère</option>' +
+'<option value="Père">Père</option>' +
+'<option value="Grandparent">Grandparent</option>' +
+'<option value="Tuteur">Tuteur</option></select>' +
+"</div>";
+if(i <= 3){
+ $(this).parent().after(html);
+ }
+ i++;
+ });
+
+</script>

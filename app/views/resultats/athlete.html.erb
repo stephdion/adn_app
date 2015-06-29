@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+<% provide(:title, I18n.t(:resultats_resultats) + ": " + I18n.t(:role_athlete)) %>
+<body>
+
+<div class="col-md-6">
+  <div class="span12 row">
+    <div class="infoBox">
+      <div class="margin-bottom">
+        <h4><%= I18n.t(:resultats_resultats) %>: <%= link_to @first_record.athlete_name, @first_record.athlete %></h4></td>
+        <% if @score.to_i <= @maximum_score %>
+            <h4><%= I18n.t(:general_score) %>: <%= @score %></h4>
+        <% else %>
+            <h4><%= I18n.t(:general_score) %>: <%= I18n.t(:resultats_incomplete)%></h4>
+        <% end %>
+        <h6><b><%= I18n.t(:general_evaluation) %>: </b> <%= @first_record.evaluation.name %></h6>
+        <h6><b><%= I18n.t(:resultats_max_score)%>:</b> <%= @maximum_score.to_s %></h6>
+        <h6><b><%= I18n.t(:general_date) %>: </b><%= @first_record.created_at.strftime("%e %b, %Y, %H:%M") %></h6>
+        <h6><b><%= I18n.t(:general_evaluator) %>: </b> <%= link_to @first_record.user.name, @first_record.user %></h6>
+      </div>
+    </div>
+  <div class="no-print" >
+    <div class="top-nav-bar">
+      <h4 style="display:inline;"><%= link_to I18n.t(:resultats_prog_corr), programme_corrective_resultats_path(:resultat_id => @first_record.id, :format => :html), :class=>"btn btn-default" %></h4>
+      <!--<h4 style="display:inline;"><%= link_to I18n.t(:resultats_prog_corr) + " PDF", programme_corrective_resultats_path(:resultat_id => @first_record.id, :format => :pdf), :class=>"btn btn-default" %></h4>-->
+    </div>
+  </div>
+  <br>
+  </div>
+  <div class="span4 row"> 
+    <table class="table table-condensed table-hover">
+                <tr>
+                  <th><%= t(:general_image)%></th>
+                  <th></th>
+                  <th><%= t(:general_test)%></th>
+                  <th><%= t(:resultats)%></th>
+                </tr>
+      <% @resultats.each do |resultat| %>
+        <tr>
+          <td><%= image_tag resultat.eval_test.image.url(:thumbnail) %><td>
+          <td><%= link_to resultat.eval_test.short_name, resultat.eval_test %>
+          <% if resultat.left_right? %> 
+            -D
+          <% end %>
+          <td><%= resultat.value_to_s %></td>
+        </tr>
+        <% if resultat.left_right? %> 
+        <tr>
+          <td><%= image_tag resultat.eval_test.image.url(:thumbnail) %><td>
+          <td><%= link_to resultat.eval_test.short_name, resultat.eval_test %>
+            -G
+          <td><%= resultat.left_to_s %></td>
+        </tr>
+        <% end %>
+      <% end %>
+    </table>
+  </div> 
+</div>
+<div class="col-md-6" style="graphicBox">
+<%= content_tag "canvas", id: "resultatsGraph", 
+                          width: "500", 
+                          height:"500", 
+                          data: {labels: @labels, values1: @chart_data} do %>
+  Loading graphic...
+<% end %>
+<script type="text/javascript">
+var ctx = document.getElementById("resultatsGraph").getContext("2d");
+
+var data = {
+    labels: $('#resultatsGraph').data('labels'),
+    datasets: [
+                {
+                fillColor: "rgba(255,255,255,0)",
+                strokeColor: "rgba(43,39,108,0.9)",
+                pointColor: "rgba(0,128,128,0.7)",
+                pointStrokeColor: "#fff",
+                data: $('#resultatsGraph').data('values1')
+                }/*,
+                {
+                fillColor: "rgba(255,255,255,0)",
+                strokeColor: "rgba(102,204,255,1)",
+                pointColor: "rgba(102,204,255,1)",
+                pointStrokeColor: "#fff",
+                data: $('#resultatsGraph').data('values2')
+                }*/
+        ]
+};
+
+var myRadarChart = new Chart(ctx).Radar(data, { scaleOverlay : true,
+                                                scaleOverride : true,
+                                                scaleSteps : 3,
+                                                scaleStepWidth : 1,
+                                                scaleStartValue : 0,
+                                                scaleShowLabels : true,
+                                                scaleFontStyle : "bold",
+                                                scaleFontSize : 18,
+                                                scaleFontColor : "#174A97",
+                                                angleLineWidth : 2, 
+                                                scaleLineWidth : 2,
+                                                angleLineColor : "rgba(0,0,0,.2)",
+                                                scaleLineColor : "rgba(0,0,0,.2)",
+                                                scaleBackdropColor : "rgba(255,255,255,0)",
+                                                datasetFill : false,
+                                                datasetStrokeWidth : 3} );
+
+
+</script>
+  <div class="legendBox">
+    <div class="margin-bottom"></br></br>
+    0=<%= @first_record.evaluation.point_desc0 %></br>
+    1=<%= @first_record.evaluation.point_desc1 %></br>
+    2=<%= @first_record.evaluation.point_desc2 %></br>
+    3=<%= @first_record.evaluation.point_desc3 %></br>
+  </div>
+  </div>
+</div>
+  <div class="row col-md-12" style="color:#2b276c">
+    <b><%=I18n.t(:evaluation_resultats) + " " + @first_record.created_at.strftime("%e %b, %Y") %></br>
+    <font color= #66ccff>
+      <% if @earlier_first_record %>
+        <%=I18n.t(:evaluation_resultats) + " " + @earlier_first_record.created_at.strftime("%e %b, %Y") %></font></b>
+      <% else %>
+      <% end %>
+  </div>
+
+</body>
+</html>

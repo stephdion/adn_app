@@ -1,0 +1,35 @@
+<% provide(:title, "Modifier le bon d'enregistrement") %>
+<h1 class="text-center">Modifier le bon d'enregistrement</h1>
+
+<div class="col-md-6 col-md-offset-3">
+  <div class="span6">
+    <%= form_for (@voucher) do |f| %>
+        <p>
+          <%= f.label :token %><br>
+          <%= f.text_field :token, :class=>"form-control" %>
+        </p>
+
+        <p>
+          <%= f.label :description %><br>
+          <%= f.text_area :description, :class=>"form-control" %>
+        </p>
+        <p>
+          <%= f.label :is_enabled %>
+          <%= f.check_box :is_enabled %>
+        </p>
+
+        <%= f.label :role_id %><br>
+        <%= f.select(:role_id,
+                     Role.all.collect { |role|  [role.name, role.id] },
+                     {}, {:class=>'selectpicker form-control'})%>
+        <p>
+          <%= f.label :organization_id %><br>
+          <%= f.select(:organization_id,
+                       Organization.all.collect { |organization|  [organization.name, organization.id] },
+                       {}, {:class=>'selectpicker form-control'})%>
+        </p>
+          <%= f.submit  class: "btn btn-default"%>
+          <%= link_to t(:general_back), vouchers_path, class: "btn btn-default", :style=>"display:inline;margin-left:10px;" %>
+    <% end %>
+  </div>
+</div>

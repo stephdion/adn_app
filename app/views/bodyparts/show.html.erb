@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b><%= t 'activerecord.attributes.bodypart.name_fr' %>:</b>
+  <%= @bodypart.name_fr %>
+</p>
+
+<p>
+  <b><%= t 'activerecord.attributes.bodypart.code' %>:</b>
+  <%= @bodypart.code %>
+</p>
+
+<p>
+  <b><%= t 'activerecord.attributes.bodypart.has_side' %>:</b>
+  <%= check_box_tag 'is enabled', 'is_enabled', @bodypart.has_side, options={:disabled=>true}%>
+</p>
+
+<p>
+  <b><%= t 'activerecord.attributes.bodypart.description' %>:</b>
+  <%= @bodypart.description %>
+</p>
+
+<%#= link_to 'Edit', edit_bodypart_path(@bodypart) %>
+<%= link_to t("general_back"), bodyparts_path, :class=>"btn btn-default" %>

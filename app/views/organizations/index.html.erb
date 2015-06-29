@@ -1,0 +1,13 @@
+<% provide(:title, 'Liste des organisations') %>
+<h1 class="text-center">Liste des organisations</h1>
+<%= link_to 'Créer une nouvelle organisation', new_organization_path(@organization), class: "btn btn-default btn-lg margin-bottom-10" %>
+<%= will_paginate renderer: BootstrapPagination::Rails%>
+<ul class="organizations" style="list-style-type: none;margin-left:0px;">
+  <% @organizations.each do |organization| %>
+      <li>
+        <%= link_to organization do %>
+         <span class="glyphicon glyphicon-chevron-right" style="font-size:14px;"></span> <%= organization.name%>
+        <% end %>
+      </li>
+  <% end %>
+</ul>

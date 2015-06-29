@@ -1,0 +1,36 @@
+<% provide(:title, t(:programme_modify)) %>
+<div class="margin-bottom">
+  <h1 class="text-center"><%= t(:programme_modify) %>: <%= @programme.name %></h1>
+</div>
+
+<div class="row">
+  <div class="span8">
+    <%= form_for(@programme) do |f| %>
+    <%= render 'shared/programme_error_messages' %>
+
+      <%= f.label :name %><br>
+      <%= f.text_field :name, :class=>"form-control" %>
+
+      <%= f.label :description %><br>
+      <%= f.text_field :description, :class=>"form-control" %>
+
+      <div class="styled-select">
+      <%= f.label :user_id %><br>
+      <%= f.collection_select :user_id, User.where(:role_id => [get_role_id("TRAINER"), get_role_id("SYSADM")], :deleted=>0).order(:last_name), :id, :name, {}, :class=>"form-control" %>
+      </div>
+      <br />
+      <br />
+      <%= t(:programme_modify_ex) %>:
+      <br />
+      <br />
+      <%= render 'progcheckboxes' %>
+      <div class="submitButton">
+      <%= f.submit t(:button_edit), class: "btn btn-default" %>
+      <br />
+      <br />
+      <%= link_to t(:programme_index), programmes_path, class: "btn btn-default" %>
+      </div>
+      </br>
+    <% end %>
+  </div>
+</div>

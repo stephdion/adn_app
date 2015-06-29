@@ -1,0 +1,64 @@
+<div class="search_box_border">
+	<%= form_tag (user_path(@user) )+ '/ajax_result_trainer', :id => 'form_result_picker', :method => 'get', :remote => true do %>
+		<div class="row">
+			<div class="col-sm-3">
+				<p><%= I18n.t(:criteria_start_date) %></p>
+				<div class="form-group">
+					<div id="datetimepicker5" class="input-group date datepicker" data-date-format="YYYY-MM-DD">
+					<%= text_field_tag :resultat_start_date, params[:resultat_start_date], :class => "form-control search_form", 'data-behaviour'=> 'datepicker' %>
+					<span class="input-group-addon">
+					<span class="glyphicon glyphicon-calendar"></span>
+					</span>
+					</div>
+				</div>
+				<p><%= I18n.t(:criteria_end_date) %></p>
+				<div class="form-group">
+					<div id="datetimepicker6" class="input-group date datepicker" data-date-format="YYYY-MM-DD">
+						<%= text_field_tag :resultat_end_date, params[:resultat_end_date], :class => "form-control search_form",  'data-behaviour'=> 'datepicker' %>
+						<span class="input-group-addon">
+						<span class="glyphicon glyphicon-calendar"></span>
+						</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-sm-4">
+				<p><%= I18n.t(:general_score) %></p>
+				<p class="search_text_n_inputs"><%= I18n.t(:general_low) %></p>
+				<%= text_field_tag :low_score, params[:low_score], :class => "form-control search_form highLow" %> 
+				<br>
+				<p class="search_text_n_inputs"><%= I18n.t(:general_high) %></p>
+				<%= text_field_tag :high_score, params[:high_score], :class => "form-control search_form highLow" %>
+				<br>
+				<p><%= I18n.t(:general_differential) %></p>
+				<p class="search_text_n_inputs"><%= I18n.t(:general_low) %></p>
+				<%= text_field_tag :low_diff, params[:low_diff], :class => "form-control search_form highLow" %>
+				<br>
+				<p class="search_text_n_inputs"><%= I18n.t(:general_high) %></p>
+				<%= text_field_tag :high_diff, params[:high_diff], :class => "form-control search_form highLow" %>
+			</div>
+			<div class="col-sm-4">
+				<p><%= I18n.t(:general_team) %><br>[ctrl + click : selection multiple]</p>
+				<%= select_tag '@equipes[id][]', options_from_collection_for_select(@all_teams, "id", "name", @equipes), multiple: true, :class => "form-control" %>
+				<br>
+				<p><%= I18n.t(:user_legend_special_cases) %></p>
+				<%= select_tag :special_case_test, options_from_collection_for_select(EvalTest.all, "id", "name", params[:special_case_test]), {:class => "form-control", :style => "padding:0;"} %>
+				<br>
+				<p class="search_text_n_inputs"><%= I18n.t(:general_value) %></p>
+				<%= text_field_tag :special_case_value, params[:special_case_value], :class => "form-control search_form highLow" %> 
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-5">
+				<p>Évaluation</p>
+				<%= select_tag :evaluation_id, options_from_collection_for_select(@current_organization.evaluations.order(:name), "id", "name", params[:evaluation_id]), {:class => "form-control", :style => " width:360px"}%>
+			</div>
+			<div class="col-md-2"> </div>
+			<div class="col-md-5">
+				<br>
+				 <%= submit_tag I18n.t(:search_refresh_resultats), :id => "result_eval_update", :class => "btn btn-default", :remote => true %>
+			</div>
+		</div>
+	
+	<%end%>
+</div>

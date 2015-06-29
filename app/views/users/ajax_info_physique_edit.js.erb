@@ -1,0 +1,5 @@
+$("#edit_form_physique").bind('ajax:success',function() {
+    <%#= render "ajax_info_physique_save" %>
+	$("#info_physique").html("<%= escape_javascript(render 'info_physique') %>")
+});
+

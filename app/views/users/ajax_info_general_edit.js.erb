@@ -1,0 +1,5 @@
+$("#edit_form_general").bind('ajax:success',function() {
+    <%#= render "ajax_info_general_save" %>
+	$("#info_general").html("<%= escape_javascript(render 'info_general') %>")
+});
+

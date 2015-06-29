@@ -1,0 +1,41 @@
+
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b><%= t 'activerecord.attributes.comment.nom' %>:</b>
+  <%= @comment.nom %>
+</p>
+
+<p>
+  <b><%= t 'activerecord.attributes.comment.prenom' %>:</b>
+  <%= @comment.prenom %>
+</p>
+
+<p>
+  <b><%= t 'activerecord.attributes.comment.organization' %>:</b>
+  <%= @comment.organization %>
+</p>
+
+<p>
+  <b><%= t 'activerecord.attributes.comment.user_type' %>:</b>
+  <%= get_value @comment.user_type, $user_type %>
+</p>
+
+<p>
+  <b><%= t 'activerecord.attributes.comment.email' %>:</b>
+  <%= @comment.email %>
+</p>
+
+<p>
+  <b><%= t 'activerecord.attributes.comment.telephone' %>:</b>
+  <%= @comment.telephone %>
+</p>
+
+<p>
+  <b><%= t 'activerecord.attributes.comment.other' %>:</b>
+  <%= @comment.other %>
+</p>
+
+
+<%= link_to 'Edit', edit_comment_path(@comment) %>
+<!--| <%= link_to 'Back', comments_path %>-->

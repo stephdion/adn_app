@@ -1,0 +1,14 @@
+<% provide(:title, @eval_type.name) %>
+<div class="margin-bottom">
+<h1 class="text-center"> <%= t(:eval_type) %>: <%= @eval_type.name %></h1>
+<p>
+  <%= I18n.t 'activerecord.attributes.eval_type.organization_id' %>:
+  <%= @eval_type.name %>
+</p>
+<p>
+  <%= I18n.t 'activerecord.attributes.eval_type.name' %>:
+  <%= @eval_type.organization.name %>
+</p>
+
+
+<%= link_to t(:general_back), eval_types_path, class: "btn btn-default" %>

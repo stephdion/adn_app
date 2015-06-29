@@ -1,0 +1,62 @@
+<% provide(:title, t(:exercise_modify)) %>
+<div class="margin-bottom">
+<h1_left><%= t(:exercise_modify) %></h1_left>
+</div>
+<div class="row">
+<div class="span6">
+    <%= form_for(@exercise) do |f| %>
+      <%= render 'shared/exercise_error_messages' %>
+
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+
+      <%= f.label :short_name, t(:exercise_short_name) %>
+      <%= f.text_field :short_name %>
+
+      <div class="styled-select">
+      <%= f.label :exercise_subcategory_id %>
+      <%= f.grouped_collection_select :exercise_subcategory_id, ExerciseCategory.order(:name).all, :exercise_subcategories, :name, :id, :name,{:include_blank => "Aucune"} %>
+      </div>
+
+       <div class="styled-select">
+        <%= f.label :organization_id %>
+        <%= f.collection_select :organization_id, @current_user.organizations, :id, :name %>
+      </div>
+
+      <%= f.label :description %>
+      <%= f.text_area :description, :size => "50x10" %>
+
+      <div class="styled-select">
+      <%= f.label :user_id, t(:general_owner) %>
+      <%= f.collection_select :user_id, User.in_organization(["TRAINER", "SYSADM", "DIR", "PHYSIO"]).order(:last_name), :id, :name ,{:include_blank => User.find(@exercise.user_id).name,:selected => 0}%>
+      </div>
+
+      <%= f.label :short_desc, t(:exercise_prescription) %>
+      <%= f.text_field :short_desc %>
+
+      <%= f.label :image %>
+      <%= image_tag @exercise.image.url(:medium) %>
+      </br> 
+      </br>
+      <%= t(:general_change_image) %>:
+      </br>
+      <%= f.file_field :image %>
+      </br>
+      </br>
+      <%= f.label :video, t(:general_change_video) %>
+      <%= f.text_field :video %>
+      </br>
+      </br>
+      <% if @exercise.video? %> 
+        <p><%= raw(youtube_embed(@exercise.video)) %></p>
+      </br>
+      </br>
+      <% end %>
+      <%= f.submit t(:button_edit), class: "btn btn-default" %>
+      </br>
+      </br>
+      <%= link_to t(:exercise_return), exercises_path %>
+    <% end %>
+
+  </div>
+</div>

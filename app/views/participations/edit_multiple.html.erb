@@ -1,0 +1,41 @@
+<% provide(:title, t(:equipe_edit_positions)) %>
+<div class="margin-bottom">
+  <h1 class="text-center"><%= t(:equipe_edit_positions) %></h1>
+</div>
+<br>
+<%= form_tag update_multiple_participations_path, method: :put do %>
+  <% @participations.each do |participant| %>
+
+    <%= fields_for "participations[]", participant do |f| %>
+      
+      <% if participant.errors.any? %>
+        <div id="error_explanation">
+      <b><%= pluralize(@participant.errors.count, "erreur") %> <%=t("helpers.errors", model: "la participation")%>:</b>
+      <ul>
+      <% participation.errors.full_messages.each do |msg| %>
+        <li>- <%= msg %></li>
+      <% end %>
+      </ul>
+      </div>
+      <% end %>
+
+      <div class="field">
+        <div class="span1 row">
+          <div class="col-md-1">
+            <%= image_tag participant.user.photo.url(:thumbnail) %><br>
+            <%= participant.user.name %>
+          </div>
+          <%= hidden_field_tag "equipe_id", @equipe.id %>
+          <div class="col-md-2">
+            <%= f.label :position_id %>
+            <%= f.collection_select :position_id, @equipe.equipe_type.positions, :id, :name, {include_blank: I18n.t(:general_none)}, :class=>"form-control" %>
+          </div>
+        </div>
+      </div>
+<hr>
+      <% end %>
+      <% end %>
+
+      <%= submit_tag t(:button_edit), class: "btn btn-default" %>
+      <%= link_to t(:general_back), @current_user, class: "btn btn-default", :style=>"display:inline;margin-left:10px;" %>
+<% end %>

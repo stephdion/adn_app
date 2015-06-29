@@ -1,0 +1,13 @@
+<% @user.children.each_with_index do |child,index| %>
+<% if index % 2 == 0 %>
+<div class="row">
+<% end %>
+<div class="col-md-6">
+<%= link_to child.name, child %><br/>
+<%= image_tag child.photo.url(:medium) %>
+
+</div>
+<% if index % 2 == 1 %>
+</div>
+<% end %>
+<% end %>

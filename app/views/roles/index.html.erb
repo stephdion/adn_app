@@ -1,0 +1,14 @@
+<% provide(:title, 'Liste des rôles') %>
+<h1 class="text-center">Liste des Rôles</h1>
+<%= link_to 'Créer un nouveau rôle', new_role_path(@role), class: "btn btn-default btn-lg margin-bottom-10" %>
+<br>
+<%= will_paginate renderer: BootstrapPagination::Rails%>
+<ul class="roles" style="list-style-type: none;margin-left:0px;">
+  <% @roles.each do |role| %>
+      <li>
+        <%= link_to role do %>
+        	<span class="glyphicon glyphicon-chevron-right" style="font-size:14px;"></span> <%= role.name + "(" + role.code + ")" %>
+        <% end %>
+      </li>
+  <% end %>
+</ul>

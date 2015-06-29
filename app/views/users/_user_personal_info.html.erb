@@ -1,0 +1,81 @@
+<fieldset>
+  <legend><%= t 'user_legend_information' %></legend>
+  <div class="row-fluid">
+    <div class="margin-bottom">
+      <div class="span3">
+        <div class="margin-bottom">
+          <%= t 'activerecord.attributes.user.address' %>:
+          <br/>
+          <indent><%= @user.address %></indent>
+          <br/>
+          <indent><%= @user.city %>
+            <% if @user.state.to_s != "" %>
+                , <%= @user.state %>
+            <% end %>
+          </indent>
+          <br/>
+          <indent><%= @user.postalCode %></indent>
+          <br/>
+          <indent><%= @user.country %></indent>
+        </div>
+      </div>
+
+      <div class="span4">
+        <div class="margin-bottom">
+          <%= t 'activerecord.attributes.user.email' %><%= "(s)" %>:
+          <br/>
+          <indent><%= @user.email %></indent>
+          <br/>
+          <% @user.user_emails.each do |items| %>
+              <indent><%= items.to_s %></indent>
+              <br/>
+          <% end %>
+          <br/>
+          <%= t 'activerecord.attributes.user.user_phones' %>:
+          <br/>
+          <% @user.user_phones.each do |item| %>
+              <% if item.phone_type == "Home"%>
+                Home_icon<indent><%= item.number.to_s %></indent>
+              <% elsif item.phone_type == "Work"%>
+               Work_icon<indent><%= item.number.to_s %></indent>
+              <% elsif item.phone_type == "Mobile"%>
+               Mobile_icon<indent><%= item.number.to_s %></indent>
+              <% else %>
+               No_icon<indent><%= item.number.to_s %></indent>
+              <% end %>
+              <br/>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="span3">
+        <div class="margin-bottom">
+          <% if @user.sex.to_s != "" %>
+              <%= t 'activerecord.attributes.user.sex' %>: <%= @user.sex %>
+              <br/>
+          <% end %>
+          <% if @user.birthday %>
+              <%= t 'activerecord.attributes.user.birthday' %>: <%= @user.birthday %>
+              <br/>
+          <% end %>
+          <% @user.user_anthropometrics.each do |items| %>
+              <% if !items.archive %>
+                  <%= items.to_s %>
+              <% end %>
+          <% end %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="margin-bottom">
+    <!-- Button to modify user info: user and ADN sysadmin only -->
+    <% if current_user?(@user) || is_current_user_sysadmin? %>
+        <%= link_to I18n.t(:user_info_modify),
+                    edit_user_path(@user),
+                    :class => "btn btn-default" %>
+    <% end %>
+  </div>
+  <fieldset>
+

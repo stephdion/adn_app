@@ -1,0 +1,115 @@
+<head>
+<style>
+body, p {
+   font-size: 1.3em;
+   color: #000;
+   line-height:100%;
+   font-family:Arial,Helvetica,sans-serif;
+ }
+table, tr, td, th, tbody, thead, tfoot {
+    page-break-inside: avoid !important;
+}
+</style>
+</head>
+<html lang="fr"></html> 
+<% provide(:title, I18n.t(:resultats_prog_corr)) %>
+  <table style="width: 100%; border: none;">
+    <tr style="padding-top:20px;">
+      <td style="width:100%;">
+        <div id="programme-correctif-icon" style="background-image:url('/assets/idathletique/progCorrectif.png'); width:53px; height:74px; position:relative; left:50%; margin-left:-26.5px;"></div>
+      </td>
+    </tr>
+    <tr>  
+      <td style="width:100%; text-align:center;">
+        <h1 style="text-transform:uppercase;
+             font-size:47px;
+             color:#262626;
+             padding-top:5px;
+             padding-bottom:40px;"><%= I18n.t(:resultats_prog_corr) %></h1>
+        <h3 style="font-size:27px;
+             line-height:0;"><%= @first_record.athlete %></h3>
+        <h4 style="line-height:0;
+            padding-top:5px;
+            font-size:17px;"><%= @first_record.evaluation.name %></h4>
+        <p style="line-height:0;
+              font-size:15px;
+              font-weight:bold;"><%= @first_record.created_at.strftime("%e %b, %Y") %></p>
+        <h4 style="line-height:0;
+               padding-top:10px;
+               font-size:17px;">Évaluateur :</h4>
+        <p style="line-height:0;
+              font-size:15px;
+              font-weight:bold;"><%= @first_record.user.name %></p>
+        <h4 style="line-height:0;
+               padding-top:10px;
+               font-size:17px;"><%= I18n.t(:general_score) %> :</h4>
+        <p style="color:#ff0000;
+              line-height:0;
+              font-size:15px;
+              font-weight:bold;">  
+          <% if @score.to_i <= @maximum_score %>
+            <%= @score %>
+          <% else %>
+            <%= I18n.t(:resultats_incomplete)%>
+          <% end %>
+        </p>
+      </td>
+    </tr>
+    <% @resultats.each do |resultat| %>
+      <% if resultat.print_exercises? %>
+        <tr>
+          <td style="width:100%;" class="text-center">        
+            <div class="row homeDivider grey" style="height:2.5mm;
+                  margin:10px auto;
+                  position:relative;
+                  display:inline-block;">      
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td style="width:100%; text-align:center;">
+            <h2 style="text-transform:uppercase;
+                   font-size:22px;
+                   line-height:0;
+                   padding-top:10px;">
+              <%= resultat.eval_test.name %>
+            </h2>
+            <h4 style="padding-top:5px;">
+              <% if resultat.left_right? %> 
+                <%= I18n.t(:resultats_right) %> :
+                <%= resultat.message("right") %> 
+              <% else %>
+                : <%= resultat.message("message") %>
+              <% end %>
+              <% if resultat.left_right? %>
+                <br>
+                <%= I18n.t(:resultats_left) %> :
+                <%= resultat.message("left") %> 
+              <% end %>
+            </h4>
+          </td>
+        </tr>
+        <tr style="padding:20px 0;">
+          <td>  
+            <table style="width:33%; border:none;">
+              <tr>
+                <% resultat.eval_test.prescriptions.reorder('exercise_order ASC').each do |prescription| %>
+                  <td>
+                    <div style="width:123px;height:83px;position:relative;left:50%;margin-left:-61.5px;">     
+                      <%= image_tag prescription.exercise.image.url(:medium) %>     
+                    </div>
+                    <div>
+                      <p style="margin: 0;padding:5px 0 12px;text-align:center;font-weight:bold;">
+                        <%= prescription.exercise.short_name %></br>
+                        <%= prescription.exercise.short_desc %>
+                      </p>
+                    </div> 
+                  </td>
+                <% end %>
+              </tr>
+            </table>            
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </table>

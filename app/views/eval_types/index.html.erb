@@ -1,0 +1,21 @@
+<h1 class="text-center"><%= t(:eval_types_index) %></h1>
+<%= link_to I18n.t(:eval_types_new), new_eval_type_path, :class=>"btn btn-default btn-lg margin-bottom-10" %>
+  <table class="table table-hover table-striped table-responsive">
+  <tr>
+    <th><%= I18n.t('activerecord.attributes.eval_type.name') %></th>
+    <th><%= I18n.t('activerecord.attributes.eval_type.organization_id') %></th>
+    <th></th>
+  </tr>
+
+<% @eval_types.each do |eval_type| %>
+  <tr>
+    <td><%= link_to eval_type.name, edit_eval_type_path(eval_type) %></td>
+    <td><%= eval_type.organization.name %></td>
+    <td class="td-last-1">
+      <%= link_to eval_type, method: :delete, data: { confirm:  I18n.t(:button_confirm_delete) } do %>
+        <span class="glyphicon glyphicon-trash"></span>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+</table>

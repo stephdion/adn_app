@@ -1,0 +1,51 @@
+<% provide(:title, t(:exercise_index)) %>
+<div class="margin-bottom">
+<h1 class="text-center"><%= t(:exercise_index) %></h1>
+<%= link_to t(:exercise_new), nouvelle_exercise_path, class: "btn btn-default btn-lg margin-bottom-10" %>
+
+<div class="row">
+
+<%= render 'exercise_tree' %>
+
+<div id="exercises" class="span5 col-md-7 col-md-offset-1" style="border-style: solid; height: 500px; overflow: scroll; overflow-x: hidden;">
+  <% @exercises.each do |exercise| %>
+      <% if exercise.exercise_subcategory_id %>
+        <% subcategory = exercise.exercise_subcategory_id.to_s %>
+      <% else %>
+        <% subcategory = "none"%>
+      <% end %>
+      <%= content_tag :div, class: "box-margin span1 tree_" + subcategory, style: "display: none;"  do -%>
+      <%= image_tag exercise.image.url(:thumbnail) %><br>
+      <%= link_to exercise.short_name, exercise%><br>
+      <% end -%>
+      <% end %><br>
+</div>
+</div>
+<br>
+<%= link_to I18n.t(:categories_edit_exercises), edit_multiple_exercises_path, class: "btn btn-default margin-bottom-10" %><br>
+
+<%= link_to t(:categories_edit), exercise_categories_path, class: "btn btn-default" %>
+
+</div>
+
+<script>
+        function CheckBoxHandler(check_box_tag, id) {
+          var checkbox_id = check_box_tag + "_" + id;
+          var box_class = "span1 " + check_box_tag + "_" + id;
+          checkbox = document.getElementById(checkbox_id);
+          exercises = document.getElementsByClassName(box_class);
+          if (checkbox.checked == true) {
+            for(var i=0; i<exercises.length; i++) {
+            exercises[i].style.display= "inline-block";
+            }
+          }
+          else {
+            for(var i=0; i<exercises.length; i++) {
+            exercises[i].style.display = "none";
+            }
+          }
+          //event.preventDefault();
+      }
+
+</script>
+

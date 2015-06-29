@@ -1,0 +1,35 @@
+<h4 class="title-rapport">Blessures</h4>
+
+<div class="row wrapper-rapport-search-criteria">
+	<div class="col-xs-8 col-sm-8 col-md-8">
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-12">
+				<h3 class="title-search">Rechercher<h3>
+			</div>
+		</div>
+		<%= render 'user_blessures_criteria_picker' %>
+	</div>
+	<div class="col-xs-4 col-sm-4 col-md-4">
+		<div class="buzzer_board_title">Nombre de blessures total</div>
+		<div class="twenty_four_box_blessures">
+			<%= @blessures.count('id') %>
+		</div>
+		<%= render 'blessures/body', :injuries => build_injuries_map(@blessures) %>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<h4 class="text-center">Résultats de recherche</h4>
+		<div id="table_blessure_result">
+			<%= render 'user_blessure_result' %>
+		</div>
+	</div>
+</div>
+
+<script>
+//Fix ajax debind calendar
+$(".input-group.date").datetimepicker({
+    pickTime: false
+});
+</script>

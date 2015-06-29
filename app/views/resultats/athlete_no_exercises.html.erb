@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<% provide(:title, I18n.t(:resultats_resultats) + ": " + I18n.t(:role_athlete)) %>
+<body>
+<div class="row">
+<div class="col-md-12">
+  <div class="span12 row">
+    <div class="infoBox">
+      <div class="margin-bottom">    
+        <h4><%= I18n.t(:resultats_resultats) %>: <%= link_to @first_record.athlete.name, @first_record.athlete %></h4></td>
+        <% if @score.to_i <= @maximum_score %>
+            <h4><%= I18n.t(:general_score) %>: <%= @score %></h4>
+        <% else %>
+            <h4><%= I18n.t(:general_score) %>: <%= I18n.t(:resultats_incomplete)%></h4>
+        <% end %>
+        <h6><b><%= I18n.t(:general_evaluation) %>: </b> <%= @first_record.evaluation.name %></h6>
+        <h6><b><%= I18n.t(:general_date) %>: </b><%= @first_record.created_at.strftime("%e %b, %Y, %H:%M") %></h6>
+        <h6><b><%= I18n.t(:general_evaluator) %>: </b> <%= link_to @first_record.user.name, @first_record.user %></h6>
+      </div>
+    </div>
+    <div class="no-print">
+      <div class="top-nav-bar">
+        <h6><%= link_to I18n.t(:resultats_resultats_pdf), programme_corrective_resultats_path(:resultat_id => @first_record.id, :format => :pdf), :class => "btn btn-default" %></h6>
+      </div>
+    </div>
+    <br>
+</div>
+</div>
+</div>
+<div class="row">
+    <div class="col-md-6"> 
+      <table class="information">
+                  <tr>
+                    <th><%= t(:general_image)%></th>
+                    <th></th>
+                    <th><%= t(:general_criteria)%></th>
+                    <th><%= t(:general_description)%></th>
+                    <th><%= t(:resultats)%></th>
+                  </tr>
+        <% @resultats.each do |resultat| %>
+          <tr>
+            <td><%= image_tag resultat.eval_test.image.url(:thumbnail) %><td>
+            <td><%= link_to resultat.eval_test.name, resultat.eval_test %><% if resultat.left_right? %>-D<% end %></td>
+            <td><%= resultat.eval_test.description %></td>
+            <td><%= resultat.value_to_s %></td>
+          </tr>
+          <% if resultat.left_right? %> 
+          <tr>
+            <td><%= image_tag resultat.eval_test.image.url(:thumbnail) %><td>
+            <td><%= link_to resultat.eval_test.name, resultat.eval_test %>-G</td>
+              <td><%= resultat.eval_test.description %></td>
+            <td><%= resultat.left_to_s %></td>
+          </tr>
+          <% end %>
+        <% end %>
+      </table>
+    </div>
+  
+
+<div class="col-md-6">
+  <div class="legendBox">
+    <div class="margin-bottom"></br></br>
+    0=<%= @first_record.evaluation.point_desc0 %></br>
+    1=<%= @first_record.evaluation.point_desc1 %></br>
+    2=<%= @first_record.evaluation.point_desc2 %></br>
+    3=<%= @first_record.evaluation.point_desc3 %></br>
+    </div>
+  </div>
+</div> 
+</div>
+</body>
+</html>

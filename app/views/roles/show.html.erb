@@ -1,0 +1,29 @@
+<div class="span11">
+  <p>
+    <strong>Name:</strong>
+    <%= @role.name %>
+  </p>
+
+  <p>
+    <strong>Code:</strong>
+    <%= @role.code %>
+  </p>
+
+  <p>
+    <strong>Description:</strong>
+    <%= @role.description %>
+  </p>
+
+  <div class="span11 left">
+    <tr>
+      <td>
+        <%= link_to 'Edit', edit_role_path(@role), class: "btn btn-default" %>
+      </td>
+      <td>
+        <%= link_to 'Destroy', role_path(@role),
+                method: :delete, data: { confirm: 'Are you sure?' },
+                class: "btn btn-default"%>
+      </td>
+    </tr>
+  </div>
+</div>

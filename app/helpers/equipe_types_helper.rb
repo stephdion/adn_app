@@ -1,0 +1,2 @@
+module EquipeTypesHelper
+end

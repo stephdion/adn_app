@@ -1,0 +1,110 @@
+<% provide(:title, I18n.t(:user_update_address)) %>
+<h1><%= t :user_update_address %></h1>
+
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for(@user, :url => {:action => "update_address"}) do |f| %>
+        <div class="span6">
+          <%= render 'shared/error_messages' %>
+
+          <%= f.label :last_name %>
+          <%= f.text_field :last_name %>
+
+          <%= f.label :first_name %>
+          <%= f.text_field :first_name %>
+
+
+          <legend>Address details</legend>
+          <div class="row">
+            <div class="span5">
+              <%= f.label :address %>
+              <%= f.text_field :address %>
+            </div>
+
+            <div class="span3">
+              <%= f.label :city %>
+              <%= f.text_field :city %>
+            </div>
+            <div class="span2">
+              <%= f.label :state %>
+              <%= f.text_field :state %>
+            </div>
+
+            <div class="span2">
+              <%= f.label :postalCode %>
+              <%= f.text_field :postalCode %>
+            </div>
+            <div class="span3">
+              <%= f.label :country %>
+              <%= f.text_field :country %>
+            </div>
+          </div>
+
+          <div>
+            <%= f.label :user_phones %>
+            <table class="table">
+              <thead>
+              <tr>
+                <th>delete</th>
+                <th>type</th>
+                <th>number</th>
+              </tr>
+              </thead>
+              <tbody>
+              <%= f.fields_for :user_phones do |phones_form| %>
+                  <tr style="vertical-align:middle;text-align:center">
+                    <td>
+                      <% if !:id.blank? %>
+                          <%= phones_form.check_box :_destroy %>
+                      <% end %>
+                    </td>
+                    <td>
+                      <%= phones_form.select :phone_type,
+                                             ["Mobile", "Home", "Work"],
+                                             {}, {:class => "selectpicker", :style => "padding:0"} %>
+                    </td>
+                    <td>
+                      <%= phones_form.text_field :number %>
+                    </td>
+                  </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <%= f.label :user_emails %>
+            <table class="table">
+              <thead>
+              <tr>
+                <th>Delete</th>
+                <th>Type</th>
+                <th>Email</th>
+              </tr>
+              </thead>
+              <tbody>
+              <%= f.fields_for :user_emails do |emails_form| %>
+                  <tr style="vertical-align:middle;text-align:center">
+                    <td>
+                      <% if !:id.blank? %>
+                          <%= emails_form.check_box :_destroy %>
+                      <% end %>
+                    </td>
+                    <td>
+                      <%= emails_form.select :email_type,
+                                             ["Email 1", "Email 2", "Email 3"],
+                                             {}, {:class => "selectpicker", :style => "padding:0"} %>
+                    </td>
+                    <td>
+                      <%= emails_form.text_field :email %>
+                    </td>
+                  </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+
+          <%= f.submit class: "btn btn-default" %>
+        </div>
+    <% end %>
+  </div>
+</div>

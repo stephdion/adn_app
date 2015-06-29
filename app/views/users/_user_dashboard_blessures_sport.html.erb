@@ -1,0 +1,30 @@
+<div class="row">
+<blessuresPieTitle class="title-table-graph"><%= I18n.t(:chart_blessures_label_sport) %></blessuresPieTitle>
+    <!-- <div class="row">
+    <%= content_tag "canvas", id: "pieSportGraph",
+                           width: "300",
+                           height:"300",
+                           class: "pie-chart-graph",
+                           data: {values: @pie_data_sport} do %>
+           Loading graphic...
+           <% end %>
+    </div> -->
+    <div class="row">
+    <table class="table table-condensed">
+      <thead>
+        <tr class="top-table-graph">
+          <td class="equipe-graph">Sport</td>
+          <td class="qte-graph">Quantité</td>
+        </tr>
+      </thead>
+      <tbody>
+          <% (0..(@sport_labels.size-1)).each do |i| %>
+            <%= content_tag(:tr) do%>
+              <%= content_tag(:td, @sport_labels[i][:name]) %>
+              <%= content_tag(:td, @sport_labels[i][:count], class: "qte-graph") %>
+            <%end%>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+</div>

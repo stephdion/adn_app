@@ -1,0 +1,18 @@
+<% provide(:title, I18n.t(:user_activate)) %>
+<h1><%= t :user_activate %></h1>
+
+<div class="span6">
+  <%= form_for(@user, :url => {:action => "activateUser"}) do |f| %>
+      <%= render 'shared/error_messages' %>
+
+      <%= f.label :last_name %>
+      <%= f.text_field :last_name %>
+
+      <%= f.label :first_name %>
+      <%= f.text_field :first_name %>
+
+      <%= f.label :email %>
+      <%= f.text_field :email %>
+      <%= f.submit 'activer', class: "btn btn-large btn-primary" %>
+      </div>
+  <% end %>

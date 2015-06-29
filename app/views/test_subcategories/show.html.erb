@@ -1,0 +1,23 @@
+<% provide(:title, @test_subcategory.name) %>
+<div class="margin-bottom">
+<h1 class="text-center"><%= @test_subcategory.name %></h1>
+</div>
+<div class="col-md-6 col-md-offset-3">
+<p>
+  <b>Name:</b>
+  <%= @test_subcategory.name %>
+</p>
+<div class="row">
+<% if @test_subcategory.eval_tests.any? %>
+  <%= I18n.t(:subcategory_contains_exercises) %><br>
+    <% @test_subcategory.eval_tests.each do |eval_test| %>
+    <div class="col-md-2" style="display:inline-block;">
+    	<%= image_tag eval_test.image.url(:thumbnail) %><br>
+    	<%= link_to eval_test.name, eval_test%><br>
+    </div>
+    <% end %>
+<% end %>
+</div>
+<br><br>
+<%= link_to  t(:general_back), test_categories_path, class: "btn btn-default" %>
+</div>

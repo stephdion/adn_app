@@ -1,0 +1,40 @@
+<table class="table table-hover table-striped table-responsive">
+  <tr>
+  	<th><%= I18n.t('activerecord.attributes.exercise_category.organization_id') %></th>
+    <th><%= I18n.t('activerecord.attributes.exercise_category.name') %></th>
+    <th></th>
+  </tr>
+
+  <% @exercise_categories.each do |category| %>
+    <tr>
+      <td>
+        <%= category.organization.name %>
+      </td>
+
+      <td>
+        <b><%= link_to category.name, edit_exercise_category_path(category) %></b>
+      </td>
+    	<td class="td-last-1">
+        <%= link_to category, method: :delete, data: { confirm:  I18n.t(:button_confirm_delete) } do %>
+          <span class="glyphicon glyphicon-trash"></span>
+        <% end %>
+      </td>
+    </tr>
+
+    <% category.exercise_subcategories.each do |subcategory| %>
+      <tr>
+      	<td></td>
+      	<td>
+          <%= link_to edit_exercise_subcategory_path(subcategory) do %>
+            <span class="glyphicon glyphicon-chevron-right" style="font-size:20px;"></span><%= subcategory.name %>
+          <% end %>
+        </td>
+        <td class="td-last-1"> 
+          <%= link_to subcategory, method: :delete, data: { confirm:  I18n.t(:button_confirm_delete) } do %>
+            <span class="glyphicon glyphicon-trash"></span>
+          <%end%>
+        </td>
+      </tr>
+    <% end %>
+  <% end %>
+</table>

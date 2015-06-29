@@ -1,0 +1,11 @@
+<div id="tree_navigation" class="span3 col-md-4 margin-bottom-10<%=@classtree%>" style="background-color: #ffd602; font-size: 17px; height: 500px; overflow: scroll; overflow-x: hidden;">
+<%= check_box_tag('tree_none', 1, false, onclick:"CheckBoxHandler('tree', 'none');") %>
+<%= t(:category_uncategorized) %><br><br>
+<% ExerciseCategory.get_exercise_tree.each do |category| %>
+  <b><%= category.name %><br></b>
+  <% category.exercise_subcategories.each do |subcategory| %>
+    <span class="glyphicon glyphicon-chevron-right" style="font-size:14px;"></span> <%= check_box_tag('tree_' + subcategory.id.to_s, 1, false, onclick:"CheckBoxHandler('tree', #{subcategory.id});") %>
+    <%= subcategory.name %><br>
+    <% end %><br>
+<% end %>
+</div>

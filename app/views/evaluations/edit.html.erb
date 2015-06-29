@@ -1,0 +1,96 @@
+<% provide(:title, t(:evaluation_modify)) %>
+<div class="margin-bottom">
+  <h1 class="text-center"><%= t(:evaluation_modify) %>: <%= @evaluation.name %></h1>
+</div>
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+
+    <%= form_for(@evaluation) do |f| %>
+      <%= render 'shared/evaluation_error_messages' %>
+        <%= f.label :name %><br>
+        <%= f.text_field :name, :class=>"form-control"  %>
+
+      <div class="styled-select">
+        <%= f.label :user_id %><br>
+        <%= f.collection_select :user_id, User.in_organization(["TRAINER","PHYSIO","SYSADM","ADN_SYSADM"]).order(:last_name), :id, :name, {}, :class=>"form-control"  %>
+      </div>
+
+      <div class="styled-select">
+        <%= f.label :eval_type_id %><br>
+        <%= f.collection_select :eval_type_id, @current_organization.eval_types, :id, :name, {}, :class=>"form-control"  %>
+      </div>
+
+      <div class="styled-select">
+        <%= f.label :organization_id %><br>
+        <%= f.collection_select :organization_id, @current_user.organizations, :id, :name, {}, :class=>"form-control"  %>
+      </div>
+
+        <%= f.label :description %><br>
+        <%= f.text_area :description, :size => "50x10", :class=>"form-control" %>
+
+        <%= f.label :point_desc0 %><br>
+        <%= f.text_field :point_desc0, :class=>"form-control"  %>
+
+        <%= f.label :point_desc1 %><br>
+        <%= f.text_field :point_desc1, :class=>"form-control"  %>
+
+        <%= f.label :point_desc2 %><br>
+        <%= f.text_field :point_desc2, :class=>"form-control"  %>
+
+        <%= f.label :point_desc3 %><br>
+        <%= f.text_field :point_desc3, :class=>"form-control"  %>
+
+        <b>Nombre de semaine prescription 0 :</b><br>
+        <%= f.text_field :point_presc0, :class=>"form-control" %>
+
+        <b>Nombre de semaine prescription 1 :</b><br>
+        <%= f.text_field :point_presc1, :class=>"form-control" %>
+
+        <b>Nombre de semaine prescription 2 :</b><br>
+        <%= f.text_field :point_presc2, :class=>"form-control" %>
+
+        <b>Nombre de semaine prescription 3 :</b><br>
+        <%= f.text_field :point_presc3, :class=>"form-control" %>
+
+        <%#= t(:evaluation_modify_tests) %>
+        <br>
+        <%= t(:evaluation_tests) %>:
+
+      <div class="well row">
+
+        <% @tests.each do |test|%>
+          <% if @evaluation.eval_test_ids.include?(test.id)  %>
+            <% display_type = "inline-block;" %>
+          <% else %>
+            <% display_type = "none;"%>
+          <% end %>
+          <%= content_tag :div, class: "box-margin span1 " + "eval_test_" + test.id.to_s, style: "display: " + display_type do %>
+            <%= image_tag test.image.url(:thumbnail) %><br>
+            <%= link_to test.short_name, test %><br><br>
+          <% end %>
+        <% end %>
+      </div>
+  </div>
+  <div class="col-md-3"></div>
+
+  <div class="row">
+      <%# @classtree = " col-md-offset-1" %>
+      <%= render 'evalcheckboxes' %>
+      <div class="span12">
+        <% if @evaluation.user %>
+          <%= t(:general_owner) %>: <%= link_to @evaluation.user.name, @evaluation.user %>
+         <% else %>
+           <%= t(:general_owner) %>: <% t(:general_sysadmin) %>
+        <% end %>
+      </div>
+      <br>
+      <div class="submitButton">
+        <%= f.submit t(:button_edit), class: "btn btn-default", style:"display:inline;" %>
+        <%= link_to t(:general_back), evaluations_path, class: "btn btn-default", style:"display:inline;margin-left:10px;" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+</div>
+</div>

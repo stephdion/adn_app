@@ -1,0 +1,25 @@
+<% provide(:title, 'Evaluation Fonctionnelle pour une equipe:') %>
+<h1 class="text-center">Évaluation Fonctionnelle: Équipe</h1>
+
+<div class="row">
+  <center><div class="span6 offset3">
+    <%= form_for @resultat do |f| %>
+    <%= render 'shared/resultat_error_messages' %>
+<div class="form-group">
+      <%= f.label :evaluation_id, "Évaluation" %>
+      <div class="styled-select">
+        <%= f.collection_select :evaluation_id, @current_organization.evaluations.order(:name), :id, :name, {}, {:class => "form-control", :style => "padding:0;width:360px"} %>
+      </div>
+</div>
+<div class="form-group">
+      <%= f.label :equipe_id, "Équipe" %>
+      <div class="styled-select">
+        <%= f.collection_select :equipe_id, @current_organization.equipes, :id, :name, {}, {:class => "form-control", :style => "padding:0;width:360px"} %>
+      </div>
+</div>
+      <div class="submitButton">
+        <%= f.submit "Creer", class: "btn btn-default" %>
+      </div>
+    <% end %>
+  </div></center>
+</div>

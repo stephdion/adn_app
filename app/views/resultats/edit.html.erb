@@ -1,0 +1,50 @@
+<% provide(:title, "Modifier Resultat") %>
+<h1>Modifier le Resultat</h1>
+
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for(@resultat) do |f| %>
+	  </br> 
+    </br>
+      Proprietaire:
+	  <%= @resultat.user.name %>
+	  </br> 
+    </br>
+      Equipe:
+    <% if @resultat.equipe != nil %>
+	    <%= @resultat.equipe.name %>
+    <% else %>
+      evaluation individuelle
+    <% end %>
+	  </br> 
+      </br>
+      Athlete:
+	  <%= @resultat.athlete.name %>
+	  </br> 
+      </br>
+      Test:
+	  <%= @resultat.eval_test.name %>
+	  </br> 
+      </br>
+      Date:
+      <%= @resultat.created_at.strftime("%e %b, %Y, %H:%M") %>
+	  </br> 
+    </br> 
+      <% if @resultat.left_right? %>
+        <%= f.label :value %>
+        <%= f.text_field :value %>
+        </br>
+        <%= f.label :left_side %>
+        <%= f.text_field :left_side %>
+        </br>
+      <% else %>
+        <%= f.label :value %>
+        <%= f.text_field :value %>
+      <% end %>
+      <div class="submitButton">
+        <%= f.submit "Modifier", class: "btn btn-inverse" %>
+        </br>
+        </br>
+        <%= link_to "Canceller et retourner a la liste de tests", resultats_path %>
+      </div>
+    <% end %>

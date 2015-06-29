@@ -1,0 +1,27 @@
+<h1 class="text-center">Listing test_subcategories</h1>
+<%= link_to 'New Test subcategory', new_test_subcategory_path, :class=>"btn btn-default btn-lg margin-bottom-10" %>
+<table class="table table-hover table-striped table-responsive">
+  <tr>
+    <th>Name</th>
+    <th>Test category</th>
+    <th></th>
+  </tr>
+
+<% @test_subcategories.each do |test_subcategory| %>
+  <tr>
+    <td><%= test_subcategory.name %></td>
+    <td><%= test_subcategory.test_category_id %></td>
+    <td class="td-last-3">
+      <%= link_to test_subcategory do %>
+        <span class="glyphicon glyphicon-eye-open"></span>
+      <% end %>
+      <%= link_to edit_test_subcategory_path(test_subcategory) do %>
+        <span class="glyphicon glyphicon-pencil"></span>
+      <% end %>
+      <%= link_to test_subcategory, method: :delete, data: { confirm: 'Are you sure?' } do %>
+        <span class="glyphicon glyphicon-trash"></span>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+</table>

@@ -1,0 +1,13 @@
+<% provide(:title, "Liste des bons d'enregistrements") %>
+<h1 class="text-center">Liste des bon d'enregistrement</h1>
+<%= link_to "Creer un nouveau bon d'enregistrement", new_voucher_path(@voucher), class: "btn btn-default btn-lg margin-bottom-10" %>
+<%= will_paginate renderer: BootstrapPagination::Rails%>
+<ul class="vouchers" style="list-style-type: none;margin-left:0px;">
+  <% @vouchers.each do |voucher| %>
+      <li>
+        <%= link_to voucher do %>
+         <span class="glyphicon glyphicon-chevron-right" style="font-size:14px;"></span> <%= voucher.token %>
+        <% end %>
+      </li>
+  <% end %>
+</ul>

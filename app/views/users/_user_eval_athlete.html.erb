@@ -1,0 +1,335 @@
+<%# if @evalArray.any? %>
+	<% index = 0 %>
+		<div class="row">
+			<div class="col-md-12">
+				<h4 class="text-center">Mes Évaluations</h4>
+
+			</div>
+		</div>
+		<!--<div class="row">
+		  <div class="col-md-12 profilePullMarginSub">
+
+			<ul class="nav nav-tabs" id="recurive_inner_tabs_evals">
+		  <%@i=0%>
+			<%# @evalArray.each do |eval| %>
+				<% if @i==0 %>
+					<li class="active">
+				<%else%>
+					<li>
+				<%end%>
+				<a href="#tab_<%=(@i+97).chr%>ev" data-toggle="tab"><%#=eval[:name]%></a></li>
+				<%@i += 1%>
+			<%#end%>
+		  </ul>
+		  <div class="tab-content">
+		  <%@tab_i=0%>
+			<%# @evalArray.each do |eval| %>
+				<%if @tab_i == 0 %>
+				<div class="tab-pane active" id="tab_<%=(@tab_i+97).chr%>ev">
+				<%else%>
+				<div class="tab-pane" id="tab_<%=(@tab_i+97).chr%>ev">
+				<%end%>
+					<h4>Évaluations <%#=eval[:name]%></h4>
+
+					  -->
+					  <!--|| @user.last_scat2s.any?-->
+					<% if @resultats!= []  %>
+						<fieldset>
+							<div class="span12 row">
+								<div class="margin-bottom">
+									<table id="table_eval" class="table table-condensed table-hover">
+										<tr>
+											<th><%= t(:general_score) %></th>
+											<th><%= t(:general_evaluation) %></th>
+											<th><%= t(:general_team) %></th>
+											<th><%= t(:general_date) %></th>
+											<th><%= t(:general_evaluator) %></th>
+											<th>Résultats</th>
+										</tr>
+<!--
+										<% if @user.last_scat2s.any?  %>
+											<tr>
+												<td><%= @user.last_scat2s.last.get_score %></td>
+												<td> <%= link_to t('user_legend_scat2'), scat2s_user_url %> </td>
+												<td><%= @user.last_scat2s.last.owner.name %></td>
+												<td><%= @user.last_scat2s.last.evaluation_datetime %></td>
+												<td><%= @user.last_scat2s.last.owner.name %></td>
+												<td class="text-center">
+													<a href="#table_eval">
+													<span class="fontello-note" onclick="if($('#eval_<%=@tab_i%>_<%=@i%>').is(':hidden')){$('.eval').hide();};$('#eval_<%=@tab_i%>_<%=@i%>').toggle();"></span>
+													</a>
+												</td>
+											</tr>
+										<% end %>-->
+										<%@i = 0%>
+										<% @resultats.each do |resultat| %>
+											<% #if (eval[:id] == -1 && (resultat.evaluation.eval_type_id == nil || !EvalType.exists?(:id => resultat.evaluation.eval_type_id)))|| eval[:id] == resultat.evaluation.eval_type_id %>
+												<tr>
+													<% if resultat.score.to_i <= resultat.evaluation.maximum_score %>
+														<td><%= resultat.score %></td>
+													<% else %>
+														<% next %>
+														<td><%= t(:resultats_incomplete) %></td>
+													<% end %>
+
+													<td><%= link_to resultat.evaluation.name, athlete_resultats_path(:resultat_id => resultat.record_id) %></td>
+
+													<% if resultat.equipe != nil %>
+														<td><%= link_to resultat.equipe.name, resultat.equipe %></td>
+													<% else %>
+														<td>evaluation individuelle</td>
+													<% end %>
+
+													<td><%= resultat.eval_day %></td>
+
+													<% if resultat.user %>
+														<td><%= link_to resultat.user.name, resultat.user %></td>
+													<% else %>
+														<td><%= t(:general_unknown) %></td>
+													<% end %>
+
+													<td style="padding-left:15px;">
+														<!--<a href="#">-->
+														<span class="fontello-note" onclick="if($('#eval_<%=@tab_i%>_<%=@i%>').is(':hidden')){$('.eval').hide();};$('#eval_<%=@tab_i%>_<%=@i%>').toggle();"></span>
+														<!--</a>-->
+													</td>
+												</tr>
+												<%@i += 1%>
+											<% #end %>
+										<% end %>
+									</table>
+								</div>
+							</div>
+						</fieldset>
+							<% @i=0 %>
+						<% @resultats.each do |resultat| %>
+							<% index  += 1
+							result_id = Resultat.find(resultat.id)%>
+							<%# if (eval[:id] == -1 && (resultat.evaluation.eval_type_id == nil || !EvalType.exists?(:id => resultat.evaluation.eval_type_id))) || eval[:id] == resultat.evaluation.eval_type_id %>
+								<%if resultat.evaluation
+									@maximum_score = resultat.evaluation.maximum_score
+								else
+									@maximum_score = 0
+								end
+
+								if !resultat.evaluation.any_exercises?
+									@resultats.each do |resultat|
+										if resultat.score == 1
+											@score += resultat.value
+											if resultat.left_right?
+												@score += resultat.left_side
+											end
+										end
+									end
+								else
+
+									@resultats.each do |resultat|
+										if resultat.score == 1
+											@chart_data << resultat.value
+											@score += resultat.value
+											if resultat.left_side != 100
+												@score += resultat.left_side
+											end
+										end
+									end
+								end
+								%>
+
+								<div id="eval_<%=@tab_i%>_<%=@i%>" style="display:none" class="row eval_border_limit eval">
+									<div class="col-md-12">
+										<h4><%= I18n.t(:resultats_resultats) %></h4>
+									</div>
+
+									<div class="col-md-6">
+										<% if resultat.score.to_i <= resultat.evaluation.maximum_score %>
+											<h4><div class="bold_title"><%= I18n.t(:general_score) %>: </div><%= resultat.score %></h4>
+										<% else %>
+											<h4><div class="bold_title"><%= I18n.t(:general_score) %>: </div><%= I18n.t(:resultats_incomplete)%></h4>
+										<% end %>
+
+										<h6><div class="bold_title"><%= I18n.t(:general_evaluation) %>: </div><%= resultat.evaluation.name %></h6>
+										<h6><div class="bold_title"><%= I18n.t(:resultats_max_score)%>: </div><%= @maximum_score.to_s %></h6>
+										<h6><div class="bold_title"><%= I18n.t(:general_date) %>: </div><%= resultat.eval_day %></h6>
+										<h6><div class="bold_title"><%= I18n.t(:general_evaluator) %>: </div><%= link_to resultat.user.name, resultat.user %></h6>
+
+										<table class="table table-condensed table-hover">
+											<tbody>
+												<tr>
+												<th><%= t(:general_image)%></th>
+												<th><%= t(:general_test)%></th>
+												<th><%= t(:resultats)%></th>
+												</tr>
+												<% @eval_test = Resultat.get_evaluation_results(resultat.evaluation_id, resultat.user_id,
+																		resultat.athlete_id, nil, result_id.created_at,
+																		1.minute, "test_order") %>
+												<% @eval_test.each do |eval|%>
+													  <tr>
+														<td><%= image_tag eval.eval_test.image.url(:thumbnail) %></td>
+														<td><%= link_to eval.eval_test.short_name, eval.eval_test %>
+														<% if eval.left_right? %>
+														  -D
+														<% end %>
+														<td><%= eval.value_to_s %></td>
+													  </tr>
+													  <% if eval.left_right? %>
+													  <tr>
+														<td><%= image_tag eval.eval_test.image.url(:thumbnail) %></td>
+														<td><%= link_to eval.eval_test.short_name, eval.eval_test %>
+														  -G
+														<td><%= eval.left_to_s %></td>
+													  </tr>
+													  <%end%>
+
+												<%end%>
+
+											</tbody>
+										</table>
+									</div>
+									<%
+	@first_record = Resultat.find(resultat.id) #Resultat.find(resultat.id)
+    timestamp = @first_record.created_at
+    eval_id = @first_record.evaluation_id
+    athlete_id = @first_record.athlete_id
+    evaluator = @first_record.user_id
+    @resultatz = Resultat.get_evaluation_results(eval_id, evaluator,
+                                                athlete_id, nil, timestamp,
+                                                1.minute, "test_order")
+
+    if @first_record.evaluation
+      @maximum_score = @first_record.evaluation.maximum_score
+    else
+      @maximum_score = 0
+    end
+
+    @score = 0
+	 @labels = Array.new
+      @chart_data = Array.new
+       @resultatz.each do |resultat|
+        if resultat.component == 1
+          @chart_data << resultat.value
+          @score += resultat.value
+          if !resultat.left_side.nil? && resultat.left_side != 100
+            @labels << resultat.eval_test.short_name.to_s + "-D"
+            @labels << resultat.eval_test.short_name.to_s + "-G"
+            @chart_data << resultat.left_side
+            @score += resultat.left_side
+          else
+            @labels << resultat.eval_test.short_name.to_s
+          end
+        end
+      end
+
+  # is there an earlier evaluation in the database?
+    earlier_id = get_earlier_eval_resultat_id(eval_id, athlete_id, timestamp)
+    @score2 = 0
+    @chart_data2 = Array.new
+
+    if earlier_id
+      @earlier_first_record = Resultat.find(earlier_id)
+      earlier_timestamp = @earlier_first_record.created_at
+      earlier_eval_id = @earlier_first_record.evaluation_id
+      earlier_athlete_id = @earlier_first_record.athlete_id
+      earlier_evaluator = @earlier_first_record.user_id
+      @earlier_resultats = Resultat.get_evaluation_results(earlier_eval_id, earlier_evaluator,
+                                                earlier_athlete_id, nil, earlier_timestamp,
+                                                1.minute, "test_order")
+
+      @earlier_resultats.each do |earlier_resultat|
+        if earlier_resultat.component == 1
+          @chart_data2 << earlier_resultat.value
+          @score2 += earlier_resultat.value
+          if earlier_resultat.left_side != 100
+            @chart_data2 << earlier_resultat.left_side
+            @score2 += earlier_resultat.left_side
+          end
+        end
+      end
+
+    else
+      @chart_data2 = [0]
+    end %>
+									<div class="col-md-6">
+										<!--COFFEE SCRIPT CHART-->
+										<div class="span4 row" style="graphicBox">
+										<%= content_tag "canvas", id: "resultatsGraph_#{index}",
+																  width: "400",
+																  height:"400",
+																  style:"margin-left:-50px;",
+																  data: {labels: @labels, values1: @chart_data, values2: @chart_data2} do %>
+										  Loading graphic...
+										<% end %>
+										</div>
+<script type="text/javascript">
+var ctx = document.getElementById("resultatsGraph_<%=index%>").getContext("2d");
+
+var data = {
+    labels: $('#resultatsGraph_<%= index %>').data('labels'),
+    datasets: [
+                {
+                fillColor: "rgba(255,255,255,0)",
+                strokeColor: "rgba(43,39,108,0.9)",
+                pointColor: "rgba(0,128,128,0.7)",
+                pointStrokeColor: "#fff",
+                data: $('#resultatsGraph_<%= index %>').data('values1')
+                },
+                {
+                fillColor: "rgba(255,255,255,0)",
+                strokeColor: "rgba(102,204,255,1)",
+                pointColor: "rgba(102,204,255,1)",
+                pointStrokeColor: "#fff",
+                data: $('#resultatsGraph_<%= index %>').data('values2')
+                }
+        ]
+};
+
+var myRadarChart = new Chart(ctx).Radar(data, { scaleOverlay : true,
+                                                scaleOverride : true,
+                                                scaleSteps : 3,
+                                                scaleStepWidth : 1,
+                                                scaleStartValue : 0,
+                                                scaleShowLabels : true,
+                                                scaleFontStyle : "bold",
+                                                scaleFontSize : 18,
+                                                scaleFontColor : "#174A97",
+                                                angleLineWidth : 2,
+                                                scaleLineWidth : 2,
+                                                angleLineColor : "rgba(0,0,0,.2)",
+                                                scaleLineColor : "rgba(0,0,0,.2)",
+                                                scaleBackdropColor : "rgba(255,255,255,0)",
+                                                datasetFill : false,
+                                                datasetStrokeWidth : 3} );
+
+
+</script>
+										<div class="list_grp_pad_marg">
+											<ul class="list-group">
+											<li class="list-group-item">0=<%= resultat.evaluation.point_desc0 %></li>
+											<li class="list-group-item">1=<%= resultat.evaluation.point_desc1 %></li>
+											<li class="list-group-item">2=<%= resultat.evaluation.point_desc2 %></li>
+											<li class="list-group-item">3=<%= resultat.evaluation.point_desc3 %></a></li>
+											</ul>
+										</div>
+										<% if resultat.evaluation.any_exercises? %>
+										<%= link_to programme_corrective_resultats_path(:resultat_id => resultat.id, :format => :html), :class=>"btn btn-default button_profile_box_one", :id=>"profile_user_access_button_margin" do%>
+										<i class="fontello-weight sub_nav_icons_reposition"></i>Programme Correctif
+										<%end%>
+										<%end%>
+									</div>
+								</div>
+
+								<%@i += 1%>
+							<%#end%>
+						<%end%>
+					<%#end%>
+
+				<%@tab_i += 1%>
+			<%end%>
+
+
+<%#else%>
+	<!--<div class="row">
+		<div class="col-md-12">
+			<h4 class="text-center">Vous n'avez présentement aucune évaluations.</h4>
+		</div>
+	</div>-->
+<%#end%>

@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b><%= t 'activerecord.attributes.bodyside.name_fr' %>:</b>
+  <%= @bodyside.name_fr %>
+</p>
+
+<p>
+  <b><%= t 'activerecord.attributes.bodyside.code' %>:</b>
+  <%= @bodyside.code %>
+</p>
+
+<p>
+  <b><%= t 'activerecord.attributes.bodyside.description' %>:</b>
+  <%= @bodyside.description %>
+</p>
+
+<%#= link_to 'Edit', edit_bodyside_path(@bodyside) %>
+<%= link_to t("general_back"), bodysides_path, :class=>"btn btn-default" %>

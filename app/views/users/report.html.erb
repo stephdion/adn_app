@@ -1,0 +1,103 @@
+<div class="row">
+	<div class="col-md-6">
+		<% if !@reportTaskList.empty? %>
+			<% @reportTaskList.each do |report| %>
+			<%	frequency = ""
+				if report.frequency == 1
+					frequency = "Hebdomadaire"
+				elsif report.frequency == 2
+					frequency = "Mensuel"
+				elsif report.frequency == 3
+					frequency = "Annuel"
+				end
+				
+
+			%>
+				<div class="row" id="<%= report.id %>">
+					<div style="float:right;top:0px;">
+						<span class="glyphicon glyphicon-trash del-report" data-id="<%= report.id %>" style="margin-right:15px;cursor:pointer;">
+					</div>
+					Report ID: <%= report.id %><br>
+					Org: <%= Organization.find(report.organization_id).name %><br>
+					Frequency: <%= frequency %><br>
+					Dernier Rapport: <%= report.last_date %><br>
+
+				<% if report.evaluation != nil %>
+					Évaluation(s): <br>
+					<div class="eval" style="max-height:150px;overflow:auto;overflow-x:hidden;">
+
+					</div>
+				<% end %>
+
+					Équipes: <br>
+					<div class="team" style="max-height:150px;overflow:auto;overflow-x:hidden;">
+				<%	if !(report.equipe_select == "0" || report.equipe_select == nil)
+			            team = report.equipe_select.split(',') 
+			            if team.is_a? Array 
+			            	team.each do |t|
+			            		equipe = Equipe.find(t)
+			    %>
+			    	
+			    		<%= equipe.name %><br>
+			    <%            
+			    			end
+			            else
+			                team = report.equipe_select
+			                equipe = Equipe.find(team)
+			    %>
+			    		<%= equipe.name %>
+			    <%
+			            end    
+			         
+			        else
+						team = Organization.find(report.organization_id).equipes 
+						team.each do |t|
+				%>
+			    		<%= t.name %><br>
+				<%
+						end
+					end
+				%>
+					</div>
+					<div class="row homeDivider grey"></div>
+				</div>
+				
+			<% end %>
+		<% end %>
+	</div>
+	<div class="col-md-6">
+		<% if !@reportHistoryList.empty? %>
+		<% @reportHistoryList.each do |report| %>
+				<div class="row" id="<%= report.id %>">
+					<div style="float:right;top:0px;">
+						<%= link_to :controller => :users, :action => :send_report, :id=> report.id  do %>
+							<span class="glyphicon glyphicon-list-alt" style="margin-right:15px;cursor:pointer;">
+						<% end %>
+					</div>
+					Rapport ID: <%= report.report_task_id %><br>
+					Org: <%= Organization.find(report.organization_id).name %><br>
+					Date Rapport: <%= report.start_date %> au <%= report.end_date %><br>
+					<div class="row homeDivider grey"></div>
+				</div>
+		<% end %>
+		<% end %>
+	</div>
+</div>
+<script>
+$(".del-report").on("click",function(){
+	id = $(this).attr('data-id')
+$.ajax({
+    type : 'post',
+    url : "/users/report_delete",
+    data : "id=" + id,    
+    dataType : 'json',
+    async : true,
+    success : function(response) {
+    	if (response == "1")
+    		$("#"+id).remove();
+
+    }
+  });
+
+});
+</script>

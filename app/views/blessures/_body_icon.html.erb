@@ -1,0 +1,10 @@
+<% if injuries && !injuries.empty? %>
+    <div id="head" class="body-icon" style="top:<%= top %>;
+                          left:<%= left %>;"
+        title='<%= list_injuries injuries %>'>
+        <%= nb_injuries injuries %>
+        <div class="<%= classLine %>" style="width:<%= width %>;">
+        	<span class="pointer-line"></span>
+        </div>
+    </div>
+<% end %>

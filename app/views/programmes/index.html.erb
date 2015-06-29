@@ -1,0 +1,29 @@
+<% provide(:title, I18n.t(:programme_index)) %>
+<h1 class="text-center"><%= t(:programme_index) %></h1>
+
+<div class="margin-bottom">
+<%= link_to t(:programme_new), nouveau_programme_path, class: "btn btn-default btn-lg margin-bottom-10" %>
+<br>
+<ul class="programmes" style="list-style-type: none;margin-left:0px;">
+  <% @programmes.each do |programme| %>
+   <% if programme.user %>
+    <li>
+      <%= link_to programme do %>
+          <span class="glyphicon glyphicon-chevron-right" style="font-size:14px;"></span> <%= programme.name %>
+        <% end %>
+        <%#= t(:general_owner) :%>
+        <%#= link_to programme.user.name, programme.user %>
+        <!--
+      <% if (correct_programme_user?(programme.id) || is_current_user_sysadmin?) %>
+        <%#= link_to modifier_programme_path(:id => programme.id) do %>
+        <span class="glyphicon glyphicon-pencil"></span>
+        <%# end %>
+        <%#= link_to programme, :confirm => t(:button_confirm_delete), method: :delete do %>
+          <span class="glyphicon glyphicon-trash"></span>
+        <%# end %>
+        <% end %>-->
+    </li>
+    <% end %>
+  <% end %>
+</ul>
+</div>

@@ -1,0 +1,24 @@
+<% provide(:title, t(:programme_new)) %>
+<div class="margin-bottom">
+<h1 class="text-center"><%= t(:programme_new) %></h1>
+</div>
+
+<div class="row">
+  <div class="span8">
+    <%= form_for(@programme) do |f| %>
+    <%= render 'shared/programme_error_messages' %>
+
+      <%= f.label :name %><br>
+      <%= f.text_field :name, :class=>"form-control" %>
+
+      <%= f.label :description %><br>
+      <%= f.text_field :description, :class=>"form-control" %>
+      <br>
+      <%= render 'progcheckboxes' %>
+      <br />
+      <div class="submitButton">
+      <%= f.submit t(:button_submit), class: "btn btn-default" %>
+      </div>
+    <% end %>
+  </div>
+</div>

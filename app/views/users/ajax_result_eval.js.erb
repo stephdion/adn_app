@@ -1,0 +1,76 @@
+/*$("#form_result_picker").bind('ajax:success',function() {
+	$("#table_eval_result").html("<%#= escape_javascript(render 'user_eval_result') %>");
+});*/
+<% if @update == true %>
+$("#form_result_picker").bind('ajax:success',function() {
+	$("#tab_e").html("<%= escape_javascript(render 'user_eval') %>").promise().done(function() {
+		$("#resultats_eval").show();
+		$("#result-evaluation-rapport").html("<%= escape_javascript(render 'user_eval_result_rapport') %>").promise().done(function() {
+			initGraph();
+			closePopUp();
+			$('.refresh_link').html("<%= escape_javascript(select_tag :eval_test_id, options_from_collection_for_select(@special_cases, "id", "name", params[:special_case_test]), {:class => "form-control", :style => "padding:0;", :prompt => 'Tous'}) %>");
+		});
+	});
+});
+
+
+$("#form_result_picker_rapport").bind('ajax:success',function() {
+	
+	$("#tab_e").html("<%= escape_javascript(render 'user_eval') %>").promise().done(function() {
+		$("#resultats_eval").show();
+		$("#result-evaluation-rapport").html("<%= escape_javascript(render 'user_eval_result_rapport') %>").promise().done(function() {
+			initGraph();
+			closePopUp();
+			$('.refresh_link').html("<%= escape_javascript(select_tag :eval_test_id, options_from_collection_for_select(@special_cases, "id", "name", params[:special_case_test]), {:class => "form-control", :style => "padding:0;", :prompt => 'Tous'}) %>");
+		});	
+	});
+});
+
+function initGraph() {
+	alert = function() {};
+	table = $('.datatable').DataTable({
+	    paging: false,
+	    info: false,
+	    filter: false
+	});
+
+
+	var barGraphs = document.getElementsByClassName("bar-graph");
+
+	for(var i = 0; i < barGraphs.length; i++) {
+	  currentBarGraphs = barGraphs.item(i).getContext("2d");
+
+	  var bardata = {
+	  labels: $(barGraphs.item(i)).data('labels'),
+	  datasets: $(barGraphs.item(i)).data('values')
+	  };
+
+	  var myBarChart = new Chart(currentBarGraphs).Bar(bardata, { 
+	  scaleShowLabels : true,
+	  scaleFontStyle : "bold",
+	  scaleFontSize : 12,
+	  scaleFontColor : "grey",
+	  angleLineWidth : 2,
+	  scaleLineWidth : 2,
+	  scaleShowVerticalLines: false,
+	  scaleOverride: true,
+	  scaleSteps: 6,
+	  scaleStepWidth: 0.5,
+	  scaleStartValue: 0
+	  });
+	}
+
+	$('.show-details').click(function(e) {
+	  $(e.currentTarget.parentNode.childNodes[7].childNodes[1]).toggle();
+	});
+}
+
+function closePopUp() {
+	$('.pop-up-date').hide();
+	$('#pop-up-eval').hide();
+	$('#pop-up-eval-frequence').hide();
+	$('.spinner').hide();
+}
+<% end %>
+	$('#pop-up-eval-frequence').hide();
+	$('.spinner').hide();

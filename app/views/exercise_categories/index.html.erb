@@ -1,0 +1,11 @@
+<% provide(:title, t(:categories_exercises)) %>
+<div class="margin-bottom">
+<h1 class="text-center"><%= I18n.t(:categories_exercises) %></h1>
+</div>
+<br>
+<%= render 'exercise_tree' %>
+
+<%= link_to I18n.t(:category_new), new_exercise_category_path, class: "btn btn-default" %>
+<%= link_to I18n.t(:subcategory_new), new_exercise_subcategory_path, class: "btn btn-default" %>
+<br><br>
+<%= link_to I18n.t(:categories_edit_exercises), edit_multiple_exercises_path, class: "btn btn-default" %>

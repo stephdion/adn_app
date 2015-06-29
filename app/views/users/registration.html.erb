@@ -1,0 +1,33 @@
+<% provide(:title) %>
+<div class="row span7">
+  <% if @user %>
+      <aside class="span4">
+        <section>
+          <h1>
+            <div style="width:10%;vertical-align:top;padding-top:5px;padding-right:5px">
+            <%= image_tag @user.photo.url(:medium), size: "150x150" %>
+            </div>
+            <%= @user.name %>
+          </h1>
+        </section>
+        <p>
+          <strong>Email:</strong>
+          <%= @user.email %>
+        </p>
+        <% if @user.change_password_required %>
+            <legend><%= t :user_change_password_msg %>
+              <%= form_for(@user, url: update_password_user_path(@user)  ) do |f| %>
+                  <%= render 'shared/error_messages' %>
+                  <%= f.label :password %>
+                  <%= f.password_field :password %>
+
+                  <%= f.label :password_confirmation %>
+                  <%= f.password_field :password_confirmation %>
+                  <%= f.submit I18n.t(:user_change_password), class: "btn btn-large btn-primary" %>
+              <% end %>
+            </legend>
+        <% end %>
+  <% end %>
+
+  </aside>
+</div>

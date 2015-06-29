@@ -1,0 +1,44 @@
+<% provide(:title, t(:exercise_new)) %>
+<div class="margin-bottom">
+<h1 class="text-center"><%= t(:exercise_new) %></h1>
+
+<div class="row">
+<div class="col-md-3"></div>
+  <div class="span6 col-md-6">
+    <%= form_for(@exercise) do |f| %>
+    <%= render 'shared/exercise_error_messages' %>
+
+      <%= f.label :name %><br>
+      <%= f.text_field :name, class:"form-control" %>
+
+      <%= f.label :short_name, t(:exercise_short_name) %><br>
+      <%= f.text_field :short_name, class:"form-control" %>
+
+      <div class="styled-select">
+      <%= f.label :exercise_subcategory_id %><br>
+      <%= f.grouped_collection_select :exercise_subcategory_id, ExerciseCategory.where("organization_id IN (?)", [Organization.current_organization]).order(:name), :exercise_subcategories, :name, :id, :name ,{}, class:"form-control"%>
+      </div>
+
+      <div class="styled-select">
+      <%= f.label :organization_id %><br>
+      <%= f.collection_select :organization_id, @current_user.organizations, :id, :name,{}, class:"form-control" %>
+      </div>
+
+      <%= f.label :description %><br>
+      <%= f.text_field :description, class:"form-control" %>
+
+      <%= f.label :short_desc, t(:exercise_prescription) %><br>
+      <%= f.text_field :short_desc , class:"form-control"%>
+
+      <%= f.label :image, accept: 'image/png,image/jpeg'%><br>
+      <%= f.file_field :image %><br>
+
+      <%= f.label :video, t(:general_video) %><br>
+      <%= f.text_field :video, class:"form-control" %>
+
+      <%= f.submit t(:button_submit), class: "btn btn-default" %>
+    <% end %>
+  </div>
+  <div class="col-md-3"></div>
+</div>
+</div>

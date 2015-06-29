@@ -1,0 +1,31 @@
+      <div class="user_profile_box text-center">
+        <%= image_tag @user.photo.url(:medium), :class =>'img-circle', size: "150x150" %>
+        <h4><%= @user.name %></h4>
+
+		<%#@profileTeam.each do |participant|%>
+			<%#if Organization.find(Equipe.find(participant[:equipe_id]).organization_id) == @current_organization %>
+				<!-- <h6><%#= Equipe.find(participant[:equipe_id]).name %> - <%#=@current_organization.name%></h6> -->
+				<%#if participant[:position_id] %>
+					<!-- <h6><%#= Position.find(participant[:position_id]).name %> - <%#= EquipeType.find(Equipe.find(participant[:equipe_id]).equipe_type_id).name %></h6> -->
+				<%#end%>
+			<%#end%>
+		<%#end%>
+        <br>
+        <div class="row button_profile_quarter_section_margin">
+          <div class="col-lg-12">
+            <%= link_to "#tab_i", class: "btn btn-default button_profile_box_one", id: "profile_user_access_button_margin", :data =>{ :toggle => "tab" } do %>
+            Profil<i class="glyphicon glyphicon-cog profile_user_button_icon_align"></i>
+            <% end %>
+          </div>
+        </div>
+        <div class="row button_profile_quarter_section_margin">
+          <div class="col-lg-12">
+            <div class="btn-group-vertical button_profile_box_two">
+              <%= link_to edit_user_path(:id => @user.id), class: "btn btn-default" do %>
+              Modifier Profil<i class="glyphicon glyphicon-cog profile_user_button_icon_align"></i>
+              <%end%>
+               <%= link_to "/fermeture", class: "btn btn-default" do %>Fermeture de Session<i class="glyphicon glyphicon-cog profile_user_button_icon_align"></i><% end%>
+            </div>
+          </div>
+        </div>
+      </div>

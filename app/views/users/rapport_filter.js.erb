@@ -1,0 +1,229 @@
+YUI({lang:"fr-FR"}).use('intl', 'calendar', 'datatype-date', 'datatype-date-math', function(Y) {
+
+ Y.CalendarBase.CONTENT_TEMPLATE = Y.CalendarBase.TWO_PANE_TEMPLATE;
+
+ var calendar = new Y.Calendar({
+   contentBox: "#mycalendar",
+   width: "500px",
+   height: "263px",
+   showPrevMonth: true,
+   showNextMonth: true,
+   selectionMode: 'multiple'
+ }).render();
+
+ var rules = {
+   "all": {
+     "all": {
+       "all": {
+         "2,5": "tuesdays_and_fridays",
+         "0,6": "all_weekends"
+       }
+     }
+   }
+ };
+
+  calendar.set("headerRenderer", function (curDate) {
+   var ydate = Y.DataType.Date,
+       output = ydate.format(curDate, {
+       format: "%B %Y"
+     }) + " &mdash; " + ydate.format(ydate.addMonths(curDate, 1), {
+       format: "%B %Y"
+     });
+   return output;
+ });
+
+ calendar.on("selectionChange", function (e) {
+   $('#start_date_rapport').val(moment(e.newSelection[0]).format('YYYY-MM-DD'));
+   $('#end_date_rapport').val(moment(e.newSelection[e.newSelection.length - 1]).format('YYYY-MM-DD'));
+   refreshDateLabel();
+ });
+
+  //INIT 
+ start_init_date = new Date("2013-02-02");
+ end_init_date = new Date("2015-02-02");
+ array_date = selectRange(start_init_date, end_init_date);
+ calendar.selectDates(array_date);
+ $('#end_date_rapport').val(moment(end_init_date).format('YYYY-MM-DD'));
+ $('#start_date_rapport').val(moment(start_init_date).format('YYYY-MM-DD'));
+ refreshDateLabel();
+
+ $("#sct-today").click(function() {
+ 	calendar.deselectDates();
+ 	calendar.selectDates(new Date());
+ });
+
+$("#sct-this-week").click(function() {
+	calendar.deselectDates();
+	monday = getMonday(new Date());
+	sunday = getSundayFromMonday(monday);
+	array_date = selectRange(monday, sunday);
+
+	calendar.selectDates(array_date);
+});
+
+$("#sct-this-month").click(function() {
+	calendar.deselectDates();
+	range_date = getFirstAndLastDayOfAMonth(new Date());
+	array_date = selectRange(range_date[0], range_date[1]);
+
+	calendar.selectDates(array_date);
+});
+
+$("#sct-this-year").click(function() {
+	calendar.deselectDates();
+	year = new Date().getFullYear();
+	array_date = selectRange(year + "-01-01", year + "-12-31");
+
+	calendar.selectDates(array_date);
+});
+
+$("#sct-yesterday").click(function() {
+	calendar.deselectDates();
+	date = new Date();
+	date.setDate(date.getDate() - 1);
+
+	calendar.selectDates(date);
+});
+
+$("#sct-yesterday").click(function() {
+	calendar.deselectDates();
+	date = new Date();
+	date.setDate(date.getDate() - 1);
+
+	calendar.selectDates(date);
+});
+
+$("#sct-last-week").click(function() {
+	calendar.deselectDates();
+	monday = new Date();
+	monday.setDate(monday.getDate() - 7);
+	monday = getMonday(monday);
+	sunday = getSundayFromMonday(monday);
+	array_date = selectRange(monday, sunday);
+
+	calendar.selectDates(array_date);
+});
+
+$("#sct-last-month").click(function() {
+	calendar.deselectDates();
+	last_month = new Date();
+	last_month.setDate(last_month.getMonth() - 1);
+	range_date = getFirstAndLastDayOfAMonth(last_month);
+	array_date = selectRange(range_date[0], range_date[1]);
+
+	calendar.selectDates(array_date);
+});
+
+$("#sct-last-year").click(function() {
+	calendar.deselectDates();
+	year = new Date();
+	year = year.getFullYear() - 1;
+	array_date = selectRange(year + "-01-01", year + "-12-31");
+
+	calendar.selectDates(array_date);
+});
+
+function refreshDateLabel() {
+	end_date = new Date($('#end_date_rapport').val());
+	end_date.setDate(end_date.getDate() + 1);
+	start_date = new Date($('#start_date_rapport').val());
+	start_date.setDate(start_date.getDate() + 1); 
+	array_month = ["Jan.", "Fév.", "Mar.", "Avr.", "Mai", "Juin", "Juil.", "Août", "Sep.", "Oct.", "Nov.", "Déc."];
+
+	start_label = "";
+	end_label = "";
+	start_label_title = moment(start_date).format("YYYY-MM-DD");
+	end_label_title = moment(end_date).format("YYYY-MM-DD");
+
+	if (end_date.getMonth() != start_date.getMonth()) {
+		start_label = start_date.getDate() + " " + array_month[start_date.getMonth()];
+	} else {
+		start_label = start_date.getDate();
+	}
+
+	end_label = end_date.getDate() + " " + array_month[end_date.getMonth()] + " " + end_date.getFullYear();
+
+	$("#label-date-filter").html("Du " + start_label + " au " + end_label); 
+	$(".date-rapport-title").html(start_label_title + " au " + end_label_title);
+}
+
+$("#change-date-left").click(function() { 
+	dateValue = new Date($('#end_date_rapport').val());
+	calendar.deselectDates();
+	dateValue.setDate(dateValue.getDate());
+	calendar.selectDates(dateValue);
+});
+
+$("#change-date-right").click(function() { 
+	dateValue = new Date($('#end_date_rapport').val());
+	calendar.deselectDates();
+	dateValue.setDate(dateValue.getDate() + 2);
+	console.log(dateValue);
+	calendar.selectDates(dateValue);
+});
+
+
+//////////PARSING DATE FUNCTION////////////
+
+ function selectRange(startDate, endDate, addFn, interval) {
+
+	 addFn = addFn || Date.prototype.addDays;
+	 interval = interval || 1;
+
+	 var retVal = [];
+	 var current = new Date(startDate);
+	 var endDate = new Date(endDate);
+
+	 while (current <= endDate) {
+	  retVal.push(new Date(current));
+	  current.setDate(current.getDate() + 1);
+	 }
+
+	 return retVal;
+}
+
+function getMonday(currentDate) {
+	date = new Date(currentDate);
+	current_day = date.getDay();
+
+	if(current_day >= 1) {
+		while(current_day != 1) {
+			date.setDate(date.getDate() - 1);
+			current_day = date.getDay();
+		}
+	}
+	else {
+		date.setDate(date.getDate() + 1);
+	}
+
+	return date;
+}
+
+function getSundayFromMonday(monday) {
+	sunday = new Date(monday);
+	sunday = sunday.setDate(sunday.getDate() + 6);
+
+	return sunday;
+}
+
+function getFirstAndLastDayOfAMonth(date) {
+	var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+	var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+	return [firstDay, lastDay];
+}
+
+});
+
+///Rapport Event
+$('#wrapper-event-date-filter').click(function(e) {
+	$('#pop-up-date').toggle();
+	$('#pop-up-team').hide();
+	e.preventDefault();
+});
+
+$('#wrapper-event-team-filter').click(function(e) {
+	$('#pop-up-team').toggle();
+	$('#pop-up-date').hide();
+	e.preventDefault();
+});

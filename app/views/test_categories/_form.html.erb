@@ -1,0 +1,39 @@
+<%= form_for(@test_category) do |f| %>
+  <% if @test_category.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@test_category.errors.count, "error") %> prohibited this test_category from being saved:</h2>
+
+      <ul>
+      <% @test_category.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name, :class=>"form-control" %>
+  </div>
+
+  <div class="styled-select">
+    <%= f.label :organization_id %><br>
+    <%= f.collection_select :organization_id, @current_user.organizations, :id, :name, {}, :class=>"form-control" %>
+  </div>
+
+  <% if @test_category.test_subcategories.any? %>
+  <%= I18n.t(:category_contains_subcategories) %><br>
+    <% @test_category.test_subcategories.each do |subcategory| %>
+    <%= link_to edit_test_subcategory_path(subcategory) do %>
+      <span class="glyphicon glyphicon-chevron-right" style="font-size:14px;"></span> <%= subcategory.name %>
+    <% end %>
+    <% end %>
+    <br><br>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit I18n.t(:button_submit), class: "btn btn-default"%>
+    <%= link_to  t(:general_back), test_categories_path, :class=>"btn btn-default", :style=>"display:inline;margin-left:10px;" %>
+  </div>
+
+<% end %>

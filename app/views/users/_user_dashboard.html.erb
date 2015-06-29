@@ -1,0 +1,106 @@
+<% if is_user_in_any_role?(@user, ['DIR', 'TRAINER', 'PHYSIO']) && @programme_participants != [] %>
+      <% if is_user_in_role?(@user, 'DIR') %>
+          <legend><%= t 'user_legend_director_dash' %></legend>
+      <% end %>
+      <% if is_user_in_any_role?(@user, ['TRAINER', 'PHYSIO']) && @programme_participants != [] %>
+          <legend><%= t 'user_legend_admin_dash' %></legend>
+      <% end %>
+
+      <div class="span12 container">
+        <div class="margin-bottom">
+
+          <%= render 'user_dashboard_users' %>
+
+          <!-- For debugging Blessures
+            <ul class="blessure">
+              <% @blessures.each do |blessure| %>
+                 <% if blessure.user %>
+                  <li>
+                    <%#= blessure.user.name + blessure.date.to_s + blessure.sport_name(blessure) %>
+                  </li>
+                 <% end %>
+              <% end %>
+            </ul> -->
+
+          <!-- Weird invisible graph - does nothing - needed so other graphs work ?? -->
+          <div style="graphicBoxInvisible">
+            <%= content_tag "canvas", id: "resultatsGraph",
+                            width: "0",
+                            height: "0",
+                            data: {labels: @bar_labels, values1: @bar_chart_data, values2:@bar_chart_data} do %>
+                Loading graphic...
+            <% end %>
+          </div>
+
+          <div class="margin-bottom">
+            <dashboardTitle><%= I18n.t(:blessures) %></dashboardTitle>
+            <a name="sectionBlessures"></a>
+          </div>
+
+          <div class="margin-bottom">
+          <blessuresLabel><%= link_to I18n.t(:criteria_search_title), 'javascript:;', :onclick => "DisplayElement('BlessuresCriteriaPicker');" %></blessuresLabel>
+          </div>
+
+          <%= render 'user_trainer_blessures_criteria_picker' %>
+
+          <%= render 'user_dashboard_blessures_date' %>
+
+        </div>
+      </div>
+
+      <div class="span12">
+        <div class="span4">
+          <%= render 'user_dashboard_blessures_total' %>
+
+          <%= render 'user_dashboard_blessures_equipe' %>
+        </div>
+
+        <div class="span3 textAlignCenter" style="padding: 0px 0px 0px 15px;">
+          <blessuresLabel><%= I18n.t(:chart_blessures_label_corps) %></blessuresLabel>
+          <div id="injuriesBody_dashboard" class="panel">
+            <%= render 'blessures/body', :injuries => build_injuries_map(@blessures) %>
+          </div>
+        </div>
+
+        <div class="span4">
+          <%= render 'user_dashboard_blessures_sport' %>
+
+          <%= render 'user_dashboard_blessures_type' %>
+        </div>
+      </div>
+
+    <div id="BlessuresList" style="position:fixed; z-index: 3; background-color: white; top:30%; left: 23%; height: 35%; width: 47%; overflow:auto; border:8px solid; border-radius:25px; padding: 10px; box-shadow: 10px 10px 5px #669999; border-color:#6E88D6; visibility: hidden;">
+      <blessuresPieTitle><%= @blessures.count.to_s + " " + I18n.t(:blessures) + " " + I18n.t(:chart_blessures_total_msg_1) + " " + I18n.t(:chart_blessures_total_msg_2) + ":" %></blessuresPieTitle>
+      </br>
+      <% @blessures.each do |blessure| %>
+          <%= link_to blessure.index_title, blessure %></br>
+      <% end %>
+    </div>
+    <div id="closeBlessuresList" style="position:fixed; z-index: 4; background-color: white; top:33%; left: 68%; width: 10px; font-size: 20px; color: #6E88D6; font-weight: bold; visibility: hidden;"> <%= link_to "X", 'javascript:;', :onclick => "HideElement('BlessuresList');" %></div>
+
+    <div class="span12 container">
+      <div id="jump" data-preview= "<%= @jump_to_resultats ? true : false -%>" class="margin-bottom">
+
+        <a name="sectionResultats"></a>
+        <div class="margin-bottom">
+          <dashboardTitle><%= I18n.t(:user_legend_resultats_dash) %></dashboardTitle>
+        </div>
+
+        <div class="margin-bottom">
+        <blessuresLabel><%= link_to I18n.t(:criteria_search_title), 'javascript:;', :onclick => "DisplayElement('ResultatsCriteriaPicker');" %></blessuresLabel>
+        </div>
+
+      <%= render 'user_dashboard_resultat_evaluations' %>
+      </div>
+    </div>
+
+<script>
+  $(function() {
+    var preview = $("#jump").data('preview');
+    if (preview == true){
+      $(document).scrollTop( $("#jump").offset().top );
+    };
+  });
+</script>
+
+<% end %>

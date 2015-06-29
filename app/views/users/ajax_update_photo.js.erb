@@ -1,0 +1,5 @@
+$("#form_photo").bind('ajax:success',function() {
+    <%#= render "ajax_info_general_save" %>
+	$("#profile_box").html("<%= escape_javascript(render 'user_profil_box') %>")
+});
+

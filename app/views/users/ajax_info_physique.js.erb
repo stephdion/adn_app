@@ -1,0 +1,4 @@
+$("#info_physique").html("<%= escape_javascript(render 'form_info_physique') %>")
+$('#user_physique_cancel').bind('click',function(){
+	$("#info_physique").html("<%= escape_javascript(render 'info_physique') %>")
+});

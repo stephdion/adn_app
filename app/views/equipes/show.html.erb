@@ -1,0 +1,69 @@
+<% provide(:title, @equipe.name) %>
+<div class="col-md-12">
+  <div class="margin-bottom">
+<h1_left><%= t(:equipe)%> : <%= @equipe.name %></h1_left>
+
+</div>
+<div class="span3">
+  <div class="margin-bottom">
+  <%= I18n.t 'activerecord.attributes.equipe.description' %>: <%= @equipe.description %>
+  </br>
+  <%= I18n.t 'activerecord.attributes.equipe.equipe_type_id' %>: <%= @equipe.equipe_type.name %>
+  </br>
+  <% if @equipe.user %>
+    <%= I18n.t 'activerecord.attributes.equipe.user_id' %>: <%= link_to @equipe.user.name, @equipe.user %>
+    </br>
+  <% else %>
+    <%= I18n.t 'activerecord.attributes.equipe.user_id' %>:<%= t(:general_sysadmin) %>
+  <% end %>
+  <% if @equipe.organization %>
+    <%= I18n.t 'activerecord.attributes.equipe.organization_id' %>: <%= @equipe.organization.name %>
+  <% else %>
+    <%= t(:equipe_not_in_org) %>
+  <% end %>
+  
+</div>
+</div>
+
+<% if @trainers.any? %>
+<div class="span8">
+  <div class="margin-bottom">
+    <%= t(:equipe_trainers) %>:</br>
+    <%= render partial: "participants", locals: {users: @trainers} %>
+	<%#= render partial: "equipes/participants", locals: {users: Equipe.find(@team_id).users} %>
+    </div>
+  </div>
+<% end %>
+
+<% if @physios.any? %>
+<div class="span8">
+  <div class="margin-bottom">
+    <%= t(:equipe_physios) %>:</br>
+    <%= render partial: "participants", locals: {users: @physios} %>
+    </div>
+  </div>
+<% end %>
+
+<div class="span8">
+  <div class="margin-bottom">
+    <%= t(:equipe_athlete_count) %>: <%= @athletes.size %></br>
+    <%= render partial: "participants", locals: {users: @athletes} %>
+  </div>
+</div>
+
+<div class="span12">
+  <div class="margin-bottom">
+  <% if correct_equipe_user?(@equipe.id) %>
+    <%= link_to t(:equipe_edit_positions), edit_multiple_participations_path(:id => @equipe.id) %></br></br>
+    <%= link_to t(:equipe_edit_archives), edit_archives_participations_path(:id => @equipe.id) %></br></br>
+    <%= link_to t(:button_edit), modifier_equipe_path(:id => @equipe.id), class: "btn btn-default" %>
+  <% end %>
+  <% if is_current_user_sysadmin? %>
+  <br>
+    <%= link_to t(:button_delete), @equipe, :confirm => t(:user_confirm_delete), class: "btn btn-default", method: :delete %>
+  </br>
+  </br>
+  <% end %>
+</div>
+</div>
+</div>

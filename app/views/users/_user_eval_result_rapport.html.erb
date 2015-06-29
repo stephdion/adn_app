@@ -1,0 +1,48 @@
+<resultatsLabel class="title-moyenne"><%= I18n.t(:user_legend_equipe_moyennes)%></resultatsLabel></br>
+<resultatsLabel><%= I18n.t(:general_evaluation) %>: <%= link_to @evaluation.name, @evaluation %></resultatsLabel></br>
+<%= I18n.t(:resultats_max_score)%>: <%= @max_score %></br>
+<%= I18n.t(:resultats_max_differential)%>: <%= @evaluation.maximum_differential %></br></br>
+<% @team_averages.each do |data| %>
+  <%= ADN_Collapsible_Panel_Header("TeamTable" +  data[:id].to_s, data[:name] + " -   " + I18n.t(:resultats_avg_score) + ": " + data[:avg_score].round(2).to_s + ",   " + I18n.t(:resultats_avg_differential) + ": " + data[:avg_differential].round(2).to_s) %>
+  <div class="legend_eval">
+    <span class="legend_color legend-grey"></span>Gauche<br/>
+    <span class="legend_color legend-blue"></span>Droite
+  </div>
+  <%= content_tag "canvas",
+                   height:"300",
+                   width: "700",
+                   class: "bar-graph",
+                   data: {labels: @test_data[data[:id]], 
+                          values:  @team_graph_results_value[data[:id]]} do 
+  %>
+  Loading graphic...
+  <% end %>
+  <button class="button-style button-show-table show-details">Voir le détails des résultats</button>
+  <table class="table table-condensed datatable pop-datatable">
+	<thead>
+      <tr class="header-table">
+        <th><%= t(:general_athlete) %></th>
+        <th><%= t(:general_evaluation) %></th>
+        <th><%= t(:general_date) %></th>
+        <th><%= t(:general_score) %></th>
+        <th><%= t(:general_differential) %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @team_results[data[:id]].each do |resultat| %>
+          <tr class="content-table">
+            <td class="first-content"><%= resultat.athlete_name %></td>
+            <td><%= resultat.evaluation_name %></td>
+            <td><%= resultat.eval_day %></td>
+            <td><% if resultat.score.to_i <= @max_score.to_i %>
+                   <%= resultat.score %></td>
+                <% else %>
+                   <%= I18n.t(:resultats_incomplete) %></td>
+                <% end %>
+            <td><%= resultat.differential %></td>
+          </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= ADN_Collapsible_Panel_Footer() %>
+<% end %>

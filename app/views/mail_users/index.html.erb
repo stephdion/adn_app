@@ -1,0 +1,54 @@
+<% provide(:title, "Messagerie") %>
+<div class="row">
+	<div class="mail-head">
+		<div class="title">
+			<h1>Messagerie</h1>
+		</div> 
+		
+		  <%= form_tag({:controller => "mails", :action => "index"}, {:method => "get"})   do %>
+	      <%= select_tag 'status', options_for_select([ ["Afficher par<i class='glyphicon glyphicon-triangle-bottom'></i>".html_safe, ""],["Received", "0"],["Sent", "1"]])%>
+
+		      <%= submit_tag "Appliquer", :name => nil, class: "btn btn-default", style: "display:inline;margin-left:15px;" %>
+		  <% end %>
+	</div>
+	<% if !@mail_users.nil? %>
+		<%= will_paginate renderer: BootstrapPagination::Rails%>
+	<% end %>
+		<div class="row mailTableHeader">
+			<div class="col-md-3 col-sm-3 mailTableText"><%= t(:mail_subject) %></div>
+			<div class="col-md-4 col-sm-4 mailTableText"><%= t(:mail_message) %></div>
+			<% if params[:sent] %>
+			<div class="col-md-2 col-sm-2 mailTableText"><%= t(:mail_to) %></div>
+			<% else %>
+			<div class="col-md-2 col-sm-2 mailTableText"><%= t(:mail_from) %></div>
+			<% end %>
+			<div class="col-md-2 col-sm-2 mailTableText"><%= t(:general_date) %></div>
+			<div class="col-md-1 col-sm-1"></div>
+			<div class="clearfix"></div>
+		</div>
+		
+		<% @mails.each do |mail| %>
+			<%= link_to controller: "mails", action: "show", id: mail.id do %>
+			<%#= link_to mail, :class => "mailLink" do %>
+				<% if !mail.read? && @current_user.id == mail.uid_to %>
+					<div class="mail-unread">
+				<% else %>
+					<div>
+				<% end %>
+					<div class="col-md-3 col-sm-3 mailTableText"><%= mail.subject %></div>
+					<div class="col-md-4 col-sm-4 mailTableText"><%= mail.message %></div>
+					<div class="col-md-2 col-sm-2 mailTableText"><%= User.find(mail.uid_from).name %></div>
+					<div class="col-md-2 col-sm-2"><%= mail.date_created.to_formatted_s(:long) %></div>
+					<div style="text-align:right;"class="col-md-1 col-sm-1">
+
+				<%= link_to mail, method: :delete, data: { confirm:  I18n.t(:button_confirm_delete) } do %>
+					<span class="glyphicon glyphicon-remove"></span>
+				<% end %>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			<% end %>
+		<% end %>
+		<%= link_to t(:mail_new), new_mail_path, :class => "btn btn-default", style:"margin:15px 15px" %>
+	
+</div>

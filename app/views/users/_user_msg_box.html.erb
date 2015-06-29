@@ -1,0 +1,69 @@
+ <!--QUARTER BOX-->
+      <div class="user_profile_box">
+        <div class="user_profile_box_header">
+          <h4>
+          <span class="fontello-rss8 sub_nav_icons_reposition"></span>MESSAGERIE 
+          <div style="height:16px; float:right">
+          <%= link_to new_mail_path, :class => "button small-button green-button" do %>
+            <span class="glyphicon glyphicon-pencil"></span>
+          <% end %>
+          <%= link_to mails_path, :class => "button small-button green-button" do %>
+          <span class="fontello-mail navLiIcons" ></span>
+        <% end %>
+        </div>
+        </h4>
+        </div>
+        <div style="max-height:300px;overflow:auto;overflow-x:hidden;">
+        <% if @mails.count > 0  && @user.id == @current_user.id %>
+          <% @mails.each do |mail| %>
+        <!--SANDBOX-->
+        <%= link_to mail do%>
+        <% if mail.read? %>
+          <div class="row user_profile_box_user_post_box">
+          <% else %>
+          <div class="row user_profile_box_user_post_box mail-unread">
+          <% end %>
+          <div class="col-md-2">
+            <div class="user_profile_box_user_post_box_profile_pic">
+              <img src="http://placehold.it/35x35">
+            </div>
+          </div>
+          <div class="col-md-10">
+            <div class="row">
+              <div class="col-md-12">
+                <p class="user_profile_box_user_post_uppertext"><%= User.find(mail.uid_from).name %><br><%= mail.subject[0..25] %><% if mail.subject.length > 25 %><%= "..." %><%end%></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <p class="user_profile_box_user_post_lowertext"><%= mail.message[0..45] %>
+                <% if mail.message.length > 45 %><%= "..." %><%end%></p>
+              </div> 
+            </div>
+          </div>
+        </div>
+         <%end%>
+        <%end%>
+        <%else%>
+        <div class="row user_profile_box_user_post_box">
+          <div class="col-md-2">
+            <div class="user_profile_box_user_post_box_profile_pic">
+              <img src="http://placehold.it/35x35">
+            </div>
+          </div>
+          <div class="col-md-10">
+            <div class="row">
+              <div class="col-md-12">
+                <p class="user_profile_box_user_post_uppertext">Aucun messages</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <p class="user_profile_box_user_post_lowertext"></p>
+              </div> 
+            </div>
+          </div>
+        </div>
+        <%end%>
+          </div>
+        </div>

@@ -1,0 +1,62 @@
+<%# if @evalArray.any? %>
+		<div class="row">
+			<div class="col-md-12">
+				<h4 class="text-center">Mes Évaluations</h4>
+			</div>
+		</div>
+		<div class="row">
+		  <div class="col-md-12 profilePullMarginSub">
+		  
+			<!-- <ul class="nav nav-tabs" id="recurive_inner_tabs_evals">
+		  <%@i=0%>
+			<% @evalArray.each do |eval| %>
+				<% if @i==0 %>
+					<li class="active">
+				<%else%>
+					<li>
+				<%end%>
+				<a href="#tab_<%=(@i+97).chr%>ev" data-toggle="tab"><%=eval[:name]%></a></li>
+				<%@i += 1%>
+			<%end%>
+		  </ul>	-->
+		  <div class="tab-content">
+		  <div class="row">
+			<div class="col-md-12">
+				<h4 class="text-center">Pointage</h4>
+			</div>
+		  </div>
+			<div class="row buzzer_board_allignment_buzz_buzz">
+				<div class="col-xs-2 col-sm-2 col-md-2"> </div>
+				<div class="col-xs-4 col-sm-4 col-md-4">
+					<div class="buzzer_board_title"><%= I18n.t(:resultats_max_score)%></div>
+					<div class="twenty_four_box"><%= @max_score %></div>
+				</div>
+				<div class="col-xs-4 col-sm-4 col-md-4">
+					<div class="buzzer_board_title"><%= I18n.t(:resultats_max_differential)%></div>
+					<div class="twenty_four_box"><%= @evaluation.maximum_differential %></div>
+				</div>
+				<div class="col-xs-2 col-sm-2 col-md-2"> </div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<h4 class="text-center">Recherche des Résultats des Évaluations</h4>
+				</div>
+			</div>
+			<%= render 'user_trainer_resultat_criteria_picker' %>
+			
+			<div id="table_eval_result" style="display:block;">
+				<%=	render 'user_eval_result' %>
+			</div>
+
+			
+			
+		  
+		</div>
+	</div>
+	</div>
+
+<%# else%>
+
+
+
+<%# end%>

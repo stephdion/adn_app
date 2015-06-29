@@ -1,0 +1,35 @@
+<% provide(:title, I18n.t(:user_temporary_welcome)) %>
+<h1><%= t :user_temporary_welcome %></h1>
+<div class="span7">
+</br>
+<p><%= t :user_temporary_directions %></p>
+
+
+<%= form_for(@user, :url => {:action => "update_temporary"}) do |f| %>
+      <%= render 'shared/error_messages' %>
+
+      <p><%= t :user_temporary_name %></p>
+      <%= f.label :last_name %><br>
+      <%= f.text_field :last_name %>
+		<br>
+      <%= f.label :first_name %><br>
+      <%= f.text_field :first_name %>
+      </br></br>
+
+      <p><%= t :user_temporary_email %></p>
+      <%= f.label :email %><br>
+      <%= f.text_field :email %>
+      </br></br>
+
+      <p><%= t :user_temporary_password %></p>
+      <%= f.label :password, I18n.t(:user_password_new) %><br>
+      <%= f.password_field :password %>
+		<br>
+      <%= f.label :password_confirmation, I18n.t(:user_password_confirm) %><br>
+      <%= f.password_field :password_confirmation %>
+      </br></br>
+
+      <%= f.submit "Continuer", class: "btn btn-large btn-default" %>
+	  <% end %>
+</div>
+  

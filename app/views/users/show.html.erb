@@ -1,0 +1,162 @@
+
+<div class="row">
+	<!--LEFT CONTENT -->
+	<div id="left-menu" class="col-lg-4">
+
+	  	<div id="profile_box">
+	    	<%= render 'user_profil_box' %>
+	  	</div>
+	  	<% if is_user_in_any_role?(@user, ['TRAINER', 'PHYSIO', 'DIR']) %>
+	  		<%= render 'user_report' %>
+	  	<% elsif is_user_in_role?(@user,'ATHLETE') %>
+	  		<%= render 'user_ressources' %>
+	  	<% end %>
+		<%= render 'user_msg_box' %>
+	  	<%= render 'user_adress_box' %>
+
+	</div>
+
+	<!--RIGHT CONTENT-->
+	<div class="col-lg-8 margin profilePullMargin">
+	    <div class="col-md-12 nav_profile_banner_img" style="background-image: url('<%= @user.banner.url(:large) %>');">
+	      	<nav class="navbar navbar-inverse" id="profile_sub_nav_repo_923" role="navigation">
+		        <div class="container-fluid">
+		          <!-- Brand and toggle get grouped for better mobile display -->
+			        <div class="navbar-header">
+			            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
+			              	<span class="sr-only">Toggle navigation</span>
+			              	<span class="icon-bar"></span>
+			              	<span class="icon-bar"></span>
+			              	<span class="icon-bar"></span>
+			            </button>
+			        </div>
+
+		          <!-- Collect the nav links, forms, and other content for toggling -->
+			        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+			            <ul class="nav navbar-nav">
+				            <% if is_user_in_role?(@user,'ATHLETE') %>
+					            <li><a href="#tab_a" data-toggle="tab"><span class="fontello-round15 sub_nav_icons_reposition"></span>Timeline</a></li>
+					            <li><a href="#tab_c" data-toggle="tab"><span class="fontello-note sub_nav_icons_reposition"></span>Mes Évaluations<%= render 'user_badges_evaluations' %></a></li>
+					            <li><a href="#tab_d" data-toggle="tab"><span class="fontello-broken28 sub_nav_icons_reposition"></span></span>Blessures<%= render 'user_badges_blessures' %></a></li>
+					        <% end %>
+
+					        <% if is_user_in_any_role?(@user, ['TRAINER', 'PHYSIO', 'DIR']) %>
+					        	<li class="dropdown drop_profile_sub_nav">
+									<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+										<span class="fontello-users7 sub_nav_icons_reposition"></span>
+										Mes Equipes
+										<span class="caret"></span>
+									</a>
+									<ul class="dropdown-menu" role="menu">
+										<li>
+											<%= link_to "Toutes mes équipes", (user_path(@user) )+ '/ajax_result_team?teamid=0#tab_b', :class => "team_tab", :data =>{ :toggle => "tab" }, :remote => true %>
+										</li>
+										<% @i = 1 %>
+										<% if @all_teams != [] %>
+											<% @all_teams.each do |equipe| %>
+												<li>
+													<%= link_to "#{equipe.name}", (user_path(@user) )+ "/ajax_result_team?teamid=#{equipe.id}#tab_b", :class => "team_tab", :data =>{ :toggle => "tab" }, :remote => true %>
+												</li>
+												<% @i += 1 %>
+											<%end%>
+										<%end%>
+									</ul>
+								</li>
+
+								<li><a href="#tab_e" data-toggle="tab"><span class="fontello-note sub_nav_icons_reposition"></span>Évaluations</a></li>
+					        <% end %>
+
+					        <% if is_user_in_any_role?(@user, ['TRAINER', 'PHYSIO', 'DIR']) %>
+					            <li><a href="#tab_f" data-toggle="tab"><span class="fontello-broken28 sub_nav_icons_reposition"></span>Blessures<%= render 'user_badges_blessures' %></a></li>
+					        <% end %>
+
+					        <% if is_user_in_any_role?(@user, ['TRAINER', 'PHYSIO', 'DIR']) %>
+					        	<li class="dropdown drop_profile_sub_nav">
+						        	<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+										<span class="fontello-note sub_nav_icons_reposition"></span>
+										Rapports
+										<span class="caret"></span>
+									</a>
+									<ul class="dropdown-menu" role="menu">
+										<li><a href="#tab_g" data-toggle="tab">Rapport de blessures</a></li>
+										<li><a href="#tab_j" data-toggle="tab">Rapport d'évaluation</a></li>
+									</ul>
+								</li>
+					        	<!-- <li><a href="#tab_g" data-toggle="tab"><span class="fontello-note sub_nav_icons_reposition"></span>Rapports</a></li> -->
+					        <% end %>
+					              <!--<li><a href="#tab_c" data-toggle="tab"><span class="fontello-weight sub_nav_icons_reposition"></span>Mes Programmes</a></li>-->
+					        <% if is_user_in_role?(@user,'PARENT') %>
+					        	<li><a href="#tab_h" data-toggle="tab"><span class="fontello-business133 sub_nav_icons_reposition"></span>General</a></li>
+					        <% end %>
+
+							<li><a href="#tab_i" data-toggle="tab"><span class="fontello-business133 sub_nav_icons_reposition"></span>Infos</a></li>
+			            </ul>
+		        	</div><!-- /.navbar-collapse -->
+		        </div><!-- /.container-fluid -->
+	    	</nav>
+		</div>
+
+	    <!---TAB CONTENT /NAV-->
+	    <div class="row"><!--ROW-->
+	      	<div class="col-md-12"><!--COL-MD-12-->
+	        	<div class="tab-content">
+					<% if is_user_in_role?(@user,'ATHLETE') %>
+						<div class="tab-pane fade active in" id="tab_a">
+			          		<%= render 'user_timeline' %>
+					  	</div>
+				  	<% end %>
+
+				  	<% if is_user_in_any_role?(@user, ['TRAINER', 'PHYSIO', 'DIR'])  %>
+					  	<div class="tab-pane fade active in" id="tab_b">
+							<%= render 'user_dashboard_users' %>
+						</div><!--END TAB B-->
+				  	<% end %>
+
+					<% if is_user_in_role?(@user,'ATHLETE') %>
+						<div class="tab-pane fade" id="tab_c"><!--TAB C-->
+			              	<%= render 'user_eval_athlete' %>
+						</div><!--TAB C-->
+
+						<div class="tab-pane fade" id="tab_d"><!--TAB D-->
+			           		<%= render 'user_blessures_athlete' %>
+					   	</div><!--TAB D-->
+			   		<% end %>
+
+				  	<% if is_user_in_any_role?(@user, ['TRAINER', 'PHYSIO', 'DIR']) %>
+						<div class="tab-pane fade" id="tab_e"><!--TAB E-->
+							<%= render 'user_eval' %>
+						</div><!--TAB E-->
+					<% end %>
+
+					<% if is_user_in_any_role?(@user, ['TRAINER', 'PHYSIO', 'DIR']) %>
+						<div class="tab-pane fade" id="tab_f"><!--TAB F-->
+							<%= render 'user_blessures' %>
+						</div><!--TAB F-->
+					<% end %>
+
+					<% if is_user_in_any_role?(@user,['TRAINER', 'PHYSIO', 'DIR']) %>
+						<div class="tab-pane fade" id="tab_g"><!--TAB G-->
+			              	<%= render 'user_rapport' %>
+						</div><!--TAB G-->
+					<% end %>
+
+					<% if is_user_in_any_role?(@user,['TRAINER', 'PHYSIO', 'DIR']) %>
+						<div class="tab-pane fade" id="tab_j"><!--TAB J-->
+			              	<%= render 'user_eval_rapport' %>
+						</div><!--TAB J-->
+					<% end %>
+
+					<% if is_user_in_role?(@user,'PARENT') %>
+						<div class="tab-pane fade active in" id="tab_h"><!--TAB H-->
+			              	<%= render 'children_dashboard' %>
+						</div><!--TAB H-->
+					<% end %>
+
+					<div class="tab-pane fade" id="tab_i"><!--TAB I-->
+		              	<%= render 'user_info' %>
+					</div><!--TAB I-->
+	        	</div><!--TAB CONTENT-->
+	      	</div><!--COL-MD-12-->
+	    </div><!--ROW-->
+  	</div><!--RIGHT CONTENT-->
+</div>

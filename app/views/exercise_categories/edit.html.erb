@@ -1,0 +1,15 @@
+<% provide(:title, t(:category_edit)) %>
+<div class="margin-bottom">
+<h1 class="text-center"><%= I18n.t(:category_edit) %></h1>
+</div>
+<div class="col-md-6">
+	<%= render 'form' %>
+
+	<% if @exercise_category.exercise_subcategories.any? %>
+	  <%= I18n.t(:category_delete_failed) %>
+	<% else %>
+	    <div class="actions">
+	    <%= link_to t(:button_delete), @exercise_category, :confirm => t(:button_confirm_delete), method: :delete, class: "btn btn-default" %>
+	    </div>
+	<% end %>
+ </div>

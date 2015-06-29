@@ -1,0 +1,13 @@
+<h1>Commentaires</h1>
+
+<div class="span6">
+
+    <% @comments.each do |comment| %>
+          <li>
+            <%= link_to comment.index_item , comment %>
+          </li>
+    <% end %>
+</div>
+<br />
+
+<!--%= link_to 'New Comment', new_comment_path %-->

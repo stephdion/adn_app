@@ -1,0 +1,284 @@
+<% provide(:title, I18n.t(:user_modify)) %>
+<h1><%= t :user_modify %></h1>
+
+<div class="row span7">
+    <%= form_for(@user) do |f| %>
+        <div class="span6">
+          <%= render 'shared/error_messages' %>
+
+          <%= f.label :last_name %><br>
+          <%= f.text_field :last_name %>
+		<br>
+          <%= f.label :first_name %><br>
+          <%= f.text_field :first_name %>
+
+          <legend><%= I18n.t(:user_contact_info) %></legend>
+          <div class="row">
+            <div class="span5">
+              <%= f.label :address %><br>
+              <%= f.text_field :address %>
+            </div>
+
+            <div class="span3">
+              <%= f.label :city %><br>
+              <%= f.text_field :city %>
+            </div>
+            <div class="span2">
+              <%= f.label :state %><br>
+              <%= f.text_field :state %>
+            </div>
+
+            <div class="span2">
+              <%= f.label :postalCode %><br>
+              <%= f.text_field :postalCode %>
+            </div>
+            <div class="span3">
+              <%= f.label :country %><br>
+              <%= f.text_field :country %>
+            </div>
+          </div>
+
+          <div>
+            </br>
+            <%= f.label :user_phones %>
+            <table class="table table-hover table-striped table-responsive">
+              <thead>
+              <tr>
+                <th>delete</th>
+                <th>type</th>
+                <th>number</th>
+              </tr>
+              </thead>
+              <tbody>
+              <%= f.fields_for :user_phones do |phones_form| %>
+                  <tr>
+                    <td>
+                      <% if !:id.blank? %>
+                          <%= phones_form.check_box :_destroy %>
+                      <% end %>
+                    </td>
+                    <td>
+                      <%= phones_form.select :phone_type,
+                                             ["Mobile", "Home", "Work"],
+                                             {}, {:class => "selectpicker", :style => "padding:0"} %>
+                    </td>
+                    <td>
+                      <%= phones_form.text_field :number %>
+                    </td>
+                  </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+
+          <div>
+            <%= f.label :user_emails %>
+            <table class="table table-hover table-striped table-responsive">
+              <thead>
+              <tr>
+                <th>Delete</th>
+                <th>Type</th>
+                <th>Email</th>
+              </tr>
+              </thead>
+              <tbody>
+              <%= f.fields_for :user_emails do |emails_form| %>
+                  <tr>
+                    <td>
+                      <% if !:id.blank? %>
+                          <%= emails_form.check_box :_destroy %>
+                      <% end %>
+                    </td>
+                    <td>
+                      <%= emails_form.select :email_type,
+                                             ["Email 1", "Email 2", "Email 3"],
+                                             {}, {:class => "selectpicker", :style => "padding:0"} %>
+                    </td>
+                    <td>
+                      <%= emails_form.text_field :email %>
+                    </td>
+                  </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+
+          <legend><%= I18n.t(:user_about_me) %></legend>
+          <%= f.label :photo %>
+          <%= f.file_field :photo %>
+
+          <%= f.label :birthday %><br>
+          <%= f.date_select :birthday,
+                            {
+                                    :start_year => Time.now.year - 50,
+                                    :prompt => {:day => I18n.t(:date_choose_day),
+                                                :month => I18n.t(:date_choose_month),
+                                                :year => I18n.t(:date_choose_year)},
+                                    :order => [:day, :month, :year]
+                            },
+                            {:style => "padding:0"} %>
+<br>
+          <%= f.label :sex %><br>
+          <%= f.select :sex,
+                       [I18n.t(:user_male), I18n.t(:user_female)],
+                       {:include_blank => true},
+                       {:class => "selectpicker", :style => "padding:0"} %>
+
+          
+          <div>
+            <%= f.label :user_anthropometrics %>
+            <table class="table table-hover table-striped table-responsive">
+              <thead>
+              <tr>
+                <th><%= I18n.t(:anthropometrics_archive)  %></th>
+                <th><%= I18n.t(:anthropometrics_weight)  %></th>
+                <th><%= I18n.t(:anthropometrics_height)  %></th>
+              </tr>
+              </thead>
+              <tbody>
+              <%= f.fields_for :user_anthropometrics do |anthropometry_form| %>
+                  <tr>
+                    <% if anthropometry_form.object.archive %>
+                        <td>
+                          <%= anthropometry_form.text_field :archiveDate, :disabled => true %>
+                        </td>
+                        <td>
+                          <%= anthropometry_form.text_field :weight, :disabled => true %>
+                        </td>
+                        <td>
+                          <%= anthropometry_form.text_field :height, :disabled => true %>
+                        </td>
+                    <% else %>
+                        <td>
+                          <% if !:id.blank? %>
+                              <%= anthropometry_form.check_box :archive %>
+                          <% end %>
+                        </td>
+                        <td>
+                          <%= anthropometry_form.text_field :weight %>
+                        </td>
+                        <td>
+                          <%= anthropometry_form.text_field :height %>
+                        </td>
+                    <% end %>
+                  </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+
+          <% if is_current_user_sysadmin? %>
+          <legend>Admin:</legend>
+              <p>
+                <%= f.label :email %>
+                <%= f.text_field :email %>
+              </p>
+              <p>
+                <%= f.label :change_password_required %>
+                <%= f.check_box :change_password_required %>
+              </p>
+              <p>
+                <%= f.label :is_enabled %>
+                <%= f.check_box :is_enabled %>
+              </p>
+
+              <div>
+              <%= f.label :memberships %>
+              <table class="table table-hover table-striped table-responsive">
+              <thead>
+              <tr>
+                <th><%= I18n.t(:general_delete) %></th>
+                <th><%= I18n.t(:general_organization) %></th>
+                <th><%= I18n.t(:general_role) %></th>
+              </tr>
+              </thead>
+              <tbody>
+              <%= f.fields_for :memberships do |memberships_form| %>
+                  <tr>
+                    <td>
+                      <% if !:id.blank? %>
+                          <%= memberships_form.check_box :_destroy %>
+                      <% end %>
+                    </td>
+                    <td>
+                      <%= memberships_form.select :organization_id,
+                                                  Organization.all.collect { |org| [org.name, org.id] },
+                                                  {:include_blank => true}, 
+                                                  {:class => "selectpicker", :style => "padding:0"} %>
+                    </td>
+                    <td>
+                      <%= memberships_form.select :role_id,
+                                                  Role.all.collect { |role| [role.name, role.id] },
+                                                  {:include_blank => true}, 
+                                                  {:class => "selectpicker", :style => "padding:0"} %>
+                    </td>
+                  </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+
+          <div>
+              <%= f.label :family_members %>
+              <table class="table table-hover table-striped table-responsive">
+              <thead>
+              <tr>
+                <th> <%= I18n.t(:general_delete) %></th>
+                <th><%= I18n.t(:roles_parent) %></th>
+                <th><%= I18n.t(:general_relationship) %></th>
+              </tr>
+              </thead>
+              <tbody>
+              <%= f.fields_for :family_members do |family_form| %>
+                  <tr >
+                    <td>
+                      <% if !:id.blank? %>
+                          <%= family_form.check_box :_destroy %>
+                      <% end %>
+                    </td>
+                    <td>
+                      <%= family_form.select :parent_id,
+                                                  User.in_organization(["PARENT"]).collect { |parent| [parent.name, parent.id] },
+                                                  {:include_blank => true},  
+                                                  {:class => "selectpicker", :style => "padding:0"} %>
+                    </td>
+                    <td>
+                      <%= family_form.select :relationship, [I18n.t(:relation_mother),
+                                                                     I18n.t(:relation_father), 
+                                                                     I18n.t(:relation_grandparent),
+                                                                     I18n.t(:relation_guardian) ],
+                                                  {:include_blank => true}, 
+                                                  {:class => "selectpicker", :style => "padding:0"} %>
+                    </td>
+                  </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+
+          <% else %>
+          <!--
+          <hr>
+          <div class="row">
+            <%= form_tag("users/addparent", :id => 'addparent', :method => 'post', :remote =>true) do %>
+            <div class="col-md-4" style="padding-left:0px;">
+            <%= select_tag "relationship", options_for_select([I18n.t(:relation_mother),
+                             I18n.t(:relation_father), 
+                             I18n.t(:relation_grandparent),
+                             I18n.t(:relation_guardian) ]),
+          {:class => "form-control",} %>
+              <input class="form-control" type="text" name="email" placeholder="Email">
+              <input class="form-control" type="text" name="password" placeholder="Password">
+            </div>
+            <% end %>
+              <div class="btn btn-default col-md-3" style="margin-top:100px;" onclick="$('#addparent').submit()">
+                S'enregistrer
+              </div>
+          </div>
+          <% end %>
+          -->
+
+          <%= f.submit class: "btn btn-default btn-default" %>
+        </div>
+    <% end %>
+</div>

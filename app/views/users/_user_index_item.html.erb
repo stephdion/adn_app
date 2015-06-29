@@ -1,0 +1,6 @@
+<%= link_to user do %>
+	<span class="glyphicon glyphicon-chevron-right" style="font-size:14px;"></span> <%= user.index_item %>
+<% end %>
+<% if is_current_user_sysadmin? %>
+  <%= link_to "-- ("+I18n.t(:user_change_password)+")", change_password_user_path(:id => user.id) %>
+<% end %>

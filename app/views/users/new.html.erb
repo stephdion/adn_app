@@ -1,0 +1,82 @@
+<% provide(:title, I18n.t(:user_inscription)) %>
+
+
+<div class="row">
+  <div class="col-md-12 text-centerr login_pass_layout">
+    <h1><%= t :user_inscription %></h1>
+  </div>
+</div>
+<%= render 'shared/error_messages' %>
+<div class="row text-center">
+  <div class="col-md-4">
+  </div>
+  <div class="col-md-4">
+    <%= form_for(@user) do |f| %>
+      <div class="form-group">
+        <%= f.label :last_name %>
+        <%= f.text_field :last_name %>
+      </div>
+      <div class="form-group">
+        <%= f.label :first_name %>
+        <%= f.text_field :first_name %>
+      </div>
+      <div class="form-group">
+        <%= f.label :email %>
+        <%= f.text_field :email %>
+      </div>
+      <div class="form-group">
+        <%= f.label :password %>
+        <%= f.password_field :password %>
+      </div>
+      <div class="form-group">
+        <%= f.label :password_confirmation %>
+        <%= f.password_field :password_confirmation %>
+      </div>
+      <div class="form-group">
+        <%= f.label :voucher, I18n.t(:user_voucher) %>
+        <%= text_field_tag(:voucher) %>
+      </div>
+      <%= f.submit I18n.t(:user_subscribe), class: "btn btn-default gen_style_loginpw_form_button" %>
+    <% end %>
+  </div>
+  <div class="col-md-4">
+  </div>
+</div>
+
+<div class="span6">
+  <b>Présentement, la seulement façon de s'inscrire et de posséder son dossier
+    ADN est par l’entremise de votre école /Club/association sportive.
+  </b>
+  <br/>
+  <br/>
+  <i>
+    Nous vous invitons toutefois à laisser vos coordonnées et il nous fera plaisir de
+    vous tenir informé des nouvelles concernant ADN.
+  </i>
+  <br/>
+  <br/>
+  <b>
+    <%= link_to I18n.t(:comment_new),
+                {:controller=>"comments", :action=>"new"},
+                {:style=>'color:red;'} %>
+  </b>
+  <br/>
+  <br/>
+  Vous pouvez également faire part de votre intérêt à joindre ADN avec un
+  responsable des sports de votre école ou organisation et l’inviter à prendre
+  contacte avec nous.
+  <br/>
+  <br/>
+  <b>
+    <%= link_to I18n.t(:comment_new),
+                {:controller=>"comments", :action=>"new"},
+                {:style=>'color:red;'} %>
+  </b>
+  <br/>
+  <br/>
+  Merci de votre intérêt !
+  <br/>
+  <br/>
+  <b>Équipe ADN</b>
+
+</div>

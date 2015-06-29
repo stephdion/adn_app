@@ -1,0 +1,33 @@
+<div class="row">
+	<!--
+	<% @programList.each do |program| %>
+		<% prog = Programme.find(program) %>
+		<span class="glyphicon glyphicon-chevron-right"></span><%= link_to prog.name, prog %><br>
+	<% end %>-->
+	<% if !@empty %>
+		<% if !@pdfProgram.blank? %>
+			<% @pdfProgram.each do |pdf| %>
+				<div class="col-md-6 col-md-offset-3">
+				<%= link_to download_path(:id=>pdf[:id], :hash=>pdf[:hash]), target: "_blank" , :class=>"btn btn-default button_profile_box_one", :id=>"profile_user_access_button_margin" do%>
+					<i class="fontello-weight sub_nav_icons_reposition"></i><%=pdf[:name]%>
+				<%end%>
+			</div>
+			<% end %>
+		<% end %>
+
+		<% if !@resultats.blank? %>
+			<% @resultats.each do |resultat| %>
+				<% if resultat.evaluation.any_exercises? %>
+					<div class="col-md-6 col-md-offset-3">
+						<%= link_to programme_corrective_resultats_path(:resultat_id => resultat.id, :format => :html), :class=>"btn btn-default button_profile_box_one", :id=>"profile_user_access_button_margin" do%>
+							<i class="fontello-weight sub_nav_icons_reposition"></i><%=resultat.evaluation.name%>
+						<%end%>
+					</div>
+					<br>
+				<%end%>
+			<% end %>
+		<% end %>
+	<% else %>
+		Aucun Programme
+	<% end %>
+</div>

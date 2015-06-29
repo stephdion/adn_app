@@ -1,0 +1,30 @@
+<h1><%= t('bodypart_list') %></h1>
+<br>
+<%= link_to t('bodypart_new'), new_bodypart_path, :class=>"btn btn-default btn-lg margin-bottom-10" %>
+<table class="table table-hover table-striped table-responsive">
+  <tr>
+    <th><%= t('activerecord.models.bodypart') %></th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @bodyparts.each do |bodypart| %>
+  <tr>
+    <td>
+      <%= bodypart.index_title %>
+    </td>
+    <td class="td-last-3">
+      <%= link_to bodypart do %>
+        <span class="glyphicon glyphicon-eye-open"></span>
+      <% end %>
+      <%= link_to edit_bodypart_path(bodypart) do %>
+        <span class="glyphicon glyphicon-pencil"></span>
+      <% end %>
+      <%= link_to bodypart, method: :delete, data: { confirm: 'Are you sure?' } do %>
+        <span class="glyphicon glyphicon-trash"></span>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+</table>

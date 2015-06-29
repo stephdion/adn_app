@@ -1,0 +1,115 @@
+@font-face {
+  font-family: 'fontello';
+  src: url('fontello.eot');
+  src: url('fontello.eot#iefix') format('embedded-opentype'),
+       url('fontello.svg#fontello') format('svg'),
+       url('fontello.woff') format('woff'),
+       url('fontello.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+/* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
+/* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
+/*
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: 'fontello';
+    src: url('fontello.svg#fontello') format('svg');
+  }
+}
+*/
+ 
+ [class^="fontello-"]:before, [class*=" fontello-"]:before {
+  font-family: "fontello";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+ 
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  /* opacity: .8; */
+ 
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+     
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+ 
+  /* Animation center compensation - margins should be symmetric */
+  /* remove if not needed */
+  margin-left: .2em;
+ 
+  /* you can be more comfortable with increased fontellos size */
+  /* font-size: 120%; */
+ 
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+}
+ 
+.fontello-heart89:before { content: '\e800'; } /* '' */
+.fontello-xray2:before { content: '\e801'; } /* '' */
+.fontello-business133:before { content: '\e802'; } /* '' */
+.fontello-businessman189:before { content: '\e803'; } /* '' */
+.fontello-round15:before { content: '\e804'; } /* '' */
+.fontello-rss8:before { content: '\e805'; } /* '' */
+.fontello-football129:before { content: '\e806'; } /* '' */
+.fontello-football138:before { content: '\e807'; } /* '' */
+.fontello-hierarchical:before { content: '\e808'; } /* '' */
+.fontello-pencil43:before { content: '\e809'; } /* '' */
+.fontello-profile9:before { content: '\e80a'; } /* '' */
+.fontello-on:before { content: '\e80b'; } /* '' */
+.fontello-arrow:before { content: '\e80c'; } /* '' */
+.fontello-logo:before { content: '\e80d'; } /* '' */
+.fontello-hurted:before { content: '\e80e'; } /* '' */
+.fontello-men15:before { content: '\e80f'; } /* '' */
+.fontello-multiple25:before { content: '\e810'; } /* '' */
+.fontello-person282:before { content: '\e811'; } /* '' */
+.fontello-rectangular76:before { content: '\e812'; } /* '' */
+.fontello-rugby14:before { content: '\e813'; } /* '' */
+.fontello-rugby64:before { content: '\e814'; } /* '' */
+.fontello-rugby93:before { content: '\e815'; } /* '' */
+.fontello-scale10:before { content: '\e816'; } /* '' */
+.fontello-social104:before { content: '\e817'; } /* '' */
+.fontello-firstaid:before { content: '\e818'; } /* '' */
+.fontello-connected:before { content: '\e819'; } /* '' */
+.fontello-facebook:before { content: '\e81a'; } /* '' */
+.fontello-file:before { content: '\e81b'; } /* '' */
+.fontello-login7:before { content: '\e81c'; } /* '' */
+.fontello-ray4:before { content: '\e81d'; } /* '' */
+.fontello-check34:before { content: '\e81e'; } /* '' */
+.fontello-password9:before { content: '\e81f'; } /* '' */
+.fontello-5star:before { content: '\e820'; } /* '' */
+.fontello-at2:before { content: '\e821'; } /* '' */
+.fontello-home63:before { content: '\e822'; } /* '' */
+.fontello-mobile26:before { content: '\e823'; } /* '' */
+.fontello-phone16:before { content: '\e824'; } /* '' */
+.fontello-running31:before { content: '\e825'; } /* '' */
+.fontello-comment21:before { content: '\e826'; } /* '' */
+.fontello-news3:before { content: '\e827'; } /* '' */
+.fontello-trophy:before { content: '\e828'; } /* '' */
+.fontello-weight:before { content: '\e829'; } /* '' */
+.fontello-ribbon:before { content: '\e82a'; } /* '' */
+.fontello-paper:before { content: '\e82b'; } /* '' */
+.fontello-progression:before { content: '\e82c'; } /* '' */
+.fontello-note:before { content: '\e82d'; } /* '' */
+.fontello-mail:before { content: '\e82e'; } /* '' */
+.fontello-gym5:before { content: '\e82f'; } /* '' */
+.fontello-hand95:before { content: '\e830'; } /* '' */
+.fontello-test25:before { content: '\e831'; } /* '' */
+.fontello-verified4:before { content: '\e832'; } /* '' */
+.fontello-wound:before { content: '\e833'; } /* '' */
+.fontello-bald7:before { content: '\e834'; } /* '' */
+.fontello-brazil6:before { content: '\e835'; } /* '' */
+.fontello-broken28:before { content: '\e836'; } /* '' */
+.fontello-category:before { content: '\e837'; } /* '' */
+.fontello-entry:before { content: '\e838'; } /* '' */
+.fontello-family3:before { content: '\e839'; } /* '' */
+.fontello-standing13:before { content: '\e83a'; } /* '' */
+.fontello-user45:before { content: '\e83b'; } /* '' */
+.fontello-users7:before { content: '\e83c'; } /* '' */
+.fontello-working2:before { content: '\e83d'; } /* '' */
+.fontello-heart11:before { content: '\e83e'; } /* '' */

@@ -1,0 +1,15 @@
+<%= hidden_field_tag "programme[exercise_ids][]", nil %>
+  <div class="row">
+    <% Exercise.order(:name).each do |exercise| %>
+      <% if exercise.user %>
+        <div class="col-md-2" style="display:inline-block;">
+          <%= image_tag exercise.image.url(:thumbnail) %><br>
+          <%= check_box_tag "programme[exercise_ids][]", exercise.id, @programme.exercise_ids.include?(exercise.id), id: dom_id(exercise) %>
+          <%= label_tag dom_id(exercise), exercise.name[0..22], :title=>exercise.name %>
+          <% if exercise.name.size > 22 %>
+          ...
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>

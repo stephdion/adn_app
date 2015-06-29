@@ -1,0 +1,175 @@
+<% if !@search_equipe.nil? %>
+<h2 style="font-weight:bold;">Équipes</h2>
+<table class="table table-condensed table-hover">
+<tbody>
+  <% @search_equipe.each_with_index do |team,index| %>
+    <% @equipe = Equipe.find(team.id)
+        @athletes = @equipe.get_members(Role.athlete_role)
+        @trainers = @equipe.get_members(Role.trainer_role)
+        @physios = @equipe.get_members(Role.physio_role)
+        #@participants_info = Equipe.users_and_positions(@equipe.id)
+        @resultats_team = Resultat.where(:equipe_id => @equipe.id).
+                              select("date(created_at) as eval_day, 
+                                      evaluation_id,
+                                      min(user_id) as user_id, 
+                                      min(id) as resultat_id,
+                                      sum((value + left_side%100)*component) as score").
+                              group("eval_day, evaluation_id").
+                              order("eval_day ASC")
+        @record_count = 0
+        @resultats_team.each do |resultat|
+          @record_count += 1
+        end %>
+
+<tr>
+<td>
+<span id="<%= index %>" class="toggle_team" style="cursor:pointer;font-size:28px;"><%= @equipe.name %></span>
+<div id="team_<%= index %>" class="span12 row eval_border_limit team_frame" style="display:none">
+<div class="margin-bottom">
+ <div class="col-md-12">
+    <div class="margin-bottom">
+
+  </div>
+  <div class="span3">
+    <div class="margin-bottom">
+    <%= I18n.t 'activerecord.attributes.equipe.description' %>: <%= @equipe.description %>
+    </br>
+    <%= I18n.t 'activerecord.attributes.equipe.equipe_type_id' %>: <%= @equipe.equipe_type.name %>
+    </br>
+    <% if @equipe.user %>
+      <%= I18n.t 'activerecord.attributes.equipe.user_id' %>: <%= link_to @equipe.user.name, @equipe.user %>
+      </br>
+    <% else %>
+      <%= I18n.t 'activerecord.attributes.equipe.user_id' %>:<%= t(:general_sysadmin) %>
+    <% end %>
+    <% if @equipe.organization %>
+      <%= I18n.t 'activerecord.attributes.equipe.organization_id' %>: <%= @equipe.organization.name %>
+    <% else %>
+      <%= t(:equipe_not_in_org) %>
+    <% end %>
+    
+  </div>
+  </div>
+
+  <% if @trainers.any? %>
+    <div class="span8">
+      <div class="margin-bottom">
+        <%= t(:equipe_trainers) %>:</br>
+        <%= render partial: "participants", locals: {users: @trainers} %>
+      <%#= render partial: "equipes/participants", locals: {users: Equipe.find(@equipe.id).users} %>
+      </div>
+    </div>
+  <% end %>
+
+  <% if @physios.any? %>
+    <div class="span8">
+      <div class="margin-bottom">
+        <%= t(:equipe_physios) %>:</br>
+        <%= render partial: "participants", locals: {users: @physios} %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="span8">
+    <div class="margin-bottom">
+      <%= t(:equipe_athlete_count) %>: <%= @athletes.size %></br>
+      <%= render partial: "participants", locals: {users: @athletes} %>
+    </div>
+  </div>
+
+  <div class="span12">
+    <div class="margin-bottom">
+    <% if correct_equipe_user?(@equipe.id) %>
+      <%= link_to t(:equipe_edit_positions), edit_multiple_participations_path(:id => @equipe.id), style:"margin-left:15px;" %></br></br>
+      <%= link_to t(:button_edit), modifier_equipe_path(:id => @equipe.id), class: "btn btn-default", style:"margin:15px 15px;" %>
+    <% end %>
+    <% if is_current_user_sysadmin? %>
+      <br>
+        <%= link_to t(:button_delete), @equipe, :confirm => t(:user_confirm_delete), class: "btn btn-default", method: :delete , style:"margin-left:15px;"%>
+      </br>
+      </br>
+    <% end %>
+  </div>
+  </div>
+ </div>
+ </div>
+ </div>
+ </td>
+</tr>
+  <%end%>
+  </tbody>
+  </table>
+
+<%else%>
+  <div class="span12 row eval_border_limit">
+<div class="margin-bottom">
+  <div class="col-md-12">
+    <div class="margin-bottom">
+   <h1_left><%= t(:equipe)%> : <%= @equipe.name %></h1_left> 
+
+  </div>
+  <div class="span3">
+    <div class="margin-bottom">
+    <%= I18n.t 'activerecord.attributes.equipe.description' %>: <%= @equipe.description %>
+    </br>
+    <%= I18n.t 'activerecord.attributes.equipe.equipe_type_id' %>: <%= @equipe.equipe_type.name %>
+    </br>
+    <% if @equipe.user %>
+      <%= I18n.t 'activerecord.attributes.equipe.user_id' %>: <%= link_to @equipe.user.name, @equipe.user %>
+      </br>
+    <% else %>
+      <%= I18n.t 'activerecord.attributes.equipe.user_id' %>:<%= t(:general_sysadmin) %>
+    <% end %>
+    <% if @equipe.organization %>
+      <%= I18n.t 'activerecord.attributes.equipe.organization_id' %>: <%= @equipe.organization.name %>
+    <% else %>
+      <%= t(:equipe_not_in_org) %>
+    <% end %>
+    
+  </div>
+  </div>
+
+  <% if @trainers.any? %>
+    <div class="span8">
+      <div class="margin-bottom">
+        <%= t(:equipe_trainers) %>:</br>
+        <%= render partial: "participants", locals: {users: @trainers} %>
+      <%#= render partial: "equipes/participants", locals: {users: Equipe.find(@team_id).users} %>
+      </div>
+    </div>
+  <% end %>
+
+  <% if @physios.any? %>
+    <div class="span8">
+      <div class="margin-bottom">
+        <%= t(:equipe_physios) %>:</br>
+        <%= render partial: "participants", locals: {users: @physios} %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="span8">
+    <div class="margin-bottom">
+      <%= t(:equipe_athlete_count) %>: <%= @athletes.size %></br>
+      <%= render partial: "participants", locals: {users: @athletes} %>
+    </div>
+  </div>
+
+  <div class="span12">
+    <div class="margin-bottom">
+    <% if correct_equipe_user?(@equipe.id) %>
+      <%= link_to t(:equipe_edit_positions), edit_multiple_participations_path(:id => @equipe.id), style:"margin-left:15px;" %></br></br>
+      <%= link_to t(:button_edit), modifier_equipe_path(:id => @equipe.id), class: "btn btn-default", style:"margin:15px 15px;" %>
+    <% end %>
+    <% if is_current_user_sysadmin? %>
+      <br>
+        <%= link_to t(:button_delete), @equipe, :confirm => t(:user_confirm_delete), class: "btn btn-default", method: :delete, style:"margin-left:15px;" %>
+      </br>
+      </br>
+    <% end %>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
+<%end%>

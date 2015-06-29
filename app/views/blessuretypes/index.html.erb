@@ -1,0 +1,29 @@
+<h1><%= t('blessuretype_list') %></h1>
+<br>
+<%= link_to t('blessuretype_new'), new_blessuretype_path, :class=>"btn btn-default btn-lg margin-bottom-10" %>
+
+<table class="table table-hover table-striped table-responsive">
+  <tr>
+    <th><%= t('activerecord.models.blessuretype') %></th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @blessuretypes.each do |blessuretype| %>
+  <tr>
+    <td><%= blessuretype.index_title %></td>
+    <td class="td-last-3">
+      <%= link_to blessuretype do %>
+        <span class="glyphicon glyphicon-eye-open"></span>
+      <% end %>
+      <%= link_to edit_blessuretype_path(blessuretype) do %>
+        <span class="glyphicon glyphicon-pencil"></span>
+      <% end %>
+      <%= link_to blessuretype, method: :delete, data: { confirm: 'Are you sure?' } do %>
+        <span class="glyphicon glyphicon-trash"></span>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+</table>

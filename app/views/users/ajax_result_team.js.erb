@@ -1,0 +1,10 @@
+$('.team_tab').bind('ajax:success', function(){
+  $("#tab_b").html("<%= escape_javascript(render 'user_dashboard_users') %>");
+  //$("#tab_b").show();
+});
+
+$('.team_tab').bind('ajax:error', function(){
+  //$("#tab_a").html("<%#= escape_javascript(render 'user_dashboard_users') %>");
+  $("#tab_b").html("");
+  //$(".eval_border_limit").hide();
+});

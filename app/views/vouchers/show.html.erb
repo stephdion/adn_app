@@ -1,0 +1,38 @@
+<p>
+  <strong>Name:</strong>
+  <%= @voucher.token %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @voucher.description %>
+</p>
+
+<p>
+  <strong>Enabled</strong>
+  <%= check_box_tag 'is enabled', 'is_enabled', @voucher.is_enabled, options={:disabled=>true}%>
+</p>
+
+<p>
+  <strong>Role:</strong>
+  <%= @voucher.role.name %>
+</p>
+
+<p>
+  <strong>Organization:</strong>
+  <%= @voucher.organization.name %>
+</p>
+<div class="span11 left">
+  <tr>
+    <td>
+      <%= link_to 'Edit',
+                  edit_voucher_path(@voucher),
+                  class: "btn btn-default" %>
+    </td>
+    <td>
+      <%= link_to 'Destroy', voucher_path(@voucher),
+                  method: :delete, data: { confirm: 'Are you sure?' },
+                  class: "btn btn-default" %>
+    </td>
+  </tr>
+</div>

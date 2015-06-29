@@ -1,0 +1,39 @@
+<% provide(:title, t(:resultats_delete_title)) %>
+<h4><%= t(:resultats_delete_title)%></h4>
+</br>
+</br>
+<div class="span12">
+<table class="table table-condensed table-hover">
+              <tr>
+                <th><%= t(:general_date)%></th>
+                <th><%= t(:general_athlete)%></th>
+                <th><%= t(:general_team)%></th>
+                <th><%= t(:general_trainer)%></th>
+                <th><%= t(:general_test)%></th>
+                <th><%= t(:general_score)%></th>
+                <th></th>
+              </tr>
+    <% @resultats.each do |resultat| %>
+      <tr>
+        <td><%= resultat.eval_day %></td>
+        <td><%= resultat.athlete_name %></td>
+        <td><%= resultat.equipe_name %></td>
+        <td><%= resultat.user.name %></td>
+        <td><%= resultat.eval_test.short_name %></td>
+        <% if resultat.left_right? %>
+          <td><%= t(:resultats_right_abbr) %>- <%=resultat.right%>, <%= t(:resultats_left_abbr)%>- <%=resultat.left %></td>
+        <% else %>
+          <td><%= resultat.value%></td>
+        <% end %>
+      </tr>
+    <% end %>
+    </table>
+    </br>
+    <% if correct_resultat_user?(@first_record.id) || is_current_user_sysadmin? %>
+    <div class="warning_text">
+    <%= link_to t(:resultats_delete),  resultat_path(@first_record, :delete_target => @target), :confirm => t(:button_confirm_delete), class: "btn btn-danger", method: :delete %>
+    <%= link_to I18n.t(:general_back), resultats_path, class: "btn btn-default", :style=>"display:inline;margin-left:10px;" %>
+  </div>
+    <% end %>
+</div>
+  

@@ -1,0 +1,88 @@
+	<h4 class="text-center">Info</h4>
+	  <div class="panel-group" id="accordion">
+  <div class="panel panel-default">
+	<div class="panel-heading">
+	  <h4 class="panel-title">
+		<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+		 Info Physique
+		</a>
+	  </h4>
+	</div>
+	<div id="collapseOne" class="panel-collapse collapse in">
+	  <div class="panel-body">
+	   <div class="row">
+	  <div class="col-md-12" id="info_physique">
+			  <%= render "info_physique" %>
+	  </div>
+	</div>
+	  </div>
+	</div>
+  </div>
+  <!--
+  <div class="panel panel-default">
+	<div class="panel-heading">
+	  <h4 class="panel-title">
+		<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+		  Modifier mes images profil
+		</a>
+	  </h4>
+	</div>
+	<div id="collapseTwo" class="panel-collapse collapse">
+	  <div class="panel-body">
+		<div class="row">
+	  <div class="col-md-12">
+			<label>Image profile</label>
+			<%= form_for(@user, :html => { :id => "form_photo" }, :url => {:controller => "users", :action => "ajax_update_photo"}, remote: true) do |f| %>
+			<div style="width:150px;position:relative;">
+			
+
+				<%= f.file_field :photo, :style=>"opacity:0;position:relative;z-index:2;",:class =>"btn btn-default button_profile_box_one" %>
+				<%#= link_to "Modifier", [:ajax_update_photo, @user], remote: true, class: "btn btn-default button_profile_box_one", id:"test" %>
+				<%#= f.submit "Save",id:"test", class: "btn btn-default button_profile_box_one" %>
+				<div style="position:absolute;z-index:1;top:0;left:0;">
+					<button type="button" style="width:150px" class="btn btn-default button_profile_box_one" id="user_profile_picture">Modifier<i class="glyphicon glyphicon-cog profile_user_button_icon_align"></i></button>
+				</div>
+				
+			</div>
+			
+			
+			<label>Image Bannière</label>
+			<div style="width:150px;position:relative;">
+
+				<%= f.file_field :banner, :style=>"opacity:0;position:relative;z-index:2;",:class =>"btn btn-default button_profile_box_one" %>
+				<div style="position:absolute;z-index:1;top:0;left:0;">
+					<button type="button" style="width:150px" class="btn btn-default button_profile_box_one" id="user_banner_picture">Modifier<i class="glyphicon glyphicon-cog profile_user_button_icon_align"></i></button>
+				</div>
+			
+			</div>
+			<%end%>
+	  </div>
+	</div>
+	<div class="row">
+	  <div class="col-md-4">
+		
+		
+	  </div>
+	</div>
+	  </div>
+	</div>
+  </div>-->
+  <div class="panel panel-default">
+	<div class="panel-heading">
+	  <h4 class="panel-title">
+		<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+		  Info Générale
+		</a>
+	  </h4>
+	</div>
+	<div id="collapseThree" class="panel-collapse collapse">
+	  <div class="panel-body">
+		<div class="row">
+	  <div class="col-md-12" id="info_general">
+		  <%= render 'info_general' %>
+	  </div>
+	</div>
+	  </div>
+	</div>
+  </div>
+</div>

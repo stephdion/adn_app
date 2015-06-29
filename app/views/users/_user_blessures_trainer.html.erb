@@ -1,0 +1,35 @@
+<h4 class="text-center">Blessures</h4>
+	<div class="row">
+		<div class="col-xs-2 col-sm-2 col-md-2"> </div>
+				<div class="col-xs-4 col-sm-4 col-md-4">
+			<div class="buzzer_board_title">Blessures Totale</div>
+				<div class="twenty_four_box_blessures">
+					<%= @blessures.count %>
+					<i class="glyphicon glyphicon-arrow-down arrow_comp_twentyfour_green"></i>
+				</div>
+				<%= render 'blessures/body', :injuries => build_injuries_map(@blessures) %>
+
+		
+		</div>
+		
+		
+				<div class="col-xs-4 col-sm-4 col-md-4">
+			<div class="buzzer_board_title">Blessures Mois</div>
+				<div class="twenty_four_box_blessures">
+					<%= Blessure.where( :date => 1.month.ago.beginning_of_month..1.month.ago.end_of_month).count %>
+					<i class="glyphicon glyphicon-arrow-up arrow_comp_twentyfour"></i>
+				</div>
+				<%= render 'blessures/body', :injuries => build_injuries_map([]) %>
+		</div>
+		<div class="col-xs-2 col-sm-2 col-md-2"> </div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+		  <%= render 'user_trainer_blessures_criteria_picker' %>
+		</div>
+	</div>
+	
+		<h4 class="text-center">Resultats de recherche</h4>
+		<div id="table_blessure_result">
+			<%= render 'user_blessure_result'%>
+		</div>

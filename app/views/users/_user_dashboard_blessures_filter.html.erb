@@ -1,0 +1,328 @@
+<%= form_tag (user_path(@user) )+ '/ajax_result_blessure', :id => 'form_blessure_filter', :method => 'get', :remote => true do %>
+<%= hidden_field :end_date_rapport, params[:end_date_rapport], :id => "end_date_rapport" %>
+<%= hidden_field :start_date_rapport, params[:start_date_rapport], :id => "start_date_rapport" %>
+<!-- IMPORTANT -->
+<!-- Créer un partial pour cette partie -->
+<div class="col-md-6 wrapper-head-rapport" id="filter-blessure">
+	<div class="wrapper-event-date-filter">
+		<span id="label-date-filter-bless">Du 13 au 20 Fév.  2014</span>
+		<span class="fa fa-caret-down drop-arrow"></span>
+	</div>
+	<span class="wrapper-switch-date">
+		<span id="change-date-left" class="fa fa-caret-left drop-arrow bless-left-arrow"></span>
+		<span id="change-date-right" class="fa fa-caret-right drop-arrow bless-right-arrow"></span>
+	</span>
+	<div class="pop-up pop-up-date">
+		<div class="calendar-wrapper-pop-up">
+			<div id="calendar" class="yui3-skin-sam"> 
+				<div id="mycalendarbless"></div>
+			</div>
+		</div>
+		<div class="option-calendar-pop-up">
+			<div class="time-selector-wrapper">
+				<span id="sct-today">Aujourd'hui</span>
+				<span id="sct-this-week">Cette semaine</span>
+				<span id="sct-this-month">Ce mois-ci</span>
+				<span id="sct-this-year">Cette année</span>
+				<span id="sct-yesterday">Hier</span>
+				<span id="sct-last-week">La semaine dernière</span>
+				<span id="sct-last-month">Le mois dernier</span>
+				<span id="sct-last-year">L'année dernière</span>
+			</div>
+			<div class="wrapper-submit-calendar">
+				<%= submit_tag "Appliquer", :id => "blessure-filter-by-team", :class => "button-style", :remote => true %>
+				<span class="wrapper-spinner-date">
+					<%= render :file => "spinner/spinner" %>
+				</span>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- FIN -->
+
+<div class="col-md-3 wrapper-head-rapport">
+	<div id="wrapper-event-team-filter">
+		<span>Filtrer les équipes</span>
+		<span class="fa fa-caret-down drop-arrow"></span>
+	</div>
+	<div class="pop-up" id="pop-up-team">
+	   <h4>Équipe(s)</h4>
+	   <div class="input-wrapper-rapport">
+			<%= select_tag :equipe_select, options_for_select(@team_picker, params[:multi_equipe_select]), multiple: true, :id => "team-filter-area"%>
+		</div>
+		<span style="text-align: center; width: 100%; display: inline-block;">
+			<%= submit_tag "Appliquer", :id => "blessure-filter-by-team", :class => "button-style", :remote => true %>
+			<span class="wrapper-spinner">
+				<%= render :file => "spinner/spinner" %>
+			</span>
+		</span>
+	</div>
+</div>
+<div class="col-md-3 wrapper-head-rapport">
+	<div id="wrapper-event-frequence-filter">
+		<span>Automatisation</span>
+		<span class="fa fa-caret-down drop-arrow"></span>
+	</div>
+	<div class="pop-up" id="pop-up-frequence">
+	   <h4>Fréquences</h4>
+	   <div class="input-wrapper-rapport">
+			<%= select_tag :frequency, options_for_select([["Hebdomadaire", "1"], ["Mensuel", "2"], ["Annuel", "3"]]), :id => "frequence-filter-area", :style=>"width:100%"%>
+		</div>
+		<span style="text-align: center; width: 100%; display: inline-block;">
+			<%= submit_tag "Ajouter", :style=>"width: 100px;margin-left:-20px;", :id => "blessure-filter-by-frequence", :class => "button-style", :remote => true %>
+			<span class="wrapper-spinner2">
+				<%= render :file => "spinner/spinner" %>
+			</span>
+		</span>
+	</div>
+</div>
+<%end%>
+
+<script type="text/javascript">
+//###############################	IMPORTANT   ####################################
+////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////À implementer en module js///////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
+YUI({lang:"fr-FR"}).use('intl', 'calendar', 'datatype-date', 'datatype-date-math', function(Y) {
+
+ Y.CalendarBase.CONTENT_TEMPLATE = Y.CalendarBase.TWO_PANE_TEMPLATE;
+
+ var calendar = new Y.Calendar({
+   contentBox: "#mycalendarbless",
+   width: "500px",
+   height: "263px",
+   showPrevMonth: true,
+   showNextMonth: true,
+   selectionMode: 'multiple'
+ }).render();
+
+ var rules = {
+   "all": {
+     "all": {
+       "all": {
+         "2,5": "tuesdays_and_fridays",
+         "0,6": "all_weekends"
+       }
+     }
+   }
+ };
+
+  calendar.set("headerRenderer", function (curDate) {
+   var ydate = Y.DataType.Date,
+       output = ydate.format(curDate, {
+       format: "%B %Y"
+     }) + " &mdash; " + ydate.format(ydate.addMonths(curDate, 1), {
+       format: "%B %Y"
+     });
+   return output;
+ });
+
+ calendar.on("selectionChange", function (e) {
+   end = new Date(e.newSelection[e.newSelection.length - 1]);
+   end.setDate(end.getDate() + 1);
+   $('#start_date_rapport').val(moment(e.newSelection[0]).format('YYYY-MM-DD'));
+   $('#end_date_rapport').val(moment(end).format('YYYY-MM-DD'));
+   refreshDateLabel();
+ });
+
+  //INIT 
+ start_init_date = new Date("2013-02-02");
+ end_init_date = new Date("2015-02-02");
+ array_date = selectRange(start_init_date, end_init_date);
+ calendar.selectDates(array_date);
+ $('#end_date_rapport').val(moment(end_init_date).format('YYYY-MM-DD'));
+ $('#start_date_rapport').val(moment(start_init_date).format('YYYY-MM-DD'));
+ refreshDateLabel();
+
+ $("#sct-today").click(function() {
+ 	calendar.deselectDates();
+ 	calendar.selectDates(new Date());
+ });
+
+$("#sct-this-week").click(function() {
+	calendar.deselectDates();
+	monday = getMonday(new Date());
+	sunday = getSundayFromMonday(monday);
+	array_date = selectRange(monday, sunday);
+
+	calendar.selectDates(array_date);
+});
+
+$("#sct-this-month").click(function() {
+	calendar.deselectDates();
+	range_date = getFirstAndLastDayOfAMonth(new Date());
+	array_date = selectRange(range_date[0], range_date[1]);
+
+	calendar.selectDates(array_date);
+});
+
+$("#sct-this-year").click(function() {
+	calendar.deselectDates();
+	year = new Date().getFullYear();
+	array_date = selectRange(year + "-01-01", year + "-12-31");
+
+	calendar.selectDates(array_date);
+});
+
+$("#sct-yesterday").click(function() {
+	calendar.deselectDates();
+	date = new Date();
+	date.setDate(date.getDate() - 1);
+
+	calendar.selectDates(date);
+});
+
+$("#sct-yesterday").click(function() {
+	calendar.deselectDates();
+	date = new Date();
+	date.setDate(date.getDate() - 1);
+
+	calendar.selectDates(date);
+});
+
+$("#sct-last-week").click(function() {
+	calendar.deselectDates();
+	monday = new Date();
+	monday.setDate(monday.getDate() - 7);
+	monday = getMonday(monday);
+	sunday = getSundayFromMonday(monday);
+	array_date = selectRange(monday, sunday);
+
+	calendar.selectDates(array_date);
+});
+
+$("#sct-last-month").click(function() {
+	calendar.deselectDates();
+	last_month = new Date();
+	last_month.setDate(last_month.getMonth() - 1);
+	range_date = getFirstAndLastDayOfAMonth(last_month);
+	array_date = selectRange(range_date[0], range_date[1]);
+
+	calendar.selectDates(array_date);
+});
+
+$("#sct-last-year").click(function() {
+	calendar.deselectDates();
+	year = new Date();
+	year = year.getFullYear() - 1;
+	array_date = selectRange(year + "-01-01", year + "-12-31");
+
+	calendar.selectDates(array_date);
+});
+
+function refreshDateLabel() {
+	end_date = new Date($('#end_date_rapport').val());
+	end_date.setDate(end_date.getDate() + 1);
+	start_date = new Date($('#start_date_rapport').val());
+	start_date.setDate(start_date.getDate() + 1); 
+	array_month = ["Jan.", "Fév.", "Mar.", "Avr.", "Mai", "Juin", "Juil.", "Août", "Sep.", "Oct.", "Nov.", "Déc."];
+
+	start_label = "";
+	end_label = "";
+	start_label_title = moment(start_date).format("YYYY-MM-DD");
+	end_label_title = moment(end_date).format("YYYY-MM-DD");
+
+	if (end_date.getMonth() != start_date.getMonth()) {
+		start_label = start_date.getDate() + " " + array_month[start_date.getMonth()];
+	} else {
+		start_label = start_date.getDate();
+	}
+
+	end_label = end_date.getDate() + " " + array_month[end_date.getMonth()] + " " + end_date.getFullYear();
+
+	$("#label-date-filter-bless").html("Du " + start_label + " au " + end_label); 
+	$(".date-rapport-title").html(start_label_title + " au " + end_label_title);
+}
+
+$("#change-date-left").click(function() { 
+	dateValue = new Date($('#end_date_rapport').val());
+	calendar.deselectDates();
+	dateValue.setDate(dateValue.getDate());
+	calendar.selectDates(dateValue);
+});
+
+$("#change-date-right").click(function() { 
+	dateValue = new Date($('#end_date_rapport').val());
+	calendar.deselectDates();
+	dateValue.setDate(dateValue.getDate() + 2);
+	console.log(dateValue);
+	calendar.selectDates(dateValue);
+});
+
+
+//////////PARSING DATE FUNCTION////////////
+
+ function selectRange(startDate, endDate, addFn, interval) {
+
+	 addFn = addFn || Date.prototype.addDays;
+	 interval = interval || 1;
+
+	 var retVal = [];
+	 var current = new Date(startDate);
+	 var endDate = new Date(endDate);
+
+	 while (current <= endDate) {
+	  retVal.push(new Date(current));
+	  current.setDate(current.getDate() + 1);
+	 }
+
+	 return retVal;
+}
+
+function getMonday(currentDate) {
+	date = new Date(currentDate);
+	current_day = date.getDay();
+
+	if(current_day >= 1) {
+		while(current_day != 1) {
+			date.setDate(date.getDate() - 1);
+			current_day = date.getDay();
+		}
+	}
+	else {
+		date.setDate(date.getDate() + 1);
+	}
+
+	return date;
+}
+
+function getSundayFromMonday(monday) {
+	sunday = new Date(monday);
+	sunday = sunday.setDate(sunday.getDate() + 6);
+
+	return sunday;
+}
+
+function getFirstAndLastDayOfAMonth(date) {
+	var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+	var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+	return [firstDay, lastDay];
+}
+
+});
+
+///Rapport Event
+$('#filter-blessure > .wrapper-event-date-filter').click(function(e) {
+	$('.pop-up-date').toggle();
+	$('#pop-up-team').hide();
+	$('#pop-up-frequence').hide();
+	e.preventDefault();
+});
+
+$('#wrapper-event-team-filter').click(function(e) {
+	$('#pop-up-team').toggle();
+	$('#pop-up-frequence').hide();
+	$('.pop-up-date').hide();
+
+	e.preventDefault();
+});
+
+$('#wrapper-event-frequence-filter').click(function(e) {
+	$('#pop-up-frequence').toggle();
+	$('#pop-up-team').hide();
+	$('.pop-up-date').hide();
+	e.preventDefault();
+});
+</script>

@@ -1,0 +1,193 @@
+body {
+    position: relative;
+}
+* {
+    margin: 0;
+    padding: 0;
+}
+.navbar {
+
+}
+h2 {
+    color: #222;
+}
+.box-margin{
+    margin-left:20px;
+    margin-top:10px;
+}
+.contentContainer {
+    //padding-top: 67px;
+}
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    padding: 8px;
+}
+.td-last-3 {
+    width: 150px;
+}
+.td-last-2 {
+    width: 100px;
+}
+.td-last-1 {
+    width: 50px;
+}
+.table .glyphicon {
+    color: #777;
+    font-size: 24px;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+.table .glyphicon:hover {
+    color: #000;
+}
+.btn-default {
+    background: none repeat scroll 0 0 #000;
+    border-color: #000;
+    color: #fff;
+}
+.btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open > .dropdown-toggle.btn-default {
+    background: none repeat scroll 0 0 #ffd602;
+}
+.footer_box p {
+    color: #333;
+    font-size: 12px;
+}
+ul {
+    margin-left: 15px;
+}
+ol {
+    margin-left: 20px;
+}
+.jim_top {
+    height: 250px;
+    overflow: hidden;
+}
+dl {
+    margin-top: 20px;
+}
+.whiteTxt {
+    color: #fff;
+}
+.yellowTxt {
+    color: #ffd602;
+}
+.band {
+    margin-bottom: 18px;
+}
+dd {
+    margin-left: 15px;
+    text-shadow: 2px 2px 2px #000;
+}
+dt {
+    font-size: 125%;
+    text-shadow: 3px 3px 3px #000;
+}
+.scat2_warn {
+    color: #d7723c;
+}
+#scat2 select, #scat2 input[type="checkbox"], #scat2 input[type="radio"] {
+    margin: 10px 3px 0;
+}
+#scat2 option, #scat2 select {
+    padding: 0 5px;
+}
+#scat2 p {
+    font-size: 14px;
+    margin: 5px 0;
+}
+#scat2 input[type="number"] {
+    color: #000;
+}
+.zebra .row:nth-child(2n+1) {
+    background: none repeat scroll 0 0 #e0e0e0;
+}
+.miniTable td:first-child {
+    text-align: left;
+}
+.miniTable td {
+    min-width: 8.33%;
+    text-align: center;
+    vertical-align: middle;
+}
+.eval_nb {
+    color: #fff;
+    font-size: 42px;
+    font-weight: bold;
+    padding: 4px;
+    text-align: center;
+}
+.outline {
+    border: 1px solid #aeaeae;
+}
+.value, .score {
+    color: #fff;
+    text-align: center;
+    width: 110px;
+}
+.value {
+    background: none repeat scroll 0 0 #b0c2dd;
+}
+.score, .light-blue .value, .light-blue.box {
+    background: none repeat scroll 0 0 #6483b3;
+}
+.light-orange, .orange .value {
+    background: none repeat scroll 0 0 #f2d3bc;
+}
+.orange .score, .dark-orange.box {
+    background: none repeat scroll 0 0 #d7723c;
+}
+.value {
+    vertical-align: middle;
+}
+.value select, .score select, .value option, .score option {
+    color: #333;
+}
+.value option, .score option, .value select, .score select, .value input, .score input {
+    max-width: 94px;
+}
+.scat2_table_score th {
+    background-color: #b9b9bb;
+}
+.scat2_table_score td.blue {
+    background-color: #b0c2dd;
+}
+.scat2_table_score td.blue_dark {
+    background-color: #6483b3;
+}
+.scat2_table_score td.orange {
+    background-color: #f9e293;
+}
+.scat2_table_score td.orange_dark {
+    background-color: #f4c618;
+}
+.scat2_table_score td.scat2 {
+    background-color: #eea917;
+}
+.scat2_table_score td.maddocks {
+    background-color: #e6a77d;
+}
+.bot-row-space-10 > .row {
+    margin-bottom: 18px;
+}
+.bot-row-space-10 > .row .table {
+    margin-top: 12px;
+}
+.zoneFormBtn {
+    margin-top: 50px;
+    text-align: center;
+}
+h1.form {
+    margin-bottom: 10px;
+    margin-top: 20px;
+    text-align: center;
+}
+.margin-top-10 {
+    margin-top: 10px;
+}
+.margin-bottom-10 {
+    margin-bottom: 10px;
+}
+.login_pass_icon {
+    font-size: 70px;
+    margin-bottom: 25px;
+    margin-top: 25px;
+}

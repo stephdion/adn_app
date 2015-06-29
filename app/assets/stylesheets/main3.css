@@ -1,0 +1,28 @@
+
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+    background-color: #000;
+    border-color: #000;
+    color: #fff;
+}
+.pagination > li > a, .pagination > li > span {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    color: #000;
+    float: left;
+    line-height: 1.42857;
+    margin-left: -1px;
+    padding: 6px 12px;
+    position: relative;
+    text-decoration: none;
+}
+.show {
+    margin-bottom: 20px;
+}
+.checkboxScroll {
+    border: 1px solid #000;
+    height: 100px;
+    margin-left: 15px;
+    max-width: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
